@@ -2,3 +2,4 @@ roles/
 __pycache__/
 *.pyc
 .env
+data/dart_corp_codes.csv
