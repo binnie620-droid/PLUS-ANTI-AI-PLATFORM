@@ -1,0 +1,4 @@
+roles/
+__pycache__/
+*.pyc
+.env
