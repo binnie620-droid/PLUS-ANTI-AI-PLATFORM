@@ -40,7 +40,8 @@ description: 산업 하나를 받아 그 산업의 컨센서스 보유 종목 �
       "evidence": {
         "Q2": {
           "quote": "당사는 사료관리법상 제조업 등록과 HACCP 인증을 보유하고 있으며 신규 설비 구축에 통상 3년이 소요됩니다",
-          "source": "2025 사업보고서 II.사업의 내용 p.14"
+          "source": "2025 사업보고서 II.사업의 내용 p.14",
+          "durability": "structural"
         }
       }
     }
@@ -50,6 +51,7 @@ description: 산업 하나를 받아 그 산업의 컨센서스 보유 종목 �
 
 - `answers`는 boolean(`true`/`false`)만 쓴다. `"YES"/"NO"` 문자열 금지.
 - `evidence`는 `true`인 질문의 키만 담는다. `false`인 질문은 `evidence`에 키 자체를 만들지 않는다.
+- `durability`(`"structural"`/`"temporary"`)는 **Q1·Q2에만** 붙는다. moat-scorer가 채운다 — company-screen은 그대로 옮긴다.
 - `judged_count`는 판정을 시도한 종목 수(컨센서스 없어서 제외한 종목은 포함하지 않음)와 `companies` 배열 길이가 일치해야 한다.
 - 저장 위치: `data/company_scores/<industry>.json` (예: `data/company_scores/농업.json`)
 
@@ -76,3 +78,14 @@ description: 산업 하나를 받아 그 산업의 컨센서스 보유 종목 �
 
 - `data/industry_universe.csv`가 종목 단위(`industry,ticker,name`)까지 담는지, 아니면 산업별 개수만 담는지 B와 맞춘다. 개수만 담는 스키마라면 이 스킬은 종목 리스트를 받을 방법이 없다 — 팀장/skill1 쪽에서 ticker 리스트를 직접 넘기는 경로를 대신 열어야 한다.
 - `data/consensus.csv`의 `last_updated` 날짜 포맷(예: `2026-06-30`)을 A와 통일한다 — Q5 판정에서 날짜 비교에 그대로 쓴다.
+
+## A·D에게 제안 — 10~15년 홀딩 관점을 담는 방법
+
+이 데스크는 12개월 컨센 TP를 앵커로 쓰지만, 실제 투자는 10~15년 홀딩을 전제로 한다. 10~15년짜리 목표주가는 만들지 않는다 — 그러려면 DART로 인용 불가능한 성장률·할인율 가정이 필요해서, "인용 없으면 NO"라는 이 데스크의 근간과 충돌한다. 대신 Q1·Q2가 `true`일 때 `evidence.durability`(`structural`/`temporary`)를 이미 붙여서 넘긴다.
+
+이걸 실제로 쓰려면 A·D 쪽에서 결정할 일이 남아있다 (C가 임의로 core/select.py나 desk-head를 건드리지 않는다):
+- **하드컷으로 쓸지**: 조정률의 최대 기여 질문이 `temporary`면 "10~15년 보유 후보"에서 빼고 "단기 트레이딩 후보"로만 분류할지 — 최대 기여 질문 판별은 이미 A의 코드가 한다.
+- **V1(프론티어랩 진입)에 반영할지**: FAIL 조건을 "장벽이 구조적이지 않아 수년 내 무너질 수 있음"으로 좁혀서, `durability=structural`인 Q2 YES는 V1이 더 엄격하게, `temporary`는 그대로 두는 식.
+- **청산 규칙에 한 줄 추가할지**: "구조적 가정이 깨지는 공시가 나오면 보유기간과 무관하게 즉시 재평가."
+
+이 셋 다 숫자(TP 앵커·V1~V3 조건 값·손절/익절 %)는 안 바꾼다 — `durability` 필드를 어떻게 쓸지만 A·D가 정하면 된다.
