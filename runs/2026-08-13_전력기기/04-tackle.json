@@ -1,77 +1,58 @@
 {
   "run_id": "2026-08-13_전력기기",
+  "industry": "전력기기·중전기",
   "table": [
-    {
-      "ticker": "103590",
-      "name": "일진전기",
-      "F1": "PASS",
-      "F2": "PASS",
-      "M1": {
-        "level": "보류",
-        "basis": "segment_top 미확보 — 계약 불일치 #2"
-      },
-      "causal_breaks": 0,
-      "M2": "UP",
-      "M3": null,
-      "M4_penalty": null,
-      "delta": 0.085,
-      "upside": 0.6861,
-      "verdict": "NO CALL",
-      "reason": "|델타| 8.5% < 20%p"
-    },
-    {
-      "ticker": "082920",
-      "name": "비츠로셀",
-      "F1": "PASS",
-      "F2": "PASS",
-      "M1": {
-        "level": "보류",
-        "basis": "segment_top 미확보 — 계약 불일치 #2"
-      },
-      "causal_breaks": 0,
-      "M2": "UP",
-      "M3": null,
-      "M4_penalty": null,
-      "delta": 0.085,
-      "upside": 0.5992,
-      "verdict": "NO CALL",
-      "reason": "|델타| 8.5% < 20%p"
-    },
-    {
-      "ticker": "001440",
-      "name": "대한전선",
-      "F1": "PASS",
-      "F2": "PASS",
-      "M1": {
-        "level": "보류",
-        "basis": "segment_top 미확보 — 계약 불일치 #2"
-      },
-      "causal_breaks": 0,
-      "M2": "UP",
-      "M3": null,
-      "M4_penalty": null,
-      "delta": 0.0,
-      "upside": 0.448,
-      "verdict": "NO CALL",
-      "reason": "|델타| 0.0% < 20%p"
-    },
     {
       "ticker": "062040",
       "name": "산일전기",
       "F1": "PASS",
       "F2": "PASS",
       "M1": {
-        "level": "보류",
-        "basis": "segment_top 미확보 — 계약 불일치 #2"
+        "level": "L4",
+        "segment_op_share": 0.974
       },
       "causal_breaks": 0,
+      "break_detail": "-",
       "M2": "UP",
-      "M3": null,
-      "M4_penalty": null,
-      "delta": 0.0,
-      "upside": 0.4748,
-      "verdict": "NO CALL",
-      "reason": "|델타| 0.0% < 20%p"
+      "M3": 1,
+      "M3_basis": "고객✓(공급부족·계약확보) 규제✓ / 경쟁자✗(peer 3사 동일 Q3) 공급자✗(구리 전가근거 없음) → 2방향",
+      "M4_penalty": 1,
+      "M4_basis": "공급계약 자체는 독자 정보(2026-04-30 공시)이나 '데이터센터 성장' 프레임은 업계 상용구 → 부분",
+      "consensus_tp": 278889,
+      "price": 189100,
+      "coverage_count": 9,
+      "delta": 0.212,
+      "upside": 0.788,
+      "win_rate": 0.45,
+      "expected_return": 0.3546,
+      "verdict": "편입 1위",
+      "reason": null
+    },
+    {
+      "ticker": "103590",
+      "name": "일진전기",
+      "F1": "PASS",
+      "F2": "PASS",
+      "M1": {
+        "level": "L4",
+        "segment_op_share": 0.767
+      },
+      "causal_breaks": 1,
+      "break_detail": "고리①: 비약 — '데이터센터 전력수요 증가'는 산업 현상 서술, 그 수요가 당사 수주로 오는 경로 없음",
+      "M2": "UP",
+      "M3": 1,
+      "M3_basis": "고객✓ 규제✓ / 경쟁자✗ 공급자✗ → 2방향",
+      "M4_penalty": 2,
+      "M4_basis": "'AI 데이터센터 전력수요 증가'는 규칙서 명시 상투어. 7종목 중 6개가 자기 사업보고서에 같은 문장 사용 = 업계 상용구",
+      "consensus_tp": 112667,
+      "price": 72500,
+      "coverage_count": 3,
+      "delta": 0.212,
+      "upside": 0.884,
+      "win_rate": 0.25,
+      "expected_return": 0.221,
+      "verdict": "반려",
+      "reason": "분산 규칙 — L4 중복(산일전기와 동일)"
     },
     {
       "ticker": "006260",
@@ -79,17 +60,25 @@
       "F1": "PASS",
       "F2": "PASS",
       "M1": {
-        "level": "보류",
-        "basis": "segment_top 미확보 — 계약 불일치 #2"
+        "level": "L4",
+        "segment_op_share": 0.286
       },
-      "causal_breaks": 0,
+      "causal_breaks": 2,
+      "break_detail": "고리①: 비약 + Q2(전력부문)와 Q3(통신선) 근거가 서로 다른 세그먼트 / 고리②: 귀속 — 1위 세그먼트가 전체 영업이익의 28.6%뿐이라 부문 개선이 회사 이익을 대표하지 못함. 통신사업부문은 부문이익 -196억 적자",
       "M2": "UP",
       "M3": null,
+      "M3_basis": "-",
       "M4_penalty": null,
-      "delta": 0.085,
-      "upside": 0.8856,
-      "verdict": "NO CALL",
-      "reason": "|델타| 8.5% < 20%p"
+      "M4_basis": "-",
+      "consensus_tp": 585667,
+      "price": 337000,
+      "coverage_count": 12,
+      "delta": 0.212,
+      "upside": 1.107,
+      "win_rate": null,
+      "expected_return": null,
+      "verdict": "반려",
+      "reason": "인과 2끊김"
     },
     {
       "ticker": "298040",
@@ -97,17 +86,25 @@
       "F1": "PASS",
       "F2": "PASS",
       "M1": {
-        "level": "보류",
-        "basis": "segment_top 미확보 — 계약 불일치 #2"
+        "level": "L4",
+        "segment_op_share": 0.988
       },
-      "causal_breaks": 0,
+      "causal_breaks": 2,
+      "break_detail": "고리①: 비약 / 고리②: 역방향 — Q2 인용과 같은 문단에 '중국·인도 후발업체 가격경쟁 심화'가 병기되어 동일 출처가 UP/DOWN 양방향",
       "M2": "UP",
       "M3": null,
+      "M3_basis": "-",
       "M4_penalty": null,
-      "delta": 0.0,
-      "upside": 0.4645,
-      "verdict": "NO CALL",
-      "reason": "|델타| 0.0% < 20%p"
+      "M4_basis": "-",
+      "consensus_tp": 4235385,
+      "price": 2892000,
+      "coverage_count": 13,
+      "delta": 0.212,
+      "upside": 0.776,
+      "win_rate": null,
+      "expected_return": null,
+      "verdict": "반려",
+      "reason": "인과 2끊김"
     },
     {
       "ticker": "267260",
@@ -115,20 +112,83 @@
       "F1": "PASS",
       "F2": "PASS",
       "M1": {
-        "level": "보류",
-        "basis": "segment_top 미확보 — 계약 불일치 #2"
+        "level": "L4",
+        "segment_op_share": 1.0
       },
-      "causal_breaks": 0,
+      "causal_breaks": 2,
+      "break_detail": "고리①: 비약 / 고리②: 역방향 — 'Track-record가 중요, 발주처가 보수적'은 업계 관행 서술이며 동일 논리가 당사의 신규시장 진입도 막는다",
       "M2": "UP",
       "M3": null,
+      "M3_basis": "-",
       "M4_penalty": null,
-      "delta": 0.0,
-      "upside": 0.5268,
-      "verdict": "NO CALL",
-      "reason": "|델타| 0.0% < 20%p"
+      "M4_basis": "-",
+      "consensus_tp": 1193929,
+      "price": 782000,
+      "coverage_count": 14,
+      "delta": 0.212,
+      "upside": 0.851,
+      "win_rate": null,
+      "expected_return": null,
+      "verdict": "반려",
+      "reason": "인과 2끊김"
+    },
+    {
+      "ticker": "001440",
+      "name": "대한전선",
+      "F1": "PASS",
+      "F2": "PASS",
+      "M1": {
+        "level": "L4",
+        "segment_op_share": 1.0
+      },
+      "causal_breaks": 2,
+      "break_detail": "고리①: 비약(IEA 통계 인용은 산업 서술) / 고리②: 역방향 — '진입장벽이 비교적 높은'의 hedge, 설비투자는 자본으로 넘을 수 있어 전환비용이 아님",
+      "M2": "UP",
+      "M3": null,
+      "M3_basis": "-",
+      "M4_penalty": null,
+      "M4_basis": "-",
+      "consensus_tp": 42643,
+      "price": 29450,
+      "coverage_count": 7,
+      "delta": 0.212,
+      "upside": 0.756,
+      "win_rate": null,
+      "expected_return": null,
+      "verdict": "반려",
+      "reason": "인과 2끊김"
+    },
+    {
+      "ticker": "082920",
+      "name": "비츠로셀",
+      "F1": "PASS",
+      "F2": "PASS",
+      "M1": {
+        "level": "L4",
+        "segment_op_share": 1.0
+      },
+      "causal_breaks": 0,
+      "break_detail": "-",
+      "M2": "UP",
+      "M3": null,
+      "M3_basis": "-",
+      "M4_penalty": null,
+      "M4_basis": "-",
+      "consensus_tp": 50333,
+      "price": 34150,
+      "coverage_count": 3,
+      "delta": 0.17,
+      "upside": 0.724,
+      "win_rate": null,
+      "expected_return": null,
+      "verdict": "반려",
+      "reason": "델타 17.0%p < 20%p"
     }
   ],
-  "picks": [],
+  "picks": [
+    "062040"
+  ],
   "trap_candidates": [],
-  "rejection_notice": "7종목 전부 NO CALL. 사유는 종목 결함이 아니라 판정 입력 부족 — Q1~Q4를 DART 사업보고서 원문으로 확인하지 못해 규칙(근거 없으면 NO)에 따라 NO 처리했고, 조정률이 게이트에 못 미쳤다. 보강: 각 종목 영업이익 1위 세그먼트 비중(DART II.사업의 내용) + 인건비 비중."
+  "rejection_notice": null,
+  "_diversification_note": "7종목 전부 L4(제조). 분산 규칙상 L단계 중복 배제로 2위 이하를 담을 수 없다. 단일 산업만 심사한 구조적 결과 — 3종목 포트폴리오를 만들려면 다른 L단계(L3/L5) 산업이 필요하다."
 }
