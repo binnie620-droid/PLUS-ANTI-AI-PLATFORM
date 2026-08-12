@@ -34,6 +34,46 @@ rename them.
   (that's `core/macro.py`, owned by A — see FRED section below for why this skill
   only *reads* FRED, never *decides* with it).
 
+## Step 0 — 산업이 지정되지 않았으면 **반드시 먼저 물어본다**
+
+호출 시점에 산업명이 주어지지 않았다면, **discover를 자동 실행하지 말고 사용자에게 되묻는다.**
+
+```
+"어느 산업을 보시겠습니까?
+
+  ① 산업명을 직접 지정          → verify 모드 (예: "조선기자재", "폐기물처리")
+  ② 데스크가 후보를 추천          → discover 모드
+
+②를 고르시면 data/industry_universe.csv 에 등재된 산업 중에서만 고릅니다.
+그 목록은 현재 [N]개 산업 / [M]개 종목이며, 목록에 없는 산업은 후보에 오르지
+않습니다. 특정 산업을 염두에 두고 계시면 ①이 정확합니다."
+```
+
+**왜 물어야 하는가 — 안 물으면 데스크가 산업을 대신 고르게 된다.**
+discover는 `data/industry_universe.csv`에 있는 산업만 순위 매긴다. 그 파일을 채우는
+주체가 계약에 정의되어 있지 않으므로(계약 불일치 #4), **유니버스 작성자가 사실상 산업을
+결정한다.** 사용자에게 묻지 않고 discover를 돌리면 그 사실이 숨겨진다.
+
+`verify`가 정식 진입점이다 — 다른 팀 사람은 항상 자기 관심 산업을 들고 온다.
+
+### 지정된 산업이 유니버스에 없을 때
+
+```
+1. data/industry_universe.csv 에 해당 산업 행이 있는가?
+     있다  →  그대로 Step 1 로 진행
+     없다  →  2로
+
+2. DART 업종코드(induty_code)로 즉석 구성을 시도한다
+     data/dart_corp_codes.csv 의 ticker→corp_code 로
+     company.json 을 조회해 induty_code 를 얻고, 산업명과 대응시킨다
+     구성된 목록을 industry_universe.csv 에 append 하고 Step 1 로 진행
+
+3. 2도 불가능하면 (DART_API_KEY 없음 등) 정지하고 사용자에게 보고한다
+     "'<산업명>' 의 종목 목록을 만들 수 없다. 필요한 것: DART_API_KEY 또는
+      industry_universe.csv 에 해당 산업 행."
+     **임의로 종목을 골라 채우지 않는다.**
+```
+
 ## Gate Logic — the only judgment this skill makes
 
 Run these four steps **in this order** — the DART sanity pass happens *before* G1 is
@@ -214,6 +254,8 @@ must ignore unknown keys. Never let their absence or content change `gate`.
 
 | Mistake | Fix |
 |---|---|
+| 산업명이 없다고 바로 discover를 실행 | **Step 0 위반.** 먼저 물어본다 — 안 물으면 데스크가 산업을 대신 고르게 된다. |
+| 유니버스에 없는 산업을 "못 한다"며 즉시 반려 | Step 0의 DART induty_code 즉석 구성을 먼저 시도한다. |
 | Ranking industries by a point total | There is no industry score. PASS/REJECT + sweet-spot rank only. |
 | Recommending already-crowded industries (robotics, semis, data centers) | Clear G1 easily but avg coverage >= 10 — rank last, say so in `reason`. |
 | Dropping trap (Q1-YES) industries because they're "bad news" | Keep them, `expected_direction: "DOWN"`. A desk with only UP picks isn't credible. |
