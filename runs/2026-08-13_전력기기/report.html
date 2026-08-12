@@ -1,0 +1,548 @@
+<title>산일전기 투자보고서</title>
+<style>
+:root{
+  --paper:#EDF0F1;--surface:#FFF;--surface-2:#F5F7F8;
+  --ink:#111820;--ink-2:#33414D;--muted:#5C6873;--faint:#8A959D;
+  --rule:#D3D9DD;--rule-strong:#B4BEC5;
+  --ours:#0E6E64;--ours-bg:#E2EFED;
+  --cons:#5F6E7C;--cons-bg:#E7EAED;
+  --alert:#A93A2B;--alert-bg:#F6E5E2;
+  --ok:#2F6B45;--ok-bg:#E3EFE7;
+  --est:#8A5A00;--est-bg:#F7EFDF;
+  --f-sans:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  --f-mono:'JetBrains Mono','D2Coding',Consolas,ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0C1113;--surface:#141B20;--surface-2:#1A2329;
+  --ink:#DFE5E8;--ink-2:#BCC6CC;--muted:#8B96A0;--faint:#6C7780;
+  --rule:#26313A;--rule-strong:#39464F;
+  --ours:#41B3A3;--ours-bg:#12312E;
+  --cons:#8996A3;--cons-bg:#212A31;
+  --alert:#DC7A6B;--alert-bg:#341E1A;
+  --ok:#71B487;--ok-bg:#17291F;
+  --est:#D4A155;--est-bg:#332714;
+}}
+:root[data-theme="dark"]{
+  --paper:#0C1113;--surface:#141B20;--surface-2:#1A2329;
+  --ink:#DFE5E8;--ink-2:#BCC6CC;--muted:#8B96A0;--faint:#6C7780;
+  --rule:#26313A;--rule-strong:#39464F;
+  --ours:#41B3A3;--ours-bg:#12312E;
+  --cons:#8996A3;--cons-bg:#212A31;
+  --alert:#DC7A6B;--alert-bg:#341E1A;
+  --ok:#71B487;--ok-bg:#17291F;
+  --est:#D4A155;--est-bg:#332714;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-sans);font-size:15.5px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.shell{max-width:1000px;margin:0 auto;padding:0 clamp(14px,4vw,40px) 100px}
+:focus-visible{outline:2px solid var(--ours);outline-offset:2px}
+
+/* tags */
+.tag{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.06em;padding:1px 5px;border-radius:2px;vertical-align:2px;white-space:nowrap}
+.tag.f{background:var(--ok-bg);color:var(--ok)}
+.tag.e{background:var(--est-bg);color:var(--est)}
+.tag.a{background:var(--cons-bg);color:var(--cons)}
+.tag.na{background:var(--alert-bg);color:var(--alert)}
+
+/* cover */
+.cover{border-bottom:2px solid var(--ink);padding:44px 0 0;margin-bottom:30px}
+.eyebrow{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:20px}
+.eyebrow b{color:var(--ours);font-weight:600}
+h1{font-size:clamp(1.8rem,4.6vw,2.6rem);line-height:1.12;letter-spacing:-.03em;font-weight:800;margin:0 0 6px}
+h1 span{font-family:var(--f-mono);font-size:.5em;color:var(--muted);font-weight:600;letter-spacing:0}
+.tagline{font-size:1.02rem;color:var(--ink-2);margin:0 0 26px;max-width:60ch}
+.rating{display:grid;grid-template-columns:1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:12px}
+@media(min-width:700px){.rating{grid-template-columns:auto repeat(4,1fr)}}
+.rt{background:var(--surface);padding:16px 18px}
+.rt dt{font-family:var(--f-mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin:0 0 5px}
+.rt dd{margin:0;font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:1.28rem;font-weight:700;line-height:1.15}
+.rt.buy{background:var(--ours);}
+.rt.buy dt{color:rgba(255,255,255,.72)}
+.rt.buy dd{color:#fff;font-size:1.5rem;font-family:var(--f-sans);letter-spacing:.04em}
+.rt small{display:block;font-size:.72rem;color:var(--muted);font-family:var(--f-sans);font-weight:400;margin-top:3px}
+.disclaim{font-size:.83rem;color:var(--muted);background:var(--surface-2);border-left:3px solid var(--cons);padding:10px 14px;margin:0 0 30px}
+
+/* toc */
+.toc{background:var(--surface);border:1px solid var(--rule);padding:18px 22px;margin-bottom:38px}
+.toc h2{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.15em;text-transform:uppercase;color:var(--faint);margin:0 0 12px;font-weight:600}
+.toc ol{margin:0;padding:0;list-style:none;columns:2;column-gap:32px;font-size:.87rem}
+@media(max-width:640px){.toc ol{columns:1}}
+.toc li{margin-bottom:6px;break-inside:avoid}
+.toc a{color:var(--ink-2);text-decoration:none;display:flex;gap:9px}
+.toc a:hover{color:var(--ours)}
+.toc a b{font-family:var(--f-mono);color:var(--faint);font-weight:400;flex:0 0 20px}
+
+/* sections */
+section{margin-bottom:46px;scroll-margin-top:14px}
+.sh{display:flex;gap:12px;align-items:baseline;border-top:1px solid var(--rule-strong);padding-top:14px;margin-bottom:6px}
+.sh .n{font-family:var(--f-mono);font-size:.72rem;color:var(--ours);font-weight:700}
+h2{font-size:clamp(1.14rem,2.4vw,1.4rem);line-height:1.3;letter-spacing:-.02em;font-weight:750;margin:0}
+.sub{color:var(--muted);font-size:.89rem;margin:0 0 20px;max-width:66ch}
+h3{font-size:.97rem;font-weight:700;margin:26px 0 9px}
+p{margin:0 0 13px;max-width:70ch}
+ul,ol.n{max-width:70ch;padding-left:1.15em;margin:0 0 13px}
+li{margin-bottom:6px}
+code{font-family:var(--f-mono);font-size:.85em;background:var(--surface-2);border:1px solid var(--rule);padding:.05em .32em;border-radius:3px}
+
+/* table */
+.tw{overflow-x:auto;margin:0 0 18px;border:1px solid var(--rule);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.84rem;min-width:520px}
+caption{text-align:left;font-family:var(--f-mono);font-size:.61rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding:10px 14px 0;caption-side:top}
+th,td{padding:8px 13px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:1px solid var(--rule-strong);white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+tr.pick{background:var(--ours-bg)}
+tr.pick td{font-weight:600}
+.t-ok{color:var(--ok);font-weight:650}
+.t-al{color:var(--alert);font-weight:650}
+.t-ou{color:var(--ours);font-weight:650}
+.t-co{color:var(--cons)}
+
+/* quote / formula */
+blockquote{margin:0 0 14px;padding:11px 0 11px 15px;border-left:2px solid var(--cons);color:var(--ink-2);font-size:.9rem;background:var(--surface)}
+blockquote p{margin:0 0 5px}
+blockquote cite{display:block;font-family:var(--f-mono);font-size:.68rem;color:var(--faint);font-style:normal;margin-top:6px}
+.fx{background:var(--surface);border:1px solid var(--rule);padding:16px 19px;margin:0 0 18px;font-family:var(--f-mono);font-size:.78rem;line-height:1.95;overflow-x:auto;font-variant-numeric:tabular-nums}
+.fx .o{color:var(--ours);font-weight:600}
+.fx .c{color:var(--cons)}
+.fx .m{color:var(--faint)}
+
+/* note */
+.note{border-left:3px solid var(--ours);background:var(--surface);padding:14px 18px;margin:0 0 18px;max-width:72ch}
+.note.w{border-left-color:var(--alert)}
+.note.w .nl{color:var(--alert)}
+.nl{font-family:var(--f-mono);font-size:.61rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ours);display:block;margin-bottom:6px;font-weight:600}
+.note p:last-child{margin-bottom:0}
+
+/* chain */
+.chain{display:flex;flex-direction:column;gap:0;margin:0 0 18px}
+.ch{background:var(--surface);border:1px solid var(--rule);padding:13px 17px;display:grid;grid-template-columns:1fr;gap:4px}
+@media(min-width:640px){.ch{grid-template-columns:64px 1fr;column-gap:16px}}
+.ch .k{font-family:var(--f-mono);font-size:.68rem;font-weight:700;color:var(--ours);padding-top:2px}
+.ch .v{font-size:.89rem;color:var(--ink-2)}
+.ch .v b{color:var(--ink)}
+.arw{height:20px;display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:.68rem;color:var(--faint)}
+
+/* points */
+.pts{display:grid;grid-template-columns:1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:0 0 18px}
+@media(min-width:760px){.pts{grid-template-columns:repeat(3,1fr)}}
+.pt{background:var(--surface);padding:16px 18px}
+.pt .pn{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.12em;color:var(--ours);font-weight:700;display:block;margin-bottom:7px}
+.pt h4{margin:0 0 7px;font-size:.94rem;font-weight:700;line-height:1.4}
+.pt p{margin:0;font-size:.83rem;color:var(--muted);line-height:1.55}
+
+/* 3-point price */
+.px{border:1px solid var(--rule);background:var(--surface);padding:20px 22px;margin:0 0 18px}
+.pxr{display:grid;grid-template-columns:84px 1fr 90px;gap:12px;align-items:center;margin-bottom:9px;font-size:.8rem}
+.pxl{font-family:var(--f-mono);font-size:.68rem;color:var(--muted);text-align:right}
+.pxt{height:17px;background:var(--surface-2);border:1px solid var(--rule);position:relative}
+.pxf{height:100%;position:absolute;left:0;top:0}
+.pxf.now{background:var(--faint)}
+.pxf.con{background:var(--cons)}
+.pxf.our{background:var(--ours)}
+.pxv{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-weight:700;font-size:.78rem;text-align:right}
+
+footer{border-top:2px solid var(--ink);margin-top:12px;padding-top:18px;font-family:var(--f-mono);font-size:.67rem;color:var(--faint);letter-spacing:.05em;display:flex;flex-wrap:wrap;gap:7px 20px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="shell">
+
+<!-- ===== 0. COVER ===== -->
+<header class="cover">
+  <div class="eyebrow">
+    <span><b>PLUS FUTURE AI ANTI PLATFORM</b> PB팀</span>
+    <span>Investment Committee</span>
+    <span>2026-08-13</span>
+    <span>CASE C · Single-Stock</span>
+  </div>
+  <h1>산일전기 <span>062040 KOSPI</span></h1>
+  <p class="tagline">전력기기 7종목 중 <strong>인과 사슬이 끊기지 않은 유일한 종목.</strong>
+  근거가 시장 전망이 아니라 <strong>체결된 공급계약</strong>이다.</p>
+
+  <dl class="rating">
+    <div class="rt buy"><dt>Rating</dt><dd>BUY</dd><small>비중 30% 상한</small></div>
+    <div class="rt"><dt>목표주가</dt><dd class="t-ou">337,973</dd><small>원 <span class="tag e">EST</span></small></div>
+    <div class="rt"><dt>현재주가</dt><dd>189,100</dd><small>원 <span class="tag f">FACT</span></small></div>
+    <div class="rt"><dt>상승여력</dt><dd class="t-ou">+78.7%</dd><small>24M Horizon</small></div>
+    <div class="rt"><dt>기대수익</dt><dd class="t-ou">+35.5%</dd><small>승률 0.45 반영</small></div>
+  </dl>
+  <p class="disclaim"><strong>Skill 3 통과 여부와 무관한 독립 재검토 결과다.</strong>
+  검증 스킬의 <code>편입 1위</code> 판정을 자동으로 BUY로 옮기지 않았으며,
+  팀장 단계에서 6개 관문을 재검토한 뒤 등급을 부여했다.</p>
+</header>
+
+<!-- ===== 1. CONTENTS ===== -->
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#s2"><b>2</b>산업 선정 논리</a></li>
+    <li><a href="#s3"><b>3</b>기업 상세 분석</a></li>
+    <li><a href="#s4"><b>4</b>Investment Points</a></li>
+    <li><a href="#s5"><b>5</b>더 나은 대체 투자처 검토</a></li>
+    <li><a href="#s6"><b>6</b>리스크 &amp; Bull/Base/Bear</a></li>
+    <li><a href="#s7"><b>7</b>매출·비용 추정 — 하지 않는 이유</a></li>
+    <li><a href="#s8"><b>8</b>Valuation &amp; Target Price</a></li>
+    <li><a href="#s9"><b>9</b>Horizon &amp; Catalyst</a></li>
+    <li><a href="#s10"><b>10</b>Final Decision</a></li>
+    <li><a href="#s11"><b>11</b>Appendix — 심사표 전문</a></li>
+    <li><a href="#s12"><b>12</b>데이터 출처 · Output Schema</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- ===== 2 ===== -->
+<section id="s2">
+  <div class="sh"><span class="n">2</span><h2>산업 선정 논리 — 전력기기·중전기</h2></div>
+  <p class="sub">사용자가 산업을 직접 지정한 <code>verify</code> 경로다. 지정 산업도 <code>discover</code>와 동일한 G1 게이트를 통과했다.</p>
+
+  <div class="tw">
+    <table>
+      <caption>6개 산업 59종목 스캔 결과 — G1 게이트 (커버리지 3곳 이상 종목이 5개 이상)</caption>
+      <thead><tr><th>산업</th><th class="num">적격</th><th class="num">평균 커버리지</th><th>판정</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr class="pick"><td>전력기기·중전기</td><td class="num">7</td><td class="num">8.7</td><td class="t-ok">PASS</td><td>3개 PASS 산업 중 <strong>커버리지 가장 얇음</strong> — 정보 우위 여지</td></tr>
+        <tr><td>조선·조선기자재</td><td class="num">6</td><td class="num">15.3</td><td class="t-ok">PASS</td><td>already_covered</td></tr>
+        <tr><td>방산·항공</td><td class="num">5</td><td class="num">15.8</td><td class="t-ok">PASS</td><td>already_covered</td></tr>
+        <tr><td>원자력·발전정비</td><td class="num">4</td><td class="num">10.2</td><td class="t-al">REJECT</td><td>coverage_below_5</td></tr>
+        <tr><td>시멘트·건자재</td><td class="num">3</td><td class="num">4.0</td><td class="t-al">REJECT</td><td>coverage_below_5</td></tr>
+        <tr><td>환경·폐기물·수처리</td><td class="num">0</td><td class="num">0</td><td class="t-al">REJECT</td><td>최근 3개월 내 의견 제시 증권사 전무</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>매크로 맥락 <span class="tag f">FACT</span> — FRED 실호출: 미 10년물 <strong class="num">4.72%</strong> (2026-08-10), 원/달러 <strong class="num">1,409.94</strong> (2026-08-07). 3개월 상승 국면으로 <strong>매크로 게이트 G = 0.85(황색)</strong> 를 적용한다. 멀티플 재평가 논리는 할인율에 직결되므로 상방 조정률만 감쇠시킨다.</p>
+</section>
+
+<!-- ===== 3 ===== -->
+<section id="s3">
+  <div class="sh"><span class="n">3</span><h2>기업 상세 분석</h2></div>
+  <p class="sub">모든 판정 근거는 DART 공시 원문이다. 뉴스·IR·애널리스트 리포트는 인용에서 배제했다.</p>
+
+  <h3>Business Model &amp; Revenue Driver</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>내용</th><th class="num">비중</th><th>태그</th></tr></thead>
+      <tbody>
+        <tr><td>영업이익 1위 세그먼트</td><td>전기사업 — 변압기, 리액터 등</td><td class="num">97.4%</td><td><span class="tag f">FACT</span></td></tr>
+        <tr><td>영업부문 구조</td><td>단일 영업부문 (기업회계기준서 1108호)</td><td class="num">100%</td><td><span class="tag f">FACT</span></td></tr>
+        <tr><td>인지노동성 매출</td><td>A/S 등 기타용역 8,935백만원</td><td class="num">1.8%</td><td><span class="tag f">FACT</span></td></tr>
+        <tr><td>종업원급여 + 복리후생 + 외주용역</td><td>매출 501,946백만원 대비</td><td class="num">7.0%</td><td><span class="tag f">FACT</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>AI 잠식 판정: L4 (제조).</strong> 영업이익의 97.4%가 변압기·리액터 <em>제조</em>에서 나오고, 인건비 비중이 7.0%로 인지노동 산업이 아니다. 즉사선(L1~L2)에서 멀다.</p>
+
+  <h3>Competitive Position — Q1~Q5 판정</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th class="num">Q</th><th>질문</th><th>판정</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td class="num">Q1</td><td>영업이익 50% 이상이 AI 대체 가능 인지노동인가</td><td class="t-ok">NO</td><td>제조 97.4%, 용역 1.8%</td></tr>
+        <tr class="pick"><td class="num">Q2</td><td>3년 내 신규 진입 불가한가</td><td class="t-ou">YES <span class="tag f">structural</span></td><td>거래 지속성 · 검증 요구</td></tr>
+        <tr class="pick"><td class="num">Q3</td><td>AI 확산이 매출을 직접 늘리는 경로가 공시에 있는가</td><td class="t-ou">YES</td><td><strong>체결된 공급계약</strong></td></tr>
+        <tr><td class="num">Q4</td><td>AI로 낮출 인건비·설계비가 매출 10% 이상인가</td><td class="t-co">NO</td><td>7.0% — 제조업이라 절감 여지 자체가 적음</td></tr>
+        <tr><td class="num">Q5</td><td>컨센 갱신일 이후 중요 공시가 있었는가</td><td class="t-co">NO</td><td>최근 공시 2026-08-07, 기준일 이전</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <p>한번 특정 제조사와 거래를 시작하면 특별한 문제가 발생하지 않는 한 매우 장기적으로 거래 관계를 이어가는 경우가 많습니다. 그렇기 때문에 시장에서의 검증이 부족한 신생 회사가 진입하기 매우 어려운 시장이며</p>
+    <cite>2025 사업보고서 (접수번호 20260403003697) II.사업의 내용 7.기타 참고사항 마.시장여건 (1)시장의 특성</cite>
+  </blockquote>
+
+  <h3>경쟁사 — M3 이익귀속 4방향 검사</h3>
+  <p>동종 8분기 마진 시계열을 확보하지 못해 정성 4방향으로 강등했다 <span class="tag na">Data unavailable</span>. 비교군은 산업 유니버스 커버리지 상위 3사이며 <strong>심사 대상 자신은 제외</strong>했다.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>방향</th><th>질문</th><th>판정</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>경쟁자</td><td>동일 수혜인가</td><td class="t-al">방어 실패</td><td>peer 3사(HD현대일렉트릭·효성중공업·LS)가 <strong>같은 Q3 근거</strong>를 사업보고서에 쓴다</td></tr>
+        <tr><td>고객</td><td>단가 인하를 강요당하는가</td><td class="t-ok">방어</td><td>공급부족(shortage) 국면 — 판가 상승이 산업 서술에 존재</td></tr>
+        <tr><td>공급자</td><td>원가로 흡수되는가</td><td class="t-al">방어 실패</td><td>구리·전기강판 전가 근거가 공시에 없음 <span class="tag na">Data unavailable</span></td></tr>
+        <tr><td>규제</td><td>환수 대상인가</td><td class="t-ok">방어</td><td>요금 규제 대상 아님</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note w">
+    <span class="nl">이 종목의 최대 약점</span>
+    <p><strong>M3 = 1/2. "이 회사만의 이익인가"에 절반만 답했다.</strong> 계약을 딴 것은 당사지만, 데이터센터 변압기 수요 자체는 경쟁사에도 간다. 이것이 §10 비중 30% 상한의 직접 근거다.</p>
+  </div>
+</section>
+
+<!-- ===== 4 ===== -->
+<section id="s4">
+  <div class="sh"><span class="n">4</span><h2>Investment Points</h2></div>
+  <p class="sub">3개 논점. 각각을 5단 인과 사슬로 전개하고, 검증 스킬의 5종 공격을 통과했는지 표기한다.</p>
+
+  <div class="pts">
+    <div class="pt"><span class="pn">Point 1</span><h4>전망이 아니라 계약이다</h4>
+      <p>6개 경쟁 종목이 "AI로 전력수요가 는다"는 <em>산업 서술</em>을 근거로 냈다. 산일전기만 <strong>체결된 공급계약</strong>을 냈다.</p></div>
+    <div class="pt"><span class="pn">Point 2</span><h4>전환비용이 구조적이다</h4>
+      <p>"한번 거래를 시작하면 장기적으로 이어간다" — 검증 요구가 신규 진입을 막는다. 경쟁 3사의 근거는 <code>temporary</code>였다.</p></div>
+    <div class="pt"><span class="pn">Point 3</span><h4>사업이 흩어져 있지 않다</h4>
+      <p>영업이익 97.4%가 단일 세그먼트. LS는 1위 세그먼트가 <strong>28.6%</strong>뿐이라 부문 개선이 회사를 대표하지 못했다.</p></div>
+  </div>
+
+  <h3>인과 사슬 — 5단 전개</h3>
+  <div class="chain">
+    <div class="ch"><div class="k">P₁</div><div class="v"><b>[사실]</b> 신생 회사가 진입하기 매우 어려운 시장 <span class="tag f">FACT</span><br><span style="color:var(--faint);font-size:.8rem">2025 사업보고서 II.7.마(1)</span></div></div>
+    <div class="arw">↓</div>
+    <div class="ch"><div class="k">P₂</div><div class="v"><b>[사실]</b> 미국 Data Center용 변압기 공급계약 체결. <strong>502.8억원, 최근매출액 대비 10.02%</strong>, 계약상대 Bloom Energy <span class="tag f">FACT</span><br><span style="color:var(--faint);font-size:.8rem">2026-04-30 단일판매·공급계약체결 (20260430800407)</span></div></div>
+    <div class="arw">↓ ①</div>
+    <div class="ch"><div class="k">M</div><div class="v"><b>[연결]</b> 진입장벽이 유지되는 시장에서 당사가 데이터센터 물량을 실제로 확보했다 → 매출 인식 예정<br><span class="t-ok" style="font-size:.8rem">비약 공격 불성립 — 화살표가 이미 실현됨</span></div></div>
+    <div class="arw">↓ ②</div>
+    <div class="ch"><div class="k">R</div><div class="v"><b>[전망]</b> 영업이익 97.4%를 차지하는 세그먼트의 매출 증가가 이익으로 전환된다<br><span class="t-al" style="font-size:.8rem">귀속 공격 부분 성립 — 경쟁자·공급자 방향 미방어 (M3 1/2)</span></div></div>
+  </div>
+
+  <div class="tw">
+    <table>
+      <caption>검증 스킬 5종 공격 결과 — 끊긴 고리 0개</caption>
+      <thead><tr><th>공격</th><th>결과</th><th>사유</th></tr></thead>
+      <tbody>
+        <tr><td>① 비약</td><td class="t-ok">불성립</td><td>계약 공시로 화살표가 실현됨. 나머지 6종목은 여기서 끊김</td></tr>
+        <tr><td>② 필요≠충분</td><td class="t-ok">불성립</td><td>진입장벽 + 실제 수주가 함께 제시됨</td></tr>
+        <tr><td>③ 역방향</td><td class="t-ok">불성립</td><td>같은 인용으로 반대 결론이 나오지 않음</td></tr>
+        <tr><td>④ 제3원인</td><td class="t-ok">불성립</td><td>계약금액·상대방이 특정되어 다른 설명 불가</td></tr>
+        <tr><td>⑤ 귀속 누락</td><td class="t-al">부분 성립</td><td>경쟁자·공급자 방향 미방어 → M3 1점으로 반영</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 5 ===== -->
+<section id="s5">
+  <div class="sh"><span class="n">5</span><h2>더 나은 대체 투자처 검토</h2></div>
+  <p class="sub">단일 종목이라도 진공 비교는 금지된다. 같은 산업에서 생존했던 종목과 직접 비교한다.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>비교 항목</th><th class="num">산일전기</th><th class="num">일진전기</th><th>판정</th></tr></thead>
+      <tbody>
+        <tr><td>업사이드</td><td class="num">+78.7%</td><td class="num t-ou">+88.4%</td><td>일진 우위</td></tr>
+        <tr><td>커버리지</td><td class="num">9곳</td><td class="num t-ou">3곳</td><td>일진 우위 (스위트스팟)</td></tr>
+        <tr><td>세그먼트 집중도</td><td class="num t-ou">97.4%</td><td class="num">76.7%</td><td>산일 우위</td></tr>
+        <tr><td>인과 끊김</td><td class="num t-ou">0</td><td class="num">1 (비약)</td><td><strong>산일 우위</strong></td></tr>
+        <tr><td>M4 상투어 감점</td><td class="num t-ou">1</td><td class="num">2</td><td>산일 우위</td></tr>
+        <tr><td>승률</td><td class="num t-ou">0.45</td><td class="num">0.25</td><td>산일 우위</td></tr>
+        <tr class="pick"><td><strong>기대수익</strong></td><td class="num t-ou">+35.5%</td><td class="num">+22.1%</td><td><strong>산일 채택</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>일진전기가 업사이드와 커버리지에서 앞선다.</strong> 그럼에도 산일전기를 택한 이유는 <strong>인과 끊김</strong>이다. 일진전기의 Q3 근거는 <em>"데이터센터 전력 밀도가 급상승하면서 초고압 변압기 신규 발주가 이어지고 있다"</em> 로, 산업 현상 서술이지 당사 수주 근거가 아니다. 업사이드가 큰 것은 <strong>확률이 반영되기 전 숫자</strong>이며, 승률을 곱하면 순서가 뒤집힌다.</p>
+
+  <div class="note">
+    <span class="nl">그리고 일진전기는 담을 수 없다</span>
+    <p>전력기기 7종목이 <strong>전부 L4(제조)</strong>다. 분산 규칙상 같은 L단계를 중복 편입하면 <em>물리 자동화가 진전될 때 동시에 무너지므로</em> 배제된다. 3종목 포트폴리오를 만들려면 <strong>L3 또는 L5 산업</strong>이 따로 필요하다 — 종목이 부족해서가 아니라 <strong>단일 산업만 심사한 구조적 결과</strong>다.</p>
+  </div>
+</section>
+
+<!-- ===== 6 ===== -->
+<section id="s6">
+  <div class="sh"><span class="n">6</span><h2>리스크 &amp; Bull / Base / Bear</h2></div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>시나리오</th><th>가정</th><th class="num">TP</th><th class="num">현재가 대비</th><th class="num">확률</th></tr></thead>
+      <tbody>
+        <tr><td class="t-ok"><strong>Bull</strong></td><td>Bloom Energy 계약이 반복 수주로 전환</td><td class="num">337,973 <span class="tag e">EST</span></td><td class="num t-ou">+78.7%</td><td class="num">0.30</td></tr>
+        <tr><td><strong>Base</strong></td><td>계약 이행 완료, 추가 수주는 산업 평균</td><td class="num">278,889 <span class="tag f">FACT</span></td><td class="num">+47.5%</td><td class="num">0.45</td></tr>
+        <tr><td class="t-al"><strong>Bear</strong></td><td>단발 계약 종료, 후속 물량 경쟁사 이탈</td><td class="num">189,100 <span class="tag a">ASSUME</span></td><td class="num">0%</td><td class="num">0.25</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Bear에서도 손실이 아니라 정체다.</strong> 현재가가 컨센서스 대비 이미 47.5% 아래이기 때문이다 <span class="tag f">FACT</span>.</p>
+
+  <h3>Thesis-breaking Risk — 이게 관측되면 논리가 죽는다</h3>
+  <ul>
+    <li><strong>계약 취소·축소 공시</strong> — P₂가 무효화되면 사슬 전체가 무너진다</li>
+    <li><strong>세그먼트 영업이익 비중 90% 미만 하락</strong> — M1(L4) 판정 근거 소멸</li>
+    <li><strong>컨센서스 TP 하향</strong> — 우리 TP가 컨센에 연동되므로 독립적 하방 방어선이 없다</li>
+    <li><strong>경쟁 3사의 동일 계약 공시</strong> — M3 경쟁자 방향이 완전히 무너진다</li>
+  </ul>
+
+  <h3>미해결 항목</h3>
+  <ul>
+    <li>M3 공급자 방향 — 구리·전기강판 원가 전가 근거 <span class="tag na">Data unavailable</span></li>
+    <li>반복성 — 계약 2건은 추세가 아니다 (2025-12-24 EPC Power 437.8억 건 포함)</li>
+    <li>커버리지 9곳 — 스위트스팟(3~5곳) 밖. 정보 우위가 두텁지 않다</li>
+  </ul>
+</section>
+
+<!-- ===== 7 ===== -->
+<section id="s7">
+  <div class="sh"><span class="n">7</span><h2>매출·비용 추정 — <span style="color:var(--alert)">하지 않는다</span></h2></div>
+  <p class="sub">일반 리서치 보고서가 분량의 절반 이상을 쓰는 장이다. 우리는 이 장을 <strong>설계상 대체</strong>한다.</p>
+
+  <div class="fx"><span class="m">일반 리서치</span>   매출 P&times;Q 추정 &rarr; FCFF &rarr; WACC &rarr; DCF &rarr; 목표주가
+<span class="o">우리 데스크</span>   <span class="c">컨센 TP (FnGuide 9개사)</span> &times; (1 + <span class="o">조정률</span>)</div>
+
+  <p><strong>우리는 애널리스트보다 재무모델을 잘 만들 수 없다.</strong> 9개 증권사가 이미 만든 추정치가 있는데 그것을 무시하고 우리 P×Q를 세우는 것은 자원 낭비이며, 우리가 잘하는 일도 아니다.</p>
+  <p>우리가 잘할 수 있는 것은 <strong>그들이 안 본 것을 반영해 그 숫자를 밀거나 당기는 것</strong>이다. 그래서 컨센서스 목표주가를 앵커로 쓰고, 조정률만 얹는다. 델타가 곧 우리 판단이다.</p>
+  <div class="note w">
+    <span class="nl">이 장을 비워두지 않고 명시하는 이유</span>
+    <p>밝히지 않으면 <strong>"추정을 안 했다"</strong>로 읽히고, 밝히면 <strong>"설계 선택"</strong>이 된다. 실제로 우리 목표주가는 9개사 컨센서스를 기반으로 하므로, 추정의 품질은 그 9개사가 담보한다.</p>
+  </div>
+</section>
+
+<!-- ===== 8 ===== -->
+<section id="s8">
+  <div class="sh"><span class="n">8</span><h2>Valuation &amp; Target Price</h2></div>
+
+  <div class="fx">조정률   = Q2 진입장벽 <span class="o">+10%p</span> + Q3 수요연동 <span class="o">+15%p</span>  =  <span class="o">+25.0%</span>
+<span class="c">G</span>        = 0.85            <span class="m">FRED DGS10 4.72% 상승국면 — 황색. 상방에만 적용</span>
+
+<span class="o">우리 TP</span>  = <span class="c">278,889</span> &times; (1 + 0.25 &times; <span class="c">0.85</span>)  =  <span class="o">337,973원</span>
+델타     = 0.25 &times; 0.85 = <span class="o">+21.2%</span>          <span class="m">게이트 20%p 통과</span>
+업사이드  = 337,973 / 189,100 &minus; 1 = <span class="o">+78.7%</span>
+승률     = 0.55 &minus; 0.10 &times; (인과 0 + M4 감점 1) = <span class="o">0.45</span>
+기대수익  = 0.787 &times; 0.45 = <span class="o">+35.5%</span></div>
+
+  <h3>3점 비교</h3>
+  <div class="px">
+    <div class="pxr"><div class="pxl">현재가</div><div class="pxt"><div class="pxf now" style="width:55.9%"></div></div><div class="pxv">189,100</div></div>
+    <div class="pxr"><div class="pxl">컨센 TP</div><div class="pxt"><div class="pxf con" style="width:82.5%"></div></div><div class="pxv t-co">278,889</div></div>
+    <div class="pxr"><div class="pxl">우리 TP</div><div class="pxt"><div class="pxf our" style="width:100%"></div></div><div class="pxv t-ou">337,973</div></div>
+  </div>
+  <p>컨센서스 자체가 현재가 대비 <strong class="num">+47.5%</strong> 위에 있다 <span class="tag f">FACT</span>. 우리 판단은 그 위에 <strong class="num">+21.2%</strong> 를 더 얹은 것이며, <strong>델타가 우리 몫이다.</strong></p>
+
+  <h3>민감도 — 조정률 &times; G</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th class="num">조정률 \ G</th><th class="num">1.00 녹색</th><th class="num">0.85 황색</th><th class="num">0.50 적색</th></tr></thead>
+      <tbody>
+        <tr><td class="num">+15%</td><td class="num">320,722</td><td class="num">314,439</td><td class="num">299,806</td></tr>
+        <tr class="pick"><td class="num">+25%</td><td class="num">348,611</td><td class="num"><strong>337,973</strong></td><td class="num">313,750</td></tr>
+        <tr><td class="num">+35%</td><td class="num">376,500</td><td class="num">361,507</td><td class="num">327,694</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Q3(수요연동) 하나가 빠지면 조정률이 +10%가 되어 <strong>델타 8.5%p로 게이트 미달</strong>이 된다. <strong>이 판단은 공급계약 공시 1건에 걸려 있다.</strong></p>
+</section>
+
+<!-- ===== 9 ===== -->
+<section id="s9">
+  <div class="sh"><span class="n">9</span><h2>Investment Horizon &amp; Catalyst Timeline</h2></div>
+  <p class="sub">보유 기간 24개월. 데스크 호흡은 10~20년이나, 이 판단의 근거인 계약은 이행 주기가 짧다.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>시점</th><th>관측 대상</th><th>의미</th></tr></thead>
+      <tbody>
+        <tr><td>분기 실적</td><td>계약 매출 인식 진행률</td><td>502.8억이 실제로 들어오는가</td></tr>
+        <tr class="pick"><td>수시공시</td><td><strong>추가 데이터센터 공급계약</strong></td><td>반복성 확인 — <strong>Bull 전환 조건이자 비중 상한 해제 조건</strong></td></tr>
+        <tr><td>컨센 갱신</td><td>9개사 목표주가 변동</td><td>우리 TP가 컨센에 연동되므로 직접 영향</td></tr>
+        <tr><td>사업보고서</td><td>세그먼트 영업이익 97.4% 유지</td><td>M1(L4) 판정 근거 유지</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>선례가 하나 더 있다</strong> <span class="tag f">FACT</span> — 2025-12-24 미국 Data Center용 Pad Mount 변압기 437.8억원(매출 대비 13.11%, EPC Power Corporation). <strong>2건째라는 점이 반복성의 초기 근거</strong>이나, 2건으로 추세를 단정하지 않는다.</p>
+</section>
+
+<!-- ===== 10 ===== -->
+<section id="s10">
+  <div class="sh"><span class="n">10</span><h2>Final Decision</h2></div>
+
+  <div style="border:2px solid var(--ink);background:var(--surface);padding:26px 28px;margin-bottom:18px">
+    <p style="font-size:1.14rem;font-weight:700;margin:0 0 12px;line-height:1.5">
+      Final Decision: <span class="t-ou">BUY</span> — Target Price ₩337,973 / 24M Horizon / +78.7% Upside
+    </p>
+    <p style="margin:0;color:var(--ink-2)">전력기기 7종목 중 인과 사슬이 끊기지 않은 유일한 종목이며, 근거가 시장 전망이 아니라 <strong>체결된 공급계약</strong>이다. 다만 그 계약이 논리의 전부이고 M3가 절반만 방어되었으므로 <strong>비중 30% 상한</strong>을 둔다.</p>
+  </div>
+
+  <h3>배분 (1억 기준)</h3>
+  <div class="fx">산일전기        30%    3,000만원      <span class="m">상한. M3 절반 방어가 근거</span>
+현금·기존 유지   70%    7,000만원      <span class="m">L4 중복으로 2·3순위 편입 불가</span>
+
+<span class="o">기대수익</span>  3,000만 &times; +78.7% &times; 0.45  =  <span class="o">+1,062만원</span></div>
+
+  <h3>청산 규칙</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>조건</th><th>행동</th></tr></thead>
+      <tbody>
+        <tr><td>재심사에서 인과 끊김 2개 이상</td><td class="t-al">전량 매도</td></tr>
+        <tr><td>계약 취소·축소 공시</td><td class="t-al">전량 매도</td></tr>
+        <tr><td>컨센 TP 하향</td><td>즉시 재평가</td></tr>
+        <tr><td>우리 TP 90% 도달 (304,176원)</td><td class="t-ok">절반 익절</td></tr>
+        <tr><td>&minus;20% (151,280원)</td><td class="t-al">손절</td></tr>
+        <tr><td>세그먼트 영업이익 비중 90% 미만</td><td>M1 재판정</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>고객 유형</h3>
+  <ul>
+    <li><strong>공격형</strong> — 위 배분 그대로 (30%)</li>
+    <li><strong>안정형</strong> — 15%로 축소. 승률 0.45는 설명 가능한 수준이나 계약 1~2건 의존 구조는 변동성이 크다</li>
+  </ul>
+</section>
+
+<!-- ===== 11 ===== -->
+<section id="s11">
+  <div class="sh"><span class="n">11</span><h2>Appendix — 심사표 전문</h2></div>
+  <p class="sub"><strong>탈락 종목을 숨기지 않는다.</strong> "7개 중 1개를 골랐다"는 증거가 안 되지만 "6개를 이 사유로 죽였다"는 증거가 된다.</p>
+
+  <div class="tw">
+    <table>
+      <caption>pro_tackler 심사 전수 — 전력기기·중전기 7종목</caption>
+      <thead><tr><th>종목</th><th class="num">M1</th><th class="num">세그</th><th class="num">인과</th><th class="num">M3</th><th class="num">M4</th><th class="num">델타</th><th class="num">업사이드</th><th class="num">승률</th><th class="num">기대수익</th><th>판정 · 사유</th></tr></thead>
+      <tbody>
+        <tr class="pick"><td><strong>산일전기</strong></td><td class="num">L4</td><td class="num">97%</td><td class="num">0끊</td><td class="num">1</td><td class="num">1</td><td class="num">21.2%</td><td class="num">78.8%</td><td class="num">0.45</td><td class="num t-ou">35.5%</td><td><strong>편입 1위</strong></td></tr>
+        <tr><td>일진전기</td><td class="num">L4</td><td class="num">77%</td><td class="num">1끊</td><td class="num">1</td><td class="num">2</td><td class="num">21.2%</td><td class="num">88.4%</td><td class="num">0.25</td><td class="num">22.1%</td><td>반려 — 분산 규칙 L4 중복</td></tr>
+        <tr><td>LS</td><td class="num">L4</td><td class="num t-al">29%</td><td class="num t-al">2끊</td><td class="num">-</td><td class="num">-</td><td class="num">21.2%</td><td class="num">110.7%</td><td class="num">-</td><td class="num">-</td><td>반려 — 세그먼트 대표성 + 근거 세그먼트 불일치</td></tr>
+        <tr><td>효성중공업</td><td class="num">L4</td><td class="num">99%</td><td class="num t-al">2끊</td><td class="num">-</td><td class="num">-</td><td class="num">21.2%</td><td class="num">77.6%</td><td class="num">-</td><td class="num">-</td><td>반려 — 역방향(Q2 자기모순)</td></tr>
+        <tr><td>HD현대일렉트릭</td><td class="num">L4</td><td class="num">100%</td><td class="num t-al">2끊</td><td class="num">-</td><td class="num">-</td><td class="num">21.2%</td><td class="num">85.1%</td><td class="num">-</td><td class="num">-</td><td>반려 — 역방향(관행 서술)</td></tr>
+        <tr><td>대한전선</td><td class="num">L4</td><td class="num">100%</td><td class="num t-al">2끊</td><td class="num">-</td><td class="num">-</td><td class="num">21.2%</td><td class="num">75.6%</td><td class="num">-</td><td class="num">-</td><td>반려 — 역방향(hedge 표현)</td></tr>
+        <tr><td>비츠로셀</td><td class="num">L4</td><td class="num">100%</td><td class="num">0끊</td><td class="num">-</td><td class="num">-</td><td class="num t-al">17.0%</td><td class="num">72.4%</td><td class="num">-</td><td class="num">-</td><td>반려 — 델타 17.0%p &lt; 20%p</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>비츠로셀은 인과가 무결한데 탈락했다.</strong> Q2가 <code>structural</code>(5년 이상 실적, 6~8개월 인증평가)로 가장 강했으나 Q3가 없어 조정률이 20%에 그쳤고, G 적용 후 17.0%p로 게이트에 미달했다. <strong>좋은 회사를 찾는 게 아니라 시장이 틀린 곳을 찾는 것</strong>이므로 이것이 정상 작동이다.</p>
+
+  <div class="note w">
+    <span class="nl">설계 이슈 — 가중치가 durability를 반영하지 않는다</span>
+    <p>Q2 가중치가 <code>structural</code>과 <code>temporary</code>에 동일하게 +10%p다. 그 결과 <strong>구조적 해자를 가진 비츠로셀이 탈락하고, 중국·인도 가격경쟁에 노출된 효성중공업·HD현대일렉트릭이 게이트를 통과</strong>했다(인과에서 탈락하기 전까지). 10~20년 호흡 데스크에서는 반대여야 한다. <code>structural +15 / temporary +5</code> 로 분기하는 안을 A·C에 제안한다.</p>
+  </div>
+</section>
+
+<!-- ===== 12 ===== -->
+<section id="s12">
+  <div class="sh"><span class="n">12</span><h2>데이터 출처 · Output Schema</h2></div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>항목</th><th>출처</th><th>검증</th></tr></thead>
+      <tbody>
+        <tr><td>컨센 TP · 커버리지 · 기준일</td><td>FnGuide (navercomp.wisereport 서빙)</td><td class="t-ok">실호출 <span class="tag f">FACT</span></td></tr>
+        <tr><td>현재가</td><td>네이버 금융 실시간</td><td class="t-ok">실호출 <span class="tag f">FACT</span></td></tr>
+        <tr><td>Q1~Q5 근거 · segment_top</td><td>DART 사업보고서 · 수시공시</td><td class="t-ok">moat-scorer 에이전트 실호출 <span class="tag f">FACT</span></td></tr>
+        <tr><td>상장사 corp_code</td><td>DART OpenAPI corpCode.xml — 3,925개</td><td class="t-ok">실호출 <span class="tag f">FACT</span></td></tr>
+        <tr><td>매크로 게이트 G</td><td>FRED DGS10 · DEXKOUS</td><td class="t-ok">실호출 <span class="tag f">FACT</span></td></tr>
+        <tr><td>산업 게이트</td><td>6개 산업 59종목 스캔, G1 적격 7개</td><td class="t-ok"><span class="tag f">FACT</span></td></tr>
+        <tr><td>동종 8분기 마진 시계열</td><td>&mdash;</td><td class="t-al">미확보 <span class="tag na">Data unavailable</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="fx">runs/2026-08-13_전력기기/
+  01-industry.json     <span class="m">verify · G1 PASS · peers 3사 · FRED</span>
+  02-companies.json    <span class="m">7종목 Q1~Q5 + DART 인용 + segment_top</span>
+  03-valuation.json    <span class="m">조정률 · 우리 TP · 델타 · 업사이드</span>
+  04-tackle.json       <span class="m">심사표 전수 · picks · 분산 노트</span>
+  <span class="o">report.html</span>          <span class="m">이 문서 — 제출물</span></div>
+</section>
+
+</main>
+
+<footer>
+  <span>PLUS FUTURE AI ANTI PLATFORM</span>
+  <span>한화투자증권 PB팀</span>
+  <span>CASE C · Single-Stock Report</span>
+  <span>2026-08-13</span>
+</footer>
+
+</div>
