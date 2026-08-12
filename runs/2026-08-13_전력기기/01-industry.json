@@ -1,0 +1,28 @@
+{
+  "run_id": "2026-08-13_전력기기",
+  "mode": "discover",
+  "selected_industry": "전력기기·중전기",
+  "industries": [
+    {"name":"전력기기·중전기","consensus_universe_count":7,"gate":"PASS",
+     "reason":"적격 7개(기준 5). 평균 커버리지 8.7로 3개 PASS 산업 중 가장 얇아 정보 우위 여지가 남아있다. 다만 'AI 데이터센터 전력수요'는 상투어라 M4 감점이 예상된다 — 그 자체가 검증 대상.",
+     "expected_direction":"UP","answerable_questions":["Q1","Q2","Q3","Q5"]},
+    {"name":"조선·조선기자재","consensus_universe_count":6,"gate":"PASS",
+     "reason":"적격 6개. 평균 커버리지 15.3 — already_covered. discover 순위 후순위.",
+     "expected_direction":"UP","answerable_questions":["Q1","Q2","Q3"]},
+    {"name":"방산·항공","consensus_universe_count":5,"gate":"PASS",
+     "reason":"적격 5개(간신히 통과). 평균 커버리지 15.8 — already_covered. 후순위.",
+     "expected_direction":"UP","answerable_questions":["Q1","Q2","Q5"]}
+  ],
+  "rejected": [
+    {"name":"원자력·발전정비","consensus_universe_count":4,"gate":"REJECT","reason":"coverage_below_5 (적격 4개)"},
+    {"name":"시멘트·건자재","consensus_universe_count":3,"gate":"REJECT","reason":"coverage_below_5 (적격 3개)"},
+    {"name":"환경·폐기물·수처리","consensus_universe_count":0,"gate":"REJECT","reason":"coverage_below_5 (적격 0개) — 최근 3개월 내 의견 제시 증권사 전무"}
+  ],
+  "peers": [
+    {"ticker":"267260","name":"HD현대일렉트릭","coverage_count":14},
+    {"ticker":"298040","name":"효성중공업","coverage_count":13},
+    {"ticker":"006260","name":"LS","coverage_count":12}
+  ],
+  "_macro_context": {"DGS10":{"value":4.72,"date":"2026-08-10"},"DEXKOUS":{"value":1409.94,"date":"2026-08-07"},"source":"FRED 실호출"},
+  "_data_source": "consensus: navercomp.wisereport (FnGuide 공급) / universe: DART corpCode 3,925개 상장사"
+}

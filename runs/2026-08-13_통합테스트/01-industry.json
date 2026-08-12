@@ -1,0 +1,20 @@
+{
+  "run_id": "2026-08-13_통합테스트",
+  "mode": "discover",
+  "selected_industry": null,
+  "industries": [],
+  "peers": [],
+  "gate_result": "BLOCKED",
+  "blocked_reason": "Step 1 후보 집합 구성 실패 — data/industry_universe.csv 데이터행 0개, data/consensus.csv 데이터행 0개. 산업→종목 매핑과 커버리지 수가 없어 G1(커버리지 3곳 이상 종목 5개) 판정 자체가 불가능하다.",
+  "_env_check": {
+    "DART_API_KEY": "미설정 — Step 2 생존자 필터 불가",
+    "FRED_API_KEY": "정상 작동 확인"
+  },
+  "_macro_context": {
+    "universal_series": ["DGS10", "DEXKOUS"],
+    "DGS10": { "value": 4.72, "date": "2026-08-10", "unit": "%" },
+    "DEXKOUS": { "value": 1409.94, "date": "2026-08-07", "unit": "KRW/USD" },
+    "note": "Step 4는 실호출로 검증됨. 다만 Step 1이 막혀 산업에 귀속시킬 대상이 없다."
+  },
+  "_note": "스킬 로직은 정상. 데이터 레이어가 비어 파이프라인이 1단계에서 정지. 임의로 종목을 채워 진행하지 않는다 — industry-screen SKILL.md '§Do Not: Inventing a number with no source'."
+}

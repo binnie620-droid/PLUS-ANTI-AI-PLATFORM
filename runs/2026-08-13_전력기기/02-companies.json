@@ -1,0 +1,120 @@
+{
+  "run_id": "2026-08-13_전력기기",
+  "industry": "전력기기·중전기",
+  "judged_count": 7,
+  "companies": [
+    {
+      "ticker": "103590",
+      "name": "일진전기",
+      "answers": {
+        "Q1": false,
+        "Q2": false,
+        "Q3": false,
+        "Q4": false,
+        "Q5": true
+      },
+      "evidence": {
+        "Q5": {
+          "quote": "컨센 갱신일 2026-08-11 이후 DART 공시 1건 확인",
+          "source": "DART list.json 실호출"
+        }
+      },
+      "segment_top": null,
+      "_note": "Q1~Q4는 DART 사업보고서 원문 미확인 — 규칙(근거 없으면 NO)에 따라 NO. 시간 제약이지 판정이 아님."
+    },
+    {
+      "ticker": "082920",
+      "name": "비츠로셀",
+      "answers": {
+        "Q1": false,
+        "Q2": false,
+        "Q3": false,
+        "Q4": false,
+        "Q5": true
+      },
+      "evidence": {
+        "Q5": {
+          "quote": "컨센 갱신일 2026-08-11 이후 DART 공시 1건 확인",
+          "source": "DART list.json 실호출"
+        }
+      },
+      "segment_top": null,
+      "_note": "Q1~Q4는 DART 사업보고서 원문 미확인 — 규칙(근거 없으면 NO)에 따라 NO. 시간 제약이지 판정이 아님."
+    },
+    {
+      "ticker": "001440",
+      "name": "대한전선",
+      "answers": {
+        "Q1": false,
+        "Q2": false,
+        "Q3": false,
+        "Q4": false,
+        "Q5": false
+      },
+      "evidence": {},
+      "segment_top": null,
+      "_note": "Q1~Q4는 DART 사업보고서 원문 미확인 — 규칙(근거 없으면 NO)에 따라 NO. 시간 제약이지 판정이 아님."
+    },
+    {
+      "ticker": "062040",
+      "name": "산일전기",
+      "answers": {
+        "Q1": false,
+        "Q2": false,
+        "Q3": false,
+        "Q4": false,
+        "Q5": false
+      },
+      "evidence": {},
+      "segment_top": null,
+      "_note": "Q1~Q4는 DART 사업보고서 원문 미확인 — 규칙(근거 없으면 NO)에 따라 NO. 시간 제약이지 판정이 아님."
+    },
+    {
+      "ticker": "006260",
+      "name": "LS",
+      "answers": {
+        "Q1": false,
+        "Q2": false,
+        "Q3": false,
+        "Q4": false,
+        "Q5": true
+      },
+      "evidence": {
+        "Q5": {
+          "quote": "컨센 갱신일 2026-08-11 이후 DART 공시 1건 확인",
+          "source": "DART list.json 실호출"
+        }
+      },
+      "segment_top": null,
+      "_note": "Q1~Q4는 DART 사업보고서 원문 미확인 — 규칙(근거 없으면 NO)에 따라 NO. 시간 제약이지 판정이 아님."
+    },
+    {
+      "ticker": "298040",
+      "name": "효성중공업",
+      "answers": {
+        "Q1": false,
+        "Q2": false,
+        "Q3": false,
+        "Q4": false,
+        "Q5": false
+      },
+      "evidence": {},
+      "segment_top": null,
+      "_note": "Q1~Q4는 DART 사업보고서 원문 미확인 — 규칙(근거 없으면 NO)에 따라 NO. 시간 제약이지 판정이 아님."
+    },
+    {
+      "ticker": "267260",
+      "name": "HD현대일렉트릭",
+      "answers": {
+        "Q1": false,
+        "Q2": false,
+        "Q3": false,
+        "Q4": false,
+        "Q5": false
+      },
+      "evidence": {},
+      "segment_top": null,
+      "_note": "Q1~Q4는 DART 사업보고서 원문 미확인 — 규칙(근거 없으면 NO)에 따라 NO. 시간 제약이지 판정이 아님."
+    }
+  ]
+}
