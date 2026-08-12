@@ -32,7 +32,7 @@
    │                             └ 인용 없는 YES → NO 강제
    ├─ Core         조정률 산출   조정률 → 우리 TP → 컨센 델타          [A]
    │                             └ |델타| < 20%p → NO CALL
-   ├─ Skill 3      검증봇        V1~V3 PASS/FAIL → 승률                [D]
+   ├─ Skill 3      태클봇        pro_tackler: F1·F2 → M1 → 인과 → M2~M4  [D]
    │                             └ FAIL 2개 이상 → 폐기
    └─ Skill 4      팀장          하드컷·정렬·분산 → 3종목 + 배분       [D]
                                  └ 최대 기여 질문 중복 → 재구성
@@ -221,8 +221,7 @@ PLUS-ANTI-AI-PLATFORM/
 │  ├─ skills/
 │  │  ├─ industry-screen/SKILL.md         Skill 1 + 1.5      [B]
 │  │  ├─ company-screen/SKILL.md          Skill 2            [C]
-│  │  ├─ falsifier/SKILL.md               Skill 3            [D-검증]
-│  │  └─ desk-head/SKILL.md               Skill 4            [D-팀장]
+│  │  └─ pro_tackler/SKILL.md             Skill 3+4          [D-검증·팀장]
 │  └─ agents/
 │     └─ moat-scorer.md                   종목 1개 판정      [C]
 ├─ core/
@@ -249,8 +248,8 @@ PLUS-ANTI-AI-PLATFORM/
 | `main` | **A · 개발** | `core/` · `adapters/` · 오케스트레이터 |
 | `industry` | **B · 산업** | `industry-screen/SKILL.md` · `industry_universe.csv` |
 | `company` | **C · 기업** | `company-screen/SKILL.md` · `moat-scorer.md` |
-| `falsify` | **D · 반박 및 검증** | `falsifier/SKILL.md` |
-| `desk-head` | **팀장** | `desk-head/SKILL.md` · 최종 리포트 |
+| `falsify` | **D · 반박 및 검증** | `pro_tackler/SKILL.md` |
+| `desk-head` | **팀장** | 최종 리포트 · 배분 · 금액 기대수익 |
 
 ```bash
 git checkout industry     # 자기 브랜치로 이동
@@ -373,32 +372,62 @@ git add . && git commit -m "feat: 산업 스크린 스킬 초안" && git push
 
 ---
 
-### D · 반박 및 검증 (`falsify`)
+### D · 반박 및 검증 (`falsify`) — 스킬 `pro_tackler`
 
 > 우리 논리를 죽이는 역할. **자유 반박 금지.**
+> 구현체는 `.claude/skills/pro_tackler/SKILL.md`. 아래는 요약이며 **판정 기준의
+> 정본은 그 파일이다.**
 
-- **★ 기본값은 FAIL이다.** SKILL.md에 이 문장을 그대로 박아라.
-  ```
-  불확실하면 FAIL로 판정한다. PASS는 근거가 명확할 때만 준다.
-  "~일 가능성이 있다", "~로 보인다" 수준으로는 PASS를 줄 수 없다.
-  ```
-- **V1~V3만 실행한다.** 자유 반박은 매번 다른 소리를 내고, 어떤 날은 통과하고
-  어떤 날은 폐기된다. 그건 검증이 아니라 잡음이다.
-- **각 시험은 C가 매긴 특정 YES를 공격한다.** V1→Q2, V2→Q4, V3→전체.
-- **V2 교차 검증** — `Q2=NO`인데 `Q4=YES`인 종목은 반드시 FAIL이 나와야 한다.
-  진입장벽 없이 원가만 낮아지면 절감분은 고객에게 넘어간다.
+C가 보낸 기업 보고서 5건을 심사해 **최종 3개**를 골라 팀장에게 넘긴다.
+
+#### ★ 호흡이 10~20년임을 잊지 마라
+
+**12개월 기준으로 재지 마라.** 단기 리서치 규범을 적용하면 좋은 장기 주장이 전부 죽는다.
+
+```
+전제 (현재 사실)     확인 가능한데 안 했으면 즉사
+연결고리 (논리)      ★ 여기를 턴다
+결론 (미래 추론)     불확실성 허용
+```
+
+**같은 "가능성이 있다"도 위치에 따라 갈린다.**
+
+```
+✕  "이 회사는 면허를 보유한 것으로 보인다"        → 전제. 확인 가능한데 안 함. FAIL
+○  "10년 뒤 이 면허 가치가 커질 가능성이 있다"     → 결론. 통과
+```
+
+#### 심사 순서
+
+```
+Phase 0    인과 사슬 분해      P ──①──▶ M ──②──▶ R 로 명시화
+Phase 1    전제 심사 (즉사)    F1 근거 / F2 규모(시점 아닌 크기)
+Phase 1.5  M1 AI 잠식 선판정   L1~L5.  L1~L2 + 산업↑ = ☠ 함정
+Phase 2    인과 공격 5종  ★    비약 · 필요≠충분 · 역방향 · 제3원인 · 귀속누락
+Phase 3    M2 산업성장 / M3 이익귀속 / M4 상투어
+Phase 4    선정 — 최대 3개, 미달이면 미달인 채로
+```
+
+- **기본값 FAIL** — 단, **전제와 연결고리에만** 적용한다. 결론의 불확실성은 감점하지 않는다.
+- **끊긴 고리 2개 이상 → 탈락**, 1개 → 감점 1
+- **M1이 L1~L2면 즉사.** 산업이 성장 중이면 `☠ 함정`으로 표기해 **하향 판단 후보**로 넘긴다
+- **M3는 DART 동종 3사 영업이익률 추이로 증거화**한다. 3사가 동조하면 이 회사만의 이익이 아니다
+- **편입 0개일 때만 반려 지시서를 발행**한다. 평소엔 심사표의 탈락사유 칸으로 끝낸다
+
+#### Q1~Q5와의 관계
+
+C가 쓰는 조정 체크리스트(§3-2)의 **Q1(이익 대체성)을 정밀화한 것이 M1의 L사다리**다.
+Q1은 예/아니오 2단계, M1은 5단계다. **판정이 갈리면 M1을 따른다.**
 
 ```json
 {
   "ticker": "000000",
-  "tests": {
-    "V1": {"result":"PASS","reason":"..."},
-    "V2": {"result":"FAIL","reason":"동종 3사 모두 동일 절감 가능, 가격 경쟁 전이"},
-    "V3": {"result":"PASS","reason":"12개월 시장 대비 +8%"}
-  },
-  "fail_count": 1,
-  "win_rate": 0.40,
-  "verdict": "PASS"
+  "F1": "PASS", "F2": "PASS",
+  "M1": {"level": "L4", "score": 3, "basis": "감속기 제조 — 영업이익 85%"},
+  "causal_breaks": 1,
+  "M2": 2, "M3": 0, "M4": 2,
+  "m_total": 7, "penalty": 1, "final": 6,
+  "verdict": "편입 2위"
 }
 ```
 
@@ -432,7 +461,7 @@ PB는 종목이 아니라 **배분**을 판다.
 
 **③ 청산 규칙**
 ```
-매도: V1~V3 중 2개 이상이 FAIL로 전환될 때
+매도: pro_tackler 재심사에서 인과 끊김이 2개 이상으로 늘어날 때
 익절: 우리 TP의 90% 도달 시 절반
 손절: −20%
 갱신 리스크: Q5가 주력인 종목은 컨센 갱신 즉시 재평가
