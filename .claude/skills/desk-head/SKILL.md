@@ -120,7 +120,28 @@ runs/<run_id>/report.html     ← 제출물. Artifact 로 발행한다
 runs/<run_id>/04-tackle.json  ← 원장. Appendix 에 그대로 싣는다
 ```
 
-### 판형과 구조는 `references/report-style.md` 가 정본이다
+### 판형·문체·Investment Point 구조는 `references/report-style.md` 가 정본이다
+
+**보고서를 쓰기 전에 그 파일을 반드시 먼저 읽는다.** 초안이 Equity Research Report가
+아니라 투자 아이디어 에세이로 나오는 실패가 반복됐고, 그 파일이 대응 규칙이다.
+
+핵심 네 가지만 옮겨두면:
+
+1. **구어체는 사이드노트와 IP 제목에만.** 소제목 `(1)(2)(3)`은 반드시 분석형
+   (`Driver → 변화 → 영향`). 제목만 읽어도 Investment Logic이 보여야 한다
+2. **Investment Point는 산업 이야기가 아니라 실적 드라이버다.**
+   `Industry Driver → Company Exposure → KPI → Revenue/Margin → EPS → Target Price`
+   연결고리를 갖추고, 각 IP에 정량 근거 2~3개를 넣는다
+3. **기업이 N개면 IP도 N×3개다.** 산업분석만 공유하고 IP는 절대 공유하지 않는다.
+   두 번째 기업부터 산업 서술은 `I장 참조`로 뺀다
+4. **목표주가는 Target PER 유지 + EPS 상향으로 산출**한다. Multiple Re-rating을
+   함부로 가정하지 않는다. IP에서 제시한 근거가 곧 EPS 상향 근거이며, 둘이
+   일치하는지 검증한다
+
+**Consensus vs DPIC View 표를 각 기업 장에 반드시 넣는다.**
+**Top Pick은 Upside 단독이 아니라 Risk-adjusted Return 8개 항목으로 선정한다.**
+
+### 문서 구조
 
 문서 구성·색·조판 규칙이 그 파일에 있다. **매 회차 새로 설계하지 않는다.**
 참조 구현: `runs/2026-08-13_전력기기/report.html`
