@@ -234,7 +234,8 @@ PLUS-ANTI-AI-PLATFORM/
 ├─ data/
 │  ├─ consensus.csv
 │  ├─ price.csv
-│  └─ industry_universe.csv               산업별 컨센 종목 수 [B]
+│  ├─ industry_cache.json                 산업-종목 캐시, 자동 성장 [B]
+│  └─ dart_corp_codes.csv                 DART 상장사 캐시 (gitignore) [B]
 └─ reports/
    └─ 2026-08-13_<티커>.md                실제 판단 · 제출물 ③
 ```
@@ -246,7 +247,7 @@ PLUS-ANTI-AI-PLATFORM/
 | 브랜치 | 담당 | 커밋물 |
 |---|---|---|
 | `main` | **A · 개발** | `core/` · `adapters/` · 오케스트레이터 |
-| `industry` | **B · 산업** | `industry-screen/SKILL.md` · `industry_universe.csv` |
+| `industry` | **B · 산업** | `industry-screen/SKILL.md` |
 | `company` | **C · 기업** | `company-screen/SKILL.md` · `moat-scorer.md` |
 | `falsify` | **D · 반박 및 검증** | `pro_tackler/SKILL.md` |
 | `desk-head` | **팀장** | 최종 리포트 · 배분 · 금액 기대수익 |
@@ -316,6 +317,10 @@ git add . && git commit -m "feat: 산업 스크린 스킬 초안" && git push
 - **☠ 함정 산업도 후보로 남겨라.** Q1이 YES인 산업 — 컨설팅·SI·번역·인력파견.
   `"expected_direction": "DOWN"`으로 표시해서 넘긴다.
 - **discover와 verify는 파일 하나 안의 두 모드.** 나누면 기준이 갈라진다.
+- **유니버스는 고정 CSV가 아니라 `data/industry_cache.json`.** discover가 브레인스토밍한
+  후보 산업은 `tools/dart_lookup.py`로 실존을 확인하며 캐시에 자동 편입된다 — 사람이 손으로
+  채우는 목록이 아니다. 이래야 "설비·물질 기반 중공업"에만 몰리지 않고 서비스·금융 등
+  Q1-YES 함정(☠) 후보도 나올 수 있다.
 - **출력은 JSON.** 산문으로 설명하면 A가 파싱할 수 없다.
 
 ```json
