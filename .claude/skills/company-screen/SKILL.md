@@ -43,6 +43,18 @@ description: 산업 하나를 받아 그 산업의 컨센서스 보유 종목 �
           "source": "2025 사업보고서 II.사업의 내용 p.14",
           "durability": "structural"
         }
+      },
+      "long_term": {
+        "verdict": "structural_growth",
+        "basis": ["면허 기반 진입장벽", "영업레버리지 — 인건비 매출 대비 7%"],
+        "risk": "가격 결정력이 공급 부족에 기대 증설 시 약화 가능",
+        "quote": "...", "source": "..."
+      },
+      "ai_impact": {
+        "revenue": "positive", "cost": "neutral", "moat": "neutral",
+        "duration": "5-10y", "pattern": "persistent",
+        "duration_basis": "데이터센터 증설 사이클 기간. 설비 증설 리드타임이 공급을 제약",
+        "evidence_level": "disclosed", "quote": "...", "source": "..."
       }
     }
   ]
@@ -54,6 +66,36 @@ description: 산업 하나를 받아 그 산업의 컨센서스 보유 종목 �
 - `durability`(`"structural"`/`"temporary"`)는 **Q1·Q2에만** 붙는다. moat-scorer가 채운다 — company-screen은 그대로 옮긴다.
 - `judged_count`는 판정을 시도한 종목 수(컨센서스 없어서 제외한 종목은 포함하지 않음)와 `companies` 배열 길이가 일치해야 한다.
 - 저장 위치: `data/company_scores/<industry>.json` (예: `data/company_scores/농업.json`)
+
+## 장기 관점 — 이 데스크는 10~15년을 본다
+
+**컨센서스 목표주가는 대조 기준선이지 보유기간이 아니다.** Q1~Q5는 "지금 시장이
+틀렸는가"를 묻지만, 편입 여부는 "10~15년 뒤에도 이 이익이 있는가"로 결정된다.
+두 축이 따로 있다.
+
+```
+Q1~Q5 + 컨센 델타     진입 판단 — 시장이 지금 틀린 곳인가        (12M 기준선)
+long_term + ai_impact  보유 판단 — 10~15년 뒤 이익이 더 큰가      (DPIC 고유)
+```
+
+그래서 moat-scorer는 Q1~Q5 외에 **두 블록을 항상 채운다.** 상세 판정 기준은
+`moat-scorer.md` 에 있으며, company-screen은 그대로 옮기기만 한다.
+
+| 블록 | 묻는 것 | 핵심 필드 |
+|---|---|---|
+| `long_term` | 10~15년 뒤 이익이 구조적으로 커지는가 | `verdict` (structural_growth / flat / erosion / undetermined) |
+| `ai_impact` | AI가 매출·비용·해자를 어떻게 바꾸는가, **얼마나 오래** | `revenue` `cost` `moat` `duration` `pattern` `evidence_level` |
+
+### 오케스트레이터가 강제할 것
+
+- **`long_term`·`ai_impact` 키가 없는 종목은 판정 미완료로 처리**한다. Q1~Q5만 있고
+  이 둘이 없으면 D가 장기 판단을 할 수 없다
+- **TAM 성장만으로 `structural_growth`를 주지 않는다.** `산업 성장 → 경쟁우위 →
+  매출 → 마진/ROIC → 장기 이익` 인과가 basis에 있어야 한다
+- **AI가 중요하지 않은 기업에 억지로 AI 논리를 만들지 않는다.** 전 축 `neutral` +
+  `duration: null` 도 유효한 판정이다. 무리한 AI 서사가 오히려 신뢰를 깎는다
+- **`quote`가 없으면 `evidence_level`은 반드시 `inferred`.** Narrative를 Evidence로
+  올리지 않는다
 
 ## 절대 규칙 (moat-scorer와 동일 — 오케스트레이터 레벨에서 한 번 더 강제)
 
