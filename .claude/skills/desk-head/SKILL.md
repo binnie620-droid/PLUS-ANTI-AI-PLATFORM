@@ -130,7 +130,7 @@ runs/<run_id>/04-tackle.json  ← 원장. Appendix 에 그대로 싣는다
 > 발행 전 **업종명·종목명·수치를 전수 확인**한다. 초안이 Equity Research Report가
 아니라 투자 아이디어 에세이로 나오는 실패가 반복됐고, 그 파일이 대응 규칙이다.
 
-핵심 네 가지만 옮겨두면:
+핵심만 옮겨두면:
 
 1. **구어체는 사이드노트와 IP 제목에만.** 소제목 `(1)(2)(3)`은 반드시 분석형
    (`Driver → 변화 → 영향`). 제목만 읽어도 Investment Logic이 보여야 한다
@@ -143,8 +143,46 @@ runs/<run_id>/04-tackle.json  ← 원장. Appendix 에 그대로 싣는다
    함부로 가정하지 않는다. IP에서 제시한 근거가 곧 EPS 상향 근거이며, 둘이
    일치하는지 검증한다
 
+### ★ 산업이 바뀌어도 통하는 보고서를 쓰는 5가지 (§1-8, §3-5, §4)
+
+참조 구현이 전력기기라서 그 업종의 지표를 그대로 베끼는 사고가 반복된다.
+아래 다섯이 **업종 무관 구조를 만드는 장치**다.
+
+1. **I장 1절은 Industry Economics다 — KPI를 고르기 전에 온다.**
+   10개 질문으로 그 산업이 어떻게 돈을 버는지 규정하고, **거기서 KPI를 도출**한다.
+   `수주·수주잔고·판가`는 전력기기의 답이지 정답이 아니다.
+   반도체=수율·가동률 / SaaS=NRR·이탈률 / 은행=NIM·대손율
+2. **AI는 전달 경로 7종을 개별 판정한다.** `AI→데이터센터→전력수요`를 모든 산업의
+   기본 구조로 쓰지 않는다. **④ 제품 대체 위험(Disruption Risk)이 가장 중요**하다 —
+   수혜 크기보다 잠식당하지 않는가가 장기 보유를 가른다.
+   **AI Materiality를 1~5로 판정하고 낮게 나오면 낮게 쓴다.**
+3. **AI 영향은 시간축으로 나눈다.** Near 0~2년만 목표주가에 반영하고,
+   Medium 3~5년·Long 5~10년+는 보유 근거로만 쓴다. 발전 시나리오
+   A(Gradual)/B(Agentic)/C(Physical AI)를 검토하되 **숫자로 반영하지 않는다.**
+4. **AI가 Investment Point 1일 필요는 없다.** AI 없이도 성립하는 성장 근거가 있으면
+   그것을 IP1로 올리고 AI를 촉매로 뒤에 붙인다.
+5. **Valuation Method 선택 근거를 V장 (1)에 먼저 쓴다.** PER을 기본값으로 놓지 않고,
+   채택 이유와 **배제한 방식의 이유**를 함께 밝힌다.
+
+### ★ ROE·ROIC는 DART에서 계산한다 — 비워두지 않는다
+
+```
+python tools/fetch_roic.py <ticker> [<ticker> ...] [--year 2025] [--json]
+```
+
+`ROIC / ROE 확인 불가`는 판정이 아니라 조사 부족이다. 10~15년 보유 전제에서
+**자본 투입 효율**은 선택 항목이 아니다. 최소 2개년을 넣어 **방향**을 보이고,
+ROIC 하락은 분자(NOPAT)와 분모(투하자본)를 나눠 읽는다 — 증설로 분모가 커진
+하락과 이익이 줄어든 하락은 전혀 다르다. 산식과 해석 규칙은 `report-style.md` §3-5.
+
 **Consensus vs DPIC View 표를 각 기업 장에 반드시 넣는다.**
-**Top Pick은 Upside 단독이 아니라 Risk-adjusted Return 8개 항목으로 선정한다.**
+
+**Top Pick은 공통 투자기준 12항목으로 선정한다** — 개별 기업분석은 산업별 지표로,
+최종 비교는 산업이 달라도 동일한 잣대로 Normalization한다.
+`Earnings Growth · Earnings Visibility · FCF Generation · ROIC/ROE · Competitive Moat ·
+AI Structural Exposure · AI Disruption Risk · Valuation · Consensus Gap · Catalyst ·
+Downside Risk · Risk-adjusted Upside`.
+**AI 노출과 AI 잠식 위험은 별개 항목이다.** 합치지 않는다.
 
 ### 문서 구조
 
@@ -152,21 +190,29 @@ runs/<run_id>/04-tackle.json  ← 원장. Appendix 에 그대로 싣는다
 참조 구현: `runs/2026-08-13_전력기기/report.html`
 
 ```
-P1   표지        assets/logo-dreamplus.png 중앙 + 편입 후보 세로 나열
+P1   표지            로고 중앙 + 편입 후보 세로 나열 (비교표는 넣지 않는다)
 P2   Contents
-P3~  I. 산업분석        수요 구조 → 공급 구조(Peer Group)      ← 가장 자세히
-P?~  II. 기업분석 A     산업 내 위치 → 사업구조 → 진입장벽 → 투자포인트 → Valuation → 리스크
-P?~  III. 기업분석 B    동일 구조. 단 산업분석은 "I장 참조"로 뺀다
-P?~  IV. 기업분석 C     (CASE A, 3개일 때만)
-P?   최종장            포트폴리오 종합 — 상대비교 → 배분 → 운용규칙
+P3   DPIC Investment Framework   10~15년 보유 전제 · 진입/보유 두 축 분리
+P4~  I. 산업분석                  ← 가장 자세히. 5개 절, 순서 고정
+       1. Industry Economics       ← KPI를 고르기 전에 온다
+       2. 수요·공급 구조
+       3. AI Impact Mapping        ← 전달 경로 7종 + Materiality 1~5
+       4. AI 시간축 및 발전 시나리오
+       5. 경쟁 구도 및 진입장벽
+P?~  II. 기업분석                 1. 사업 구조·주요 지표  2. 수익성 (ROE·ROIC)
+P?~  III. 투자포인트 — 기업 A      A만의 IP 1·2·3
+P?~  IV.  투자포인트 — 기업 B      B만의 IP 1·2·3
+P?   V.   Valuation              (1) Method 선택 근거부터 시작
+P?   VI.  Top Pick 선정           공통 투자기준 12항목 + 배분 + 운용규칙
 ```
 
 **기업이 여러 개면 병렬로 세운다. 하나로 합치지 않는다.**
 각 기업이 독립된 장을 갖고, 산업분석만 공유한다. 두 번째 기업부터는
 산업 서술을 반복하지 말고 **Peer Group 내 위치**만 다룬다.
 
-**표는 문서당 3~4개를 넘기지 않는다.** 심사표 전수·Q1~Q5 판정표·5종 공격 결과표는
-**우리 채점 과정이지 독자가 볼 것이 아니다.** 판정 근거는 줄글로 푼다.
+**표는 문서당 6~8개가 적정하다.** 3개 이하면 근거가 부족하고 12개를 넘으면 산만하다.
+심사표 전수·Q1~Q5 판정표·5종 공격 결과표는 **우리 채점 과정이지 독자가 볼 것이
+아니다.** 판정 근거는 줄글로 푼다.
 
 ### 참고 — 일반 리서치 보고서 블록과의 대응
 
