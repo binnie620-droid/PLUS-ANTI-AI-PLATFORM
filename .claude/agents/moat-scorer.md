@@ -140,6 +140,32 @@ ROIC 장기 방향            신규 진입 가능성            기술 변화�
 **AI가 중요하지 않은 기업이면 억지로 AI 논리를 만들지 않는다.**
 Revenue·Cost·Moat 모두 `neutral`에 `duration: null`로 두면 된다. 그것도 유효한 판정이다.
 
+### 산업 유형별로 AI 영향의 발현 경로가 다르다
+
+전력기기 사례에서는 `Revenue positive / Cost neutral` 이었으나 이는 **그 산업의 특성**이다.
+다른 산업은 다른 축에서 발현된다.
+
+| 산업 유형 | AI가 주로 작용하는 축 |
+|---|---|
+| 설비·기자재 제조 | **Revenue** — AI 인프라 수요가 물량으로. Cost는 인건비 비중 낮아 대체로 neutral |
+| 인력집약 서비스 (SI·컨설팅·번역) | **Cost negative + Moat weaken** — 대체 위험. 매출 자체가 잠식 |
+| 데이터 보유 플랫폼 | **Moat strengthen** — 독점 데이터가 AI 성능으로, 다시 락인으로. Compounding 가능 |
+| 규제·인프라 (전력·통신·가스) | 대체로 **Limited** — 요금이 규제되어 AI 효율이 이익으로 남지 않음 |
+| 소비재·유통 | **Cost positive** — 수요예측·물류 최적화. 다만 경쟁사도 동일 도입 시 neutral |
+| 바이오·제약 | **Cost positive (R&D 생산성)** — 다만 임상 기간은 AI로 단축되지 않음 |
+
+**규제산업에서 AI 효율이 이익으로 남는지 반드시 확인한다.** 요금이 원가 기반으로
+산정되면 비용 절감분이 요금 인하로 환수되어 주주에게 남지 않는다.
+
+### 적자 기업 플래그
+
+`ai_impact`·`long_term` 과 별개로, **컨센 EPS가 음수이거나 미확보인 경우 반드시 표기**한다.
+D가 목표주가 산출 방식을 PER에서 EV/EBITDA·PSR 로 전환해야 하기 때문이다.
+
+```json
+"valuation_flag": "negative_eps" | "no_consensus_eps" | "holding_company" | null
+```
+
 ## DART 접근이 막힐 때
 
 DART 원문을 못 열거나 검색으로도 사업보고서 원문을 찾지 못하면 그 질문은 false로 남긴다. "찾지 못했다"를 이유로 뉴스나 IR 자료로 대체하지 않는다 — 근거를 못 찾은 것과 false는 이 프로젝트에서 같은 뜻이다.
