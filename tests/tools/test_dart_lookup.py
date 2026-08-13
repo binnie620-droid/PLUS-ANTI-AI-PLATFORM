@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 import zipfile
+from unittest import mock
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "tools"))
 import dart_lookup as dl
@@ -140,6 +141,45 @@ class TestCompanyInfoAndIndutyCode(unittest.TestCase):
             dl.fetch_company_info("00164742", "APIKEY", fetcher=lambda url: error_payload)
         self.assertIn("status=020", str(context.exception))
         self.assertIn("일일 이용 한도량 초과", str(context.exception))
+
+
+class TestMainApiKeyEnvFileFallback(unittest.TestCase):
+    """Reproduces the dogfood bug: main() must find DART_API_KEY in .env
+    even when it is absent from the real process environment, matching
+    env_keys.find_missing_keys()'s environ-or-file behavior."""
+
+    def setUp(self):
+        self.tmpdir = tempfile.mkdtemp()
+        self.env_path = os.path.join(self.tmpdir, ".env")
+        with io.open(self.env_path, "w", encoding="utf-8") as f:
+            f.write("DART_API_KEY=fromenvfile\n")
+
+    def tearDown(self):
+        shutil.rmtree(self.tmpdir, ignore_errors=True)
+
+    def test_main_falls_back_to_env_file_when_os_environ_lacks_key(self):
+        captured = {}
+
+        def fake_get_induty_code(ticker, api_key, cache_path=dl.CORP_CODE_CACHE_PATH, fetcher=None):
+            captured["api_key"] = api_key
+            return {"corp_code": "x", "corp_name": "y", "induty_code": "z"}
+
+        # Case 1: key present only in the .env file (the dogfood bug scenario) -> resolves via fallback.
+        with mock.patch.object(dl.env_keys, "DEFAULT_ENV_PATH", self.env_path), \
+                mock.patch.dict(os.environ, {}, clear=False), \
+                mock.patch.object(dl, "get_induty_code", fake_get_induty_code):
+            os.environ.pop("DART_API_KEY", None)
+            rc = dl.main(["induty-code", "009540"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(captured["api_key"], "fromenvfile")
+
+        # Case 2: key absent from both os.environ and the .env file -> still fails cleanly.
+        empty_env_path = os.path.join(self.tmpdir, "empty.env")
+        with mock.patch.object(dl.env_keys, "DEFAULT_ENV_PATH", empty_env_path), \
+                mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("DART_API_KEY", None)
+            rc = dl.main(["induty-code", "009540"])
+        self.assertEqual(rc, 2)
 
 
 if __name__ == "__main__":

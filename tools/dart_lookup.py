@@ -17,6 +17,8 @@ import urllib.request
 import xml.etree.ElementTree as ET
 import zipfile
 
+import env_keys
+
 CORP_CODE_URL = "https://opendart.fss.or.kr/api/corpCode.xml"
 COMPANY_URL = "https://opendart.fss.or.kr/api/company.json"
 
@@ -108,7 +110,7 @@ def main(argv):
     if not argv or argv[0] != "induty-code" or len(argv) < 2:
         print("usage: dart_lookup.py induty-code <ticker>")
         return 2
-    api_key = os.environ.get("DART_API_KEY")
+    api_key = os.environ.get("DART_API_KEY") or env_keys.read_env_file(env_keys.DEFAULT_ENV_PATH).get("DART_API_KEY")
     if not api_key:
         print("DART_API_KEY not set")
         return 2
