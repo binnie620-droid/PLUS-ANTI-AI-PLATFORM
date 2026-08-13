@@ -1,5 +1,13 @@
 {
   "companies": {
+    "000120": {
+      "cached_at": "2026-08-13",
+      "industry_labels": [
+        "택배·물류"
+      ],
+      "induty_code": "493",
+      "name": "씨제이대한통운"
+    },
     "000500": {
       "cached_at": "2026-08-13",
       "industry_labels": [
@@ -15,6 +23,14 @@
       ],
       "induty_code": null,
       "name": "대한전선"
+    },
+    "002320": {
+      "cached_at": "2026-08-13",
+      "industry_labels": [
+        "택배·물류"
+      ],
+      "induty_code": "49309",
+      "name": "한진"
     },
     "003570": {
       "cached_at": "2026-08-13",
@@ -39,6 +55,14 @@
       ],
       "induty_code": null,
       "name": "동방"
+    },
+    "004360": {
+      "cached_at": "2026-08-13",
+      "industry_labels": [
+        "택배·물류"
+      ],
+      "induty_code": "49301",
+      "name": "세방"
     },
     "004980": {
       "cached_at": "2026-08-13",
@@ -69,7 +93,7 @@
       "industry_labels": [
         "조선·조선기자재"
       ],
-      "induty_code": null,
+      "induty_code": "64992",
       "name": "HD한국조선해양"
     },
     "010130": {
@@ -85,7 +109,7 @@
       "industry_labels": [
         "조선·조선기자재"
       ],
-      "induty_code": null,
+      "induty_code": "3111",
       "name": "삼성중공업"
     },
     "010820": {
@@ -127,6 +151,14 @@
       ],
       "induty_code": null,
       "name": "현대엘리베이터"
+    },
+    "018260": {
+      "cached_at": "2026-08-13",
+      "industry_labels": [
+        "IT서비스·SI"
+      ],
+      "induty_code": "62021",
+      "name": "삼성에스디에스"
     },
     "023410": {
       "cached_at": "2026-08-13",
@@ -181,7 +213,7 @@
       "industry_labels": [
         "조선·조선기자재"
       ],
-      "induty_code": null,
+      "induty_code": "3111",
       "name": "한화오션"
     },
     "043910": {
@@ -293,7 +325,7 @@
       "industry_labels": [
         "조선·조선기자재"
       ],
-      "induty_code": null,
+      "induty_code": "29111",
       "name": "한화엔진"
     },
     "082920": {
@@ -424,6 +456,14 @@
       "induty_code": null,
       "name": "한화시스템"
     },
+    "286940": {
+      "cached_at": "2026-08-13",
+      "industry_labels": [
+        "IT서비스·SI"
+      ],
+      "induty_code": "62021",
+      "name": "롯데이노베이트"
+    },
     "298040": {
       "cached_at": "2026-08-13",
       "industry_labels": [
@@ -440,12 +480,20 @@
       "induty_code": null,
       "name": "한일시멘트"
     },
+    "307950": {
+      "cached_at": "2026-08-13",
+      "industry_labels": [
+        "IT서비스·SI"
+      ],
+      "induty_code": "582",
+      "name": "현대오토에버"
+    },
     "329180": {
       "cached_at": "2026-08-13",
       "industry_labels": [
         "조선·조선기자재"
       ],
-      "induty_code": null,
+      "induty_code": "31113",
       "name": "HD현대중공업"
     },
     "443060": {
@@ -453,7 +501,7 @@
       "industry_labels": [
         "조선·조선기자재"
       ],
-      "induty_code": null,
+      "induty_code": "7212",
       "name": "HD현대마린솔루션"
     },
     "448710": {
@@ -474,6 +522,18 @@
     }
   },
   "industries": {
+    "IT서비스·SI": {
+      "first_seen": "2026-08-13",
+      "induty_codes": [
+        "62021",
+        "582"
+      ],
+      "tickers": [
+        "018260",
+        "307950",
+        "286940"
+      ]
+    },
     "방산·항공": {
       "first_seen": "2026-08-13",
       "induty_codes": [],
@@ -539,7 +599,13 @@
     },
     "조선·조선기자재": {
       "first_seen": "2026-08-13",
-      "induty_codes": [],
+      "induty_codes": [
+        "64992",
+        "3111",
+        "31113",
+        "7212",
+        "29111"
+      ],
       "tickers": [
         "009540",
         "042660",
@@ -556,6 +622,19 @@
         "044490",
         "004140",
         "101930"
+      ]
+    },
+    "택배·물류": {
+      "first_seen": "2026-08-13",
+      "induty_codes": [
+        "493",
+        "49309",
+        "49301"
+      ],
+      "tickers": [
+        "000120",
+        "002320",
+        "004360"
       ]
     },
     "환경·폐기물·수처리": {
