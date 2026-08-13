@@ -85,7 +85,11 @@ def fetch_company_info(corp_code, api_key, fetcher=None):
     fetcher = fetcher or _http_get
     url = "{}?crtfc_key={}&corp_code={}".format(COMPANY_URL, api_key, corp_code)
     raw = fetcher(url)
-    return json.loads(raw)
+    data = json.loads(raw)
+    if data.get("status") != "000":
+        error_msg = data.get("message", "Unknown error")
+        raise RuntimeError("DART API error (status={}): {}".format(data.get("status"), error_msg))
+    return data
 
 
 def get_induty_code(ticker, api_key, cache_path=CORP_CODE_CACHE_PATH, fetcher=None):

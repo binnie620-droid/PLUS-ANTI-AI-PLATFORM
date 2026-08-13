@@ -112,7 +112,7 @@ class TestCompanyInfoAndIndutyCode(unittest.TestCase):
             fetch_log.append(url)
             if "corpCode.xml" in url:
                 return self.zip_bytes
-            return json.dumps({"corp_name": "HD한국조선해양", "induty_code": "31114"}).encode("utf-8")
+            return json.dumps({"status": "000", "corp_name": "HD한국조선해양", "induty_code": "31114"}).encode("utf-8")
 
         result = dl.get_induty_code("009540", "APIKEY", cache_path=self.cache_path, fetcher=fake_fetcher)
         self.assertEqual(result, {
@@ -131,6 +131,15 @@ class TestCompanyInfoAndIndutyCode(unittest.TestCase):
         # only the corpCode.xml lookup should have happened, never company.json
         self.assertEqual(len(fetch_log), 1)
         self.assertIn("corpCode.xml", fetch_log[0])
+
+    def test_fetch_company_info_raises_on_dart_error_status(self):
+        error_payload = json.dumps({
+            "status": "020", "message": "일일 이용 한도량 초과"
+        }).encode("utf-8")
+        with self.assertRaises(RuntimeError) as context:
+            dl.fetch_company_info("00164742", "APIKEY", fetcher=lambda url: error_payload)
+        self.assertIn("status=020", str(context.exception))
+        self.assertIn("일일 이용 한도량 초과", str(context.exception))
 
 
 if __name__ == "__main__":
