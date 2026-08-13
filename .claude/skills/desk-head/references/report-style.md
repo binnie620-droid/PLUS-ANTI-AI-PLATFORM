@@ -1,139 +1,142 @@
-# Report House Style — 증권사 리서치 보고서
+# DPIC 리서치 하우스 스타일
 
-`report.html` 을 만들 때 **이 파일의 CSS를 그대로 복사해 인라인으로 넣는다.**
-디자인을 매번 새로 짜지 않는다 — 데스크 산출물은 회차가 달라도 같은 얼굴이어야 한다.
+`report.html` 을 만들 때 **이 파일의 판형과 CSS를 그대로 쓴다.**
+디자인을 매 회차 새로 짜지 않는다 — 데스크 산출물은 종목이 달라도 같은 얼굴이어야 한다.
+
+**참조 구현**: `runs/2026-08-13_전력기기/report.html` (산업분석 + 기업보고서 2건 병렬)
 
 ---
 
-## 원칙 4가지
+## 0. 절대 규칙
 
-| | 원칙 | 이유 |
+| | 규칙 | 이유 |
 |---|---|---|
-| 1 | **화이트 지면 · 네이비 액센트** | 리서치 보고서는 인쇄·PDF 배포를 전제한다. 어두운 패널은 잉크를 먹고 표를 읽기 어렵게 만든다 |
-| 2 | **상승 적색 / 하락 청색** | 한국 시장 관행. 국제 관행(상승 녹색)을 쓰면 국내 독자가 순간 반대로 읽는다 |
-| 3 | **좌측 사이드노트** | 각 문단 왼쪽에 결론 한 줄. **사이드노트만 위에서 아래로 읽어도 논리가 완성**되어야 한다 |
-| 4 | **표가 본문이다** | 숫자는 우측 정렬 + `tabular-nums`. 헤더는 대문자 모노. 세로줄 없이 가로 헤어라인만 |
+| 1 | **외부 기관 로고·브랜딩을 쓰지 않는다** | 남의 리서치 판형을 참고하는 것과 그 기관을 사칭하는 것은 다르다. 로고는 `assets/logo-dreamplus.png` 만 쓴다 |
+| 2 | **내부 로직 표를 싣지 않는다** | 심사표 전수·Q1~Q5 판정표·5종 공격 결과표는 우리 채점 과정이지 독자가 볼 것이 아니다. 표는 **문서당 3~4개**를 넘기지 않는다 |
+| 3 | **산업분석이 가장 자세하다** | 종목 판단의 근거가 산업 구조에서 나온다. 기업분석은 그 구조 안에서의 위치를 논한다 |
+| 4 | **기업이 여러 개면 병렬로 세운다** | 하나의 HTML 안에 독립된 기업보고서가 N개. **합치지 않는다** |
+| 5 | **표는 본문 컬럼 안에** | 사이드노트 폭(118px + gap 22px = 140px)만큼 들여써서 줄글과 왼쪽 선을 맞춘다 |
 
-### 사이드노트 규칙
+---
 
-원본 리서치 보고서의 이중 레이어 설계를 따른다. 속독 독자를 위한 장치다.
+## 1. 문서 구조
+
+```
+P1   표지        로고 중앙 + 편입 후보 세로 나열 (1~3개)
+P2   Contents
+P3~  I. 산업분석          1. 수요 구조  2. 공급 구조(Peer Group)     ← 가장 자세히
+P?~  II. 기업분석 A       산업 내 위치 → 사업구조 → 진입장벽 → 투자포인트 → Valuation → 리스크
+P?~  III. 기업분석 B      동일 구조.  단 산업분석은 "I장 참조"로 뺀다
+P?~  IV. 기업분석 C       (기업이 3개일 때만)
+P?   최종장. 포트폴리오 종합   상대비교 → 배분 → 운용규칙
+```
+
+### 기업 수에 따른 분기
+
+| 기업 수 | 구성 |
+|---|---|
+| 1개 | 표지에 1줄 · 기업분석 1개 장 · 종합장에서 **대체 투자처 검토**(탈락 종목과 비교) |
+| 2개 | 표지에 2줄 · 기업분석 2개 장 · 종합장에서 상대비교 |
+| 3개 | 표지에 3줄 · 기업분석 3개 장 · 종합장에서 3자 비교 및 우선순위 |
+| 0개 | 표지에 `NO INVESTMENT` · 기업분석 장 **없음** · 산업분석 + 전원 탈락 사유만 |
+
+### ★ 산업분석 중복 금지
+
+기업이 2개 이상일 때 **산업 전반 서술을 기업마다 반복하지 않는다.**
+
+```
+기업 A 장   산업 내 위치를 논하되, 산업 구조 자체는 I장에서 이미 서술됨
+기업 B 장   "산업 전반의 수요·공급 구조는 I장에서 서술했으므로 반복하지 않는다"
+            → Peer Group 내 이 기업의 위치만 다룬다
+```
+
+B·C 장의 진입장벽 서술은 **A와 대조하는 방식**으로 쓴다 —
+*"산일은 관계 기반, 일진은 기술규격 기반 전환비용"* 처럼.
+
+---
+
+## 2. 표지
+
+```
+상단      DPIC 로고 텍스트 (좌) / 날짜·데스크명 (우)
+중앙      assets/logo-dreamplus.png  — width: min(240px, 50%)
+          다크모드에서 filter: invert(1) brightness(1.7)
+          EQUITY RESEARCH → 산업명 → 한 줄 슬로건 → 주황 짧은 rule
+하단      Investment Candidates
+          [BUY] 종목명 티커 / 한 줄 요약        목표주가 / 상승여력
+          ...
+          주석 — 편입 근거 또는 규칙 예외 사유
+```
+
+**슬로건은 언어유희가 아니라 판정의 핵심**을 담는다.
+예: *"전망을 판 5개, 계약을 판 1개"*
+
+---
+
+## 3. 본문 조판 — 1:3 사이드노트
 
 ```html
-<div class="sn-row">
+<div class="sec">
   <div class="sn">전망이 아니라 계약이다</div>
-  <div class="sn-body">
-    <p>6개 경쟁 종목이 "AI로 전력수요가 는다"는 산업 서술을 근거로 냈다…</p>
+  <div class="bd">
+    <div class="hk">화살표가 이미 실현된 주장</div>
+    <p>본문…</p>
   </div>
 </div>
 ```
 
-- 사이드노트는 **주장의 요약**이지 제목이 아니다. 명사구가 아니라 **문장**으로 쓴다
-- 문단마다 하나. 없으면 그 문단은 주장이 없는 문단이다
-- 좁은 화면에서는 본문 위로 접힌다 (CSS가 처리)
+- **사이드노트만 위에서 아래로 읽어도 논리가 완성**되어야 한다. 속독 독자를 위한 이중 레이어
+- 명사구가 아니라 **문장**으로 쓴다 — "리스크"가 아니라 "계약 1건에 논리가 걸려 있다"
+- `.hk` 는 구어체에 가까운 훅 제목. 본문은 격식체. 이 낙차가 판형의 개성이다
 
 ---
 
-## 색 토큰
+## 4. 색
+
+DPIC 메인 컬러는 **주황**이다. 다만 **본문 텍스트에는 쓰지 않는다** — 구조 요소에만 쓴다.
 
 | 토큰 | 라이트 | 용도 |
 |---|---|---|
-| `--nv` | `#14324F` | 하우스 네이비. 장 번호·강조·Rating 박스 |
-| `--up` | `#C0392B` | **상승·긍정** (한국 관행) |
-| `--dn` | `#1F5FA6` | **하락·부정** |
-| `--ink` | `#141A20` | 본문 |
-| `--paper` | `#FFFFFF` | 지면 |
-| `--bg` | `#F2F4F6` | 페이지 배경 |
-| `--rule` | `#E1E5E9` | 헤어라인 |
+| `--or` | `#F26522` | 챕터 제목 · 사이드노트 세로선 · BUY 배지 · 페이지 하단 바 |
+| `--ord` | `#C24E17` | **표 헤더 배경**(흰 글자 대비 확보) · 훅 제목 |
+| `--orl` | `#FBE3D6` | 강조 행 배경 |
+| `--orp` | `#FDF3EE` | 캡션 밴드 · Final Decision 박스 |
+| `--ink` | `#161A1F` | 본문 |
+| `--up` / `--dn` | `#C0392B` / `#1F5FA6` | **상승 적색 / 하락 청색** — 한국 관행 |
 
-`[FACT]` / `[ESTIMATE]` / `[ASSUMPTION]` / `[Data unavailable]` 배지는
-각각 네이비 / 앰버 / 회색 / 적색을 쓴다. **판정의 확실성이 색으로 보여야 한다.**
+**상승에 녹색을 쓰지 않는다.** 국내 독자가 반대로 읽는다.
 
 ---
 
-## CSS — 그대로 복사
+## 5. CSS — 그대로 복사
 
-```css
-:root{
-  --bg:#F2F4F6; --paper:#FFFFFF; --paper2:#F8F9FA;
-  --ink:#141A20; --ink2:#3A454F; --muted:#697884; --faint:#98A4AE;
-  --rule:#E1E5E9; --rule2:#C7CFD6;
-  --nv:#14324F; --nv-bg:#EAEFF4;
-  --up:#C0392B; --up-bg:#FBEDEB;
-  --dn:#1F5FA6; --dn-bg:#EAF1F9;
-  --est:#8A5A00; --est-bg:#FBF3E3;
-  --f:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
-  --m:'JetBrains Mono','D2Coding',Consolas,ui-monospace,monospace;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0D1115; --paper:#151B21; --paper2:#1B2229;
-  --ink:#E2E7EB; --ink2:#BEC7CF; --muted:#8D99A4; --faint:#6B7681;
-  --rule:#28313A; --rule2:#3B4650;
-  --nv:#6FA8D6; --nv-bg:#16283A;
-  --up:#E27668; --up-bg:#341C19;
-  --dn:#6FA8D6; --dn-bg:#16283A;
-  --est:#D4A155; --est-bg:#332714;
-}}
-:root[data-theme="dark"]{
-  --bg:#0D1115; --paper:#151B21; --paper2:#1B2229;
-  --ink:#E2E7EB; --ink2:#BEC7CF; --muted:#8D99A4; --faint:#6B7681;
-  --rule:#28313A; --rule2:#3B4650;
-  --nv:#6FA8D6; --nv-bg:#16283A;
-  --up:#E27668; --up-bg:#341C19;
-  --dn:#6FA8D6; --dn-bg:#16283A;
-  --est:#D4A155; --est-bg:#332714;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);
-  font-size:16px;line-height:1.78;-webkit-font-smoothing:antialiased}
-.sheet{max-width:1080px;margin:0 auto;background:var(--paper);
-  padding:0 clamp(16px,4.5vw,56px) 90px;
-  box-shadow:0 0 0 1px var(--rule)}
-:focus-visible{outline:2px solid var(--nv);outline-offset:2px}
+`runs/2026-08-13_전력기기/report.html` 의 `<style>` 블록 전체를 복사한다.
+주요 클래스는 아래와 같다.
 
-/* 사이드노트 2단 */
-.sn-row{display:grid;grid-template-columns:1fr;gap:6px;margin:0 0 22px}
-@media(min-width:900px){.sn-row{grid-template-columns:172px 1fr;column-gap:28px}}
-.sn{font-size:.82rem;font-weight:700;color:var(--nv);line-height:1.5;
-  padding-top:2px;border-left:2px solid var(--nv);padding-left:11px}
-@media(max-width:899px){.sn{border-left:none;border-top:2px solid var(--nv);
-  padding-left:0;padding-top:7px}}
-.sn-body>*:last-child{margin-bottom:0}
-
-/* 배지 */
-.tg{font-family:var(--m);font-size:.6rem;letter-spacing:.05em;padding:1px 5px;
-  border-radius:2px;vertical-align:1px;white-space:nowrap;font-weight:600}
-.tg.f{background:var(--nv-bg);color:var(--nv)}
-.tg.e{background:var(--est-bg);color:var(--est)}
-.tg.a{background:var(--paper2);color:var(--muted)}
-.tg.x{background:var(--up-bg);color:var(--up)}
-
-/* 표 */
-.tw{overflow-x:auto;margin:0 0 20px}
-table{border-collapse:collapse;width:100%;font-size:.85rem;min-width:520px}
-caption{text-align:left;font-family:var(--m);font-size:.6rem;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--faint);padding-bottom:7px;caption-side:top}
-th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
-thead th{font-family:var(--m);font-size:.61rem;letter-spacing:.09em;text-transform:uppercase;
-  color:var(--muted);font-weight:600;border-bottom:1.5px solid var(--rule2);
-  border-top:1.5px solid var(--ink);white-space:nowrap}
-tbody tr:last-child td{border-bottom:1.5px solid var(--rule2)}
-.num{font-family:var(--m);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
-tr.hi{background:var(--nv-bg)}
-tr.hi td{font-weight:600}
-.up{color:var(--up);font-weight:650}
-.dn{color:var(--dn);font-weight:650}
-.mu{color:var(--muted)}
+```
+.page .rhead .brand .pnum .pfoot        페이지 / 러닝헤더 / 하단
+.cv .logoimg .picks .pk                 표지
+.ctitle .cdiv .clist                    Contents
+.cobar .chap .chsub                     장 제목 / 기업 헤더바
+.sec .sn .bd .hk                        1:3 사이드노트 본문
+.fig2 .fcap .fbody .src                 표·그림 (본문 컬럼 정렬)
+.quo .fx .fin .rt                       인용 / 계산식 / 결론박스 / Rating 4칸
 ```
 
+라이트·다크 토큰은 `:root` / `@media (prefers-color-scheme:dark)` / `:root[data-theme="dark"]`
+세 곳에 모두 정의한다. **`body` 에 배경색을 명시하지 않으면 다크에서 글자가 안 보인다.**
+
 ---
 
-## 금지
+## 6. 금지
 
 | 금지 | 이유 |
 |---|---|
-| 어두운 배경 패널을 지면 전체에 | 인쇄·PDF에서 잉크를 먹고 표가 안 읽힌다 |
+| 외부 기관 로고·클럽명 사용 | 판형 참고와 사칭은 다르다 |
+| 심사표·판정표를 본문에 게재 | 우리 채점 과정이지 독자가 볼 것이 아니다 |
+| 기업마다 산업분석 반복 | 두 번째부터는 "I장 참조"로 뺀다 |
+| 여러 기업 보고서를 하나로 합치기 | 병렬로 세운다. 각 기업이 독립된 장 |
+| 표가 본문 컬럼 밖으로 튀어나감 | `margin-left: calc(padding + 140px)` |
 | 상승에 녹색 | 국내 독자가 반대로 읽는다 |
-| 표에 세로 괘선 | 가로 헤어라인만으로 충분하다. 세로줄은 밀도만 높인다 |
-| 숫자 좌측 정렬 | 자릿수 비교가 불가능해진다 |
-| 사이드노트에 명사구 | "리스크" 가 아니라 "계약 1건에 논리가 걸려 있다" 처럼 문장으로 |
-| 외부 폰트·CSS·스크립트 | 자체 완결이어야 한다 |
+| 본문 텍스트를 주황으로 | 가독성이 무너진다. 구조 요소에만 |
+| 외부 폰트·CSS·스크립트 | 자체 완결이어야 한다. 로고는 base64 인라인 |

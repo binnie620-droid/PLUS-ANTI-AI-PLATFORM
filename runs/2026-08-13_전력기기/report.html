@@ -1,572 +1,647 @@
-<title>산일전기 투자보고서</title>
+<title>DPIC 투자보고서</title>
 <style>
 :root{
-  --bg:#F2F4F6; --paper:#FFFFFF; --paper2:#F8F9FA;
-  --ink:#141A20; --ink2:#3A454F; --muted:#697884; --faint:#98A4AE;
-  --rule:#E1E5E9; --rule2:#C7CFD6;
-  --nv:#14324F; --nv-bg:#EAEFF4;
-  --up:#C0392B; --up-bg:#FBEDEB;
-  --dn:#1F5FA6; --dn-bg:#EAF1F9;
-  --est:#8A5A00; --est-bg:#FBF3E3;
+  --or:#F26522; --ord:#C24E17; --orl:#FBE3D6; --orp:#FDF3EE;
+  --nv:#1A2B44; --ink:#161A1F; --ink2:#3A424C; --side:#6B7480; --faint:#9AA3AF;
+  --line:#DDE1E7; --band:#F1F3F6; --paper:#FFF; --bg:#7E848C;
+  --up:#C0392B; --dn:#1F5FA6;
   --f:'Pretendard Variable',Pretendard,'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
-  --m:'JetBrains Mono','D2Coding',Consolas,ui-monospace,monospace;
+  --m:'JetBrains Mono',Consolas,ui-monospace,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0D1115; --paper:#151B21; --paper2:#1B2229;
-  --ink:#E2E7EB; --ink2:#BEC7CF; --muted:#8D99A4; --faint:#6B7681;
-  --rule:#28313A; --rule2:#3B4650;
-  --nv:#6FA8D6; --nv-bg:#16283A;
-  --up:#E27668; --up-bg:#341C19;
-  --dn:#6FA8D6; --dn-bg:#16283A;
-  --est:#D4A155; --est-bg:#332714;
+  --or:#FF8A4C; --ord:#FF9A62; --orl:#3A2115; --orp:#241610;
+  --nv:#9FB4CE; --ink:#E6EAEE; --ink2:#C6CDD5; --side:#98A2AE; --faint:#6E7783;
+  --line:#2B333D; --band:#1A212A; --paper:#131920; --bg:#070A0D;
+  --up:#E8776A; --dn:#6FA8D6;
 }}
 :root[data-theme="dark"]{
-  --bg:#0D1115; --paper:#151B21; --paper2:#1B2229;
-  --ink:#E2E7EB; --ink2:#BEC7CF; --muted:#8D99A4; --faint:#6B7681;
-  --rule:#28313A; --rule2:#3B4650;
-  --nv:#6FA8D6; --nv-bg:#16283A;
-  --up:#E27668; --up-bg:#341C19;
-  --dn:#6FA8D6; --dn-bg:#16283A;
-  --est:#D4A155; --est-bg:#332714;
+  --or:#FF8A4C; --ord:#FF9A62; --orl:#3A2115; --orp:#241610;
+  --nv:#9FB4CE; --ink:#E6EAEE; --ink2:#C6CDD5; --side:#98A2AE; --faint:#6E7783;
+  --line:#2B333D; --band:#1A212A; --paper:#131920; --bg:#070A0D;
+  --up:#E8776A; --dn:#6FA8D6;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.78;-webkit-font-smoothing:antialiased}
-.sheet{max-width:1080px;margin:0 auto;background:var(--paper);padding:0 clamp(16px,4.5vw,56px) 90px;box-shadow:0 0 0 1px var(--rule)}
-:focus-visible{outline:2px solid var(--nv);outline-offset:2px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:940px;margin:0 auto;padding:22px clamp(8px,2vw,22px) 70px}
+.page{background:var(--paper);margin-bottom:22px;padding:0 0 34px;position:relative;box-shadow:0 2px 14px rgba(0,0,0,.22)}
+:focus-visible{outline:2px solid var(--or);outline-offset:2px}
 
-/* header */
-.rh{border-bottom:2.5px solid var(--nv);padding:34px 0 0;margin-bottom:26px}
-.rh-top{font-family:var(--m);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;flex-wrap:wrap;gap:7px 16px;margin-bottom:16px}
-.rh-top b{color:var(--nv);font-weight:700}
-h1{font-size:clamp(1.7rem,4.2vw,2.35rem);line-height:1.14;letter-spacing:-.03em;font-weight:800;margin:0 0 4px}
-h1 em{font-style:normal;font-family:var(--m);font-size:.48em;color:var(--muted);font-weight:600;letter-spacing:0}
-.hook{font-size:1.04rem;color:var(--ink2);margin:8px 0 24px;max-width:58ch;font-weight:450}
-.hook b{color:var(--ink);font-weight:700}
+.rhead{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;padding:15px clamp(18px,3.5vw,34px) 7px;border-bottom:2px solid var(--or)}
+.rhead .t{font-size:.71rem;font-weight:700;color:var(--ink);line-height:1.4}
+.brand{font-weight:800;color:var(--or);font-size:.86rem;letter-spacing:.03em;white-space:nowrap;text-align:right}
+.brand small{display:block;font-size:.45rem;color:var(--side);font-weight:700;letter-spacing:.05em}
+.pnum{position:absolute;bottom:12px;right:clamp(18px,3.5vw,34px);font-size:.75rem;font-style:italic;color:var(--ink2);font-weight:600}
+.pfoot{position:absolute;bottom:27px;left:clamp(18px,3.5vw,34px);right:clamp(18px,3.5vw,34px);height:2px;background:var(--or)}
 
-.rate{display:grid;grid-template-columns:1fr;border:1.5px solid var(--ink);margin-bottom:12px}
-@media(min-width:720px){.rate{grid-template-columns:132px repeat(4,1fr)}}
-.rc{padding:14px 16px;border-right:1px solid var(--rule)}
-.rc:last-child{border-right:none}
-@media(max-width:719px){.rc{border-right:none;border-bottom:1px solid var(--rule)}}
-.rc dt{font-family:var(--m);font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin:0 0 4px}
-.rc dd{margin:0;font-family:var(--m);font-variant-numeric:tabular-nums;font-size:1.22rem;font-weight:700;line-height:1.15}
-.rc small{display:block;font-size:.7rem;color:var(--muted);font-family:var(--f);font-weight:400;margin-top:2px}
-.rc.buy{background:var(--nv);border-right-color:var(--nv)}
-.rc.buy dt{color:rgba(255,255,255,.7)}
-.rc.buy dd{color:#fff;font-family:var(--f);font-size:1.44rem;letter-spacing:.05em}
-.rc.buy small{color:rgba(255,255,255,.72)}
-.dis{font-size:.82rem;color:var(--muted);border-left:3px solid var(--rule2);padding:8px 13px;margin:0 0 30px;background:var(--paper2)}
+.cv{padding:24px clamp(18px,3.5vw,34px) 40px}
+.cvtop{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.cvtop .r{text-align:right;font-size:.73rem;color:var(--ink2);line-height:1.5}
+.logoimg{display:block;margin:26px auto 14px;width:min(240px,50%);height:auto}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .logoimg{filter:invert(1) brightness(1.7)}}
+:root[data-theme="dark"] .logoimg{filter:invert(1) brightness(1.7)}
+.cvmid{text-align:center}
+.cvsub{font-size:.76rem;color:var(--side);letter-spacing:.24em;font-weight:700;margin-bottom:8px}
+.cvttl{font-size:1.46rem;font-weight:800;letter-spacing:-.02em;margin:0 0 4px}
+.cvslo{color:var(--or);font-weight:700;font-size:1rem;margin:0 0 26px}
+.orl{height:3px;background:var(--or);width:92px;margin:0 auto 28px}
 
-/* toc */
-.toc{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:16px 0;margin-bottom:34px}
-.toc h2{font-family:var(--m);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin:0 0 10px;font-weight:600}
-.toc ol{margin:0;padding:0;list-style:none;columns:2;column-gap:36px;font-size:.86rem}
-@media(max-width:640px){.toc ol{columns:1}}
-.toc li{margin-bottom:5px;break-inside:avoid}
-.toc a{color:var(--ink2);text-decoration:none;display:flex;gap:10px}
-.toc a:hover{color:var(--nv)}
-.toc a b{font-family:var(--m);color:var(--faint);font-weight:400;flex:0 0 18px;text-align:right}
+.picks{max-width:580px;margin:0 auto}
+.picks h4{font-size:.72rem;letter-spacing:.17em;color:var(--side);font-weight:700;margin:0 0 9px;text-transform:uppercase}
+.pk{display:grid;grid-template-columns:54px 1fr auto;gap:14px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}
+.pk:last-of-type{border-bottom:1px solid var(--line)}
+.pk .bdg{background:var(--or);color:#fff;font-weight:800;font-size:.8rem;text-align:center;padding:4px 0;letter-spacing:.04em}
+.pk .nm{font-weight:800;font-size:1.02rem;min-width:0}
+.pk .nm em{font-style:normal;font-weight:600;font-size:.74rem;color:var(--side);margin-left:5px}
+.pk .nm span{display:block;font-size:.74rem;color:var(--side);font-weight:500;margin-top:2px}
+.pk .fg{text-align:right;font-family:var(--m);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pk .fg b{display:block;font-size:1rem;font-weight:700}
+.pk .fg i{font-style:normal;font-size:.77rem;color:var(--up);font-weight:700}
+.cvnote{max-width:580px;margin:16px auto 0;font-size:.75rem;color:var(--side);line-height:1.75;border-left:3px solid var(--orl);padding-left:11px}
 
-/* sections */
-section{margin-bottom:44px;scroll-margin-top:12px}
-.sh{border-top:1.5px solid var(--ink);padding-top:12px;margin-bottom:16px;display:flex;gap:12px;align-items:baseline}
-.sh .n{font-family:var(--m);font-size:.72rem;font-weight:700;color:var(--nv)}
-h2{font-size:clamp(1.12rem,2.3vw,1.34rem);line-height:1.3;letter-spacing:-.02em;font-weight:750;margin:0}
-.lede{color:var(--muted);font-size:.9rem;margin:0 0 20px;max-width:64ch}
-h3{font-size:.95rem;font-weight:700;margin:26px 0 9px;color:var(--nv)}
-p{margin:0 0 13px;max-width:66ch}
-ul{max-width:66ch;padding-left:1.1em;margin:0 0 13px}
-li{margin-bottom:6px}
-code{font-family:var(--m);font-size:.85em;background:var(--paper2);border:1px solid var(--rule);padding:.04em .3em;border-radius:2px}
-strong{font-weight:700}
+.ctitle{font-size:2.6rem;font-weight:400;color:var(--or);text-align:center;margin:46px 0 20px}
+.cdiv{display:grid;grid-template-columns:2.1fr 1fr;gap:16px;margin:0 clamp(18px,3.5vw,34px) 32px}
+.cdiv i{display:block;height:3px;background:var(--or)}
+.cdiv i.b{background:var(--orl)}
+.clist{list-style:none;margin:0 clamp(18px,3.5vw,34px);padding:0}
+.clist li{display:grid;grid-template-columns:1fr 84px;gap:14px;align-items:baseline;padding:13px 0;font-size:1.04rem;font-weight:700;color:var(--nv)}
+.clist li.sb{font-size:.9rem;font-weight:600;padding:8px 0;color:var(--ink2)}
+.clist .nm{text-align:right}
+.clist .nm i{font-style:normal;color:var(--orl);letter-spacing:.3em;margin-left:9px}
+.clist .pg{text-align:right;color:var(--or);font-weight:700}
 
-/* sidenote */
-.sn-row{display:grid;grid-template-columns:1fr;gap:6px;margin:0 0 22px}
-@media(min-width:900px){.sn-row{grid-template-columns:172px 1fr;column-gap:28px}}
-.sn{font-size:.82rem;font-weight:700;color:var(--nv);line-height:1.5;padding-top:2px;border-left:2px solid var(--nv);padding-left:11px}
-@media(max-width:899px){.sn{border-left:none;border-top:2px solid var(--nv);padding-left:0;padding-top:7px}}
-.sn-body>*:last-child{margin-bottom:0}
+.cobar{background:var(--ord);color:#fff;padding:10px clamp(18px,3.5vw,34px);font-weight:800;font-size:.95rem;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.cobar span{font-family:var(--m);font-weight:600;font-size:.78rem;opacity:.92}
+.chap{font-size:1.28rem;font-weight:800;color:var(--or);margin:20px clamp(18px,3.5vw,34px) 3px;letter-spacing:-.02em}
+.chsub{font-size:.78rem;color:var(--side);margin:0 clamp(18px,3.5vw,34px) 16px;font-weight:600}
+.sec{display:grid;grid-template-columns:1fr;gap:5px;margin:0 clamp(18px,3.5vw,34px) 20px}
+@media(min-width:820px){.sec{grid-template-columns:118px 1fr;column-gap:22px}}
+.sn{font-size:.73rem;color:var(--side);line-height:1.5;font-weight:600;padding-top:2px;border-left:2px solid var(--or);padding-left:9px}
+.bd{min-width:0}
+.hk{font-size:1rem;font-weight:700;color:var(--ord);margin:0 0 9px}
+.bd p{font-size:.85rem;line-height:1.9;text-align:justify;margin:0 0 11px;word-break:keep-all}
+.bd ul{font-size:.85rem;line-height:1.85;margin:0 0 11px;padding-left:1.05em}
+.bd li{margin-bottom:5px}
 
-/* badge */
-.tg{font-family:var(--m);font-size:.6rem;letter-spacing:.05em;padding:1px 5px;border-radius:2px;vertical-align:1px;white-space:nowrap;font-weight:600}
-.tg.f{background:var(--nv-bg);color:var(--nv)}
-.tg.e{background:var(--est-bg);color:var(--est)}
-.tg.a{background:var(--paper2);color:var(--muted)}
-.tg.x{background:var(--up-bg);color:var(--up)}
-
-/* table */
-.tw{overflow-x:auto;margin:0 0 20px}
-table{border-collapse:collapse;width:100%;font-size:.85rem;min-width:520px}
-caption{text-align:left;font-family:var(--m);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding-bottom:7px;caption-side:top}
-th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
-thead th{font-family:var(--m);font-size:.61rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:1.5px solid var(--rule2);border-top:1.5px solid var(--ink);white-space:nowrap}
-tbody tr:last-child td{border-bottom:1.5px solid var(--rule2)}
+.fig2{margin:0 clamp(18px,3.5vw,34px) 18px}
+@media(min-width:820px){.fig2{margin-left:calc(clamp(18px,3.5vw,34px) + 140px)}}
+.fcap{background:var(--orp);border-top:2px solid var(--or);padding:5px 10px;font-size:.75rem;font-weight:700;color:var(--ord)}
+.fbody{border:1px solid var(--line);border-top:none}
+.src{font-size:.67rem;color:var(--side);padding:4px 2px 0}
+table{border-collapse:collapse;width:100%;font-size:.77rem}
+thead th{background:var(--ord);color:#fff;font-weight:700;padding:6px 9px;text-align:center;font-size:.74rem}
+tbody td{border-bottom:1px solid var(--line);padding:5px 9px;vertical-align:top}
+tbody tr:nth-child(even){background:var(--band)}
+tr.hl td{background:var(--orl);font-weight:700}
 .num{font-family:var(--m);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
-tr.hi{background:var(--nv-bg)}
-tr.hi td{font-weight:600}
-.up{color:var(--up);font-weight:650}
-.dn{color:var(--dn);font-weight:650}
-.mu{color:var(--muted)}
-
-/* quote / formula */
-blockquote{margin:0 0 14px;padding:10px 0 10px 15px;border-left:3px solid var(--rule2);color:var(--ink2);font-size:.89rem;max-width:66ch}
-blockquote p{margin:0}
-blockquote cite{display:block;font-family:var(--m);font-size:.66rem;color:var(--faint);font-style:normal;margin-top:7px}
-.fx{background:var(--paper2);border:1px solid var(--rule);border-left:3px solid var(--nv);padding:15px 18px;margin:0 0 18px;font-family:var(--m);font-size:.77rem;line-height:1.95;overflow-x:auto;font-variant-numeric:tabular-nums}
-.fx .o{color:var(--nv);font-weight:700}
-.fx .m{color:var(--faint)}
-
-/* callout */
-.note{border:1px solid var(--rule);border-left:3px solid var(--nv);background:var(--paper2);padding:13px 17px;margin:0 0 18px;max-width:70ch}
-.note.w{border-left-color:var(--up)}
-.note.w .nl{color:var(--up)}
-.nl{font-family:var(--m);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--nv);display:block;margin-bottom:5px;font-weight:700}
-.note p:last-child{margin-bottom:0}
-
-/* chain */
-.ch{border:1px solid var(--rule);border-left:3px solid var(--nv);padding:12px 16px;margin-bottom:7px;display:grid;grid-template-columns:1fr;gap:3px}
-@media(min-width:640px){.ch{grid-template-columns:52px 1fr;column-gap:15px}}
-.ch .k{font-family:var(--m);font-size:.7rem;font-weight:700;color:var(--nv);padding-top:2px}
-.ch .v{font-size:.88rem;color:var(--ink2)}
-.ch .v b{color:var(--ink)}
-.arw{font-family:var(--m);font-size:.66rem;color:var(--faint);margin:0 0 7px 24px}
-
-/* points */
-.pts{display:grid;grid-template-columns:1fr;gap:14px;margin:0 0 20px}
-@media(min-width:780px){.pts{grid-template-columns:repeat(3,1fr)}}
-.pt{border-top:2.5px solid var(--nv);padding-top:11px}
-.pt .pn{font-family:var(--m);font-size:.6rem;letter-spacing:.12em;color:var(--nv);font-weight:700;display:block;margin-bottom:5px}
-.pt h4{margin:0 0 6px;font-size:.93rem;font-weight:700;line-height:1.4}
-.pt p{margin:0;font-size:.83rem;color:var(--muted);line-height:1.58;max-width:none}
-
-/* 3pt price */
-.px{border:1px solid var(--rule);padding:18px 20px;margin:0 0 18px;background:var(--paper2)}
-.pxr{display:grid;grid-template-columns:78px 1fr 88px;gap:12px;align-items:center;margin-bottom:8px;font-size:.79rem}
-.pxl{font-family:var(--m);font-size:.66rem;color:var(--muted);text-align:right}
-.pxt{height:15px;background:var(--paper);border:1px solid var(--rule)}
-.pxf{height:100%}
-.pxf.a{background:var(--faint)}
-.pxf.b{background:var(--dn)}
-.pxf.c{background:var(--up)}
-.pxv{font-family:var(--m);font-variant-numeric:tabular-nums;font-weight:700;font-size:.77rem;text-align:right}
-
-.final{border:2px solid var(--nv);padding:24px 26px;margin-bottom:18px;background:var(--nv-bg)}
-.final p:first-child{font-size:1.1rem;font-weight:700;margin:0 0 10px;line-height:1.5;max-width:none}
-.final p:last-child{margin:0;color:var(--ink2);max-width:64ch}
-
-footer{border-top:2.5px solid var(--nv);margin-top:10px;padding-top:16px;font-family:var(--m);font-size:.65rem;color:var(--faint);letter-spacing:.05em;display:flex;flex-wrap:wrap;gap:6px 20px}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.ctr{text-align:center}
+.up{color:var(--up);font-weight:700}.dn{color:var(--dn);font-weight:700}.mu{color:var(--faint)}
+.tw{overflow-x:auto}
+.quo{border-left:3px solid var(--or);padding:7px 0 7px 13px;margin:0 0 12px;font-size:.82rem;color:var(--ink2);line-height:1.85;text-align:justify}
+.quo cite{display:block;font-style:normal;font-size:.67rem;color:var(--side);margin-top:5px;font-family:var(--m)}
+.fx{background:var(--band);border-left:3px solid var(--or);padding:11px 14px;margin:0 0 12px;font-family:var(--m);font-size:.72rem;line-height:1.95;overflow-x:auto;font-variant-numeric:tabular-nums}
+.fx b{color:var(--ord);font-weight:700}.fx i{font-style:normal;color:var(--faint)}
+.fin{border:2px solid var(--or);background:var(--orp);padding:15px 19px;margin:0 clamp(18px,3.5vw,34px) 16px}
+@media(min-width:820px){.fin{margin-left:calc(clamp(18px,3.5vw,34px) + 140px)}}
+.fin .h{font-size:1rem;font-weight:800;color:var(--ord);margin-bottom:6px}
+.fin p{font-size:.83rem;line-height:1.85;margin:0;text-align:justify;word-break:keep-all}
+.rt{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:0 clamp(18px,3.5vw,34px) 18px}
+@media(min-width:640px){.rt{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:820px){.rt{margin-left:calc(clamp(18px,3.5vw,34px) + 140px)}}
+.rt div{background:var(--paper);padding:11px 13px}
+.rt dt{font-size:.63rem;letter-spacing:.1em;color:var(--side);font-weight:700;margin-bottom:3px}
+.rt dd{margin:0;font-family:var(--m);font-variant-numeric:tabular-nums;font-size:1.02rem;font-weight:700}
 </style>
 
-<div class="sheet">
+<div class="wrap">
 
-<header class="rh">
-  <div class="rh-top">
-    <span><b>PLUS FUTURE AI ANTI PLATFORM</b> · 한화투자증권 PB팀</span>
-    <span>Investment Committee</span>
-    <span>2026-08-13</span>
-    <span>CASE C</span>
+<!-- ═══ P1 표지 ═══ -->
+<div class="page">
+  <div class="cv">
+    <div class="cvtop">
+      <div class="brand">DPIC<small>DREAMPLUS INVESTMENT CLUB</small></div>
+      <div class="r">2026.08.13<br>AI ANTI PLATFORM Desk</div>
+    </div>
+
+    <img class="logoimg" alt="DREAM PLUS" src="data:image/png;base64,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kADAggULsGHDBkRERMDJycmSXmAqjkkwxhAcHIzdu3fj+eefJyGBSA76EbZl8+bNXGFhIUtPT8dHH32EysrK2448YBwFr2JiYrBz50489thjosjkvmjRIq6zs5OtWrUKhw8fxqVLl1BVVQWDwWBVUCYiouvXr8e3v/1tPPjgg6CUA+MUk3vR0WqPka2YgkxkAHDlyhV28uRJ7Nu3D/X19aMKijARvb29ERoaiocffhirV69GQkKCqLLiCafOu7u7WW1tLXJycnDhwgWUlpaisbERfX1941piOjs7IyQkBMuWLbNsdU8k6I0AOJVKxS5evIjz589bjYDlOA5eXl7YuXMnoqOjZ03jvv/+++z69euWU7YzIaouLi5IT0/Hhg0bbNqOPT09rKmpCXV1dSgvL0dlZSXa29uh0+ks/R4XF4e4uDhER0cjOjraJgFpuItaTUqlEo2Njairq0NNTQ2amprQ29sLtVoNnU5niWb19/dHREQE4uLiMHfuXKFKIInIZMTkXm+AqYpuhUgiYCfbBkaj0WKlcBw360o8dHR0MCFplFarBc/zUCgUVMpiCvn/WXcHo6xzLiMAAAAASUVORK5CYII=">
+
+    <div class="cvmid">
+      <div class="cvsub">EQUITY RESEARCH</div>
+      <h1 class="cvttl">전력기기·중전기</h1>
+      <p class="cvslo">전망을 판 5개, 계약을 판 1개</p>
+      <div class="orl"></div>
+    </div>
+
+    <div class="picks">
+      <h4>Investment Candidates</h4>
+
+      <div class="pk">
+        <div class="bdg">BUY</div>
+        <div class="nm">산일전기 <em>062040</em>
+          <span>편입 1위 · 인과 무결 · 세그먼트 집중 97.4%</span></div>
+        <div class="fg"><b>337,973원</b><i>+78.7%</i></div>
+      </div>
+
+      <div class="pk">
+        <div class="bdg">BUY</div>
+        <div class="nm">일진전기 <em>103590</em>
+          <span>편입 2위 · 커버리지 3곳 · 국가별 규격 전환비용</span></div>
+        <div class="fg"><b>136,552원</b><i>+88.3%</i></div>
+      </div>
+
+      <p class="cvnote">전력기기·중전기 7종목을 전수 심사해 <b>2종목을 편입</b>했다.
+      두 종목 모두 AI 잠식 단계 L4(제조)로 분산 규칙상 중복 편입 대상이나,
+      <b>단일 산업 실행이라 L단계 분산이 원천적으로 불가능</b>하여 예외를 적용했다.
+      L3·L5 산업이 추가되면 재구성한다.</p>
+    </div>
   </div>
-  <h1>산일전기 <em>062040 · KOSPI</em></h1>
-  <p class="hook">전력기기 7종목 중 <b>인과 사슬이 끊기지 않은 유일한 종목.</b>
-  근거가 시장 전망이 아니라 <b>체결된 공급계약</b>이다.</p>
+</div>
 
-  <dl class="rate">
-    <div class="rc buy"><dt>Rating</dt><dd>BUY</dd><small>비중 30% 상한</small></div>
-    <div class="rc"><dt>목표주가</dt><dd class="up">337,973</dd><small>원 <span class="tg e">EST</span></small></div>
-    <div class="rc"><dt>현재주가</dt><dd>189,100</dd><small>원 <span class="tg f">FACT</span></small></div>
-    <div class="rc"><dt>상승여력</dt><dd class="up">+78.7%</dd><small>24M Horizon</small></div>
-    <div class="rc"><dt>기대수익</dt><dd class="up">+35.5%</dd><small>승률 0.45 반영</small></div>
-  </dl>
-  <p class="dis"><strong>Skill 3 통과 여부와 무관한 독립 재검토 결과다.</strong> 검증 스킬의 <code>편입 1위</code> 판정을 자동으로 BUY로 옮기지 않았으며, 팀장 단계에서 6개 관문을 재검토한 뒤 등급을 부여했다.</p>
-</header>
-
-<nav class="toc">
-  <h2>Contents</h2>
-  <ol>
-    <li><a href="#s2"><b>2</b>산업 선정 논리</a></li>
-    <li><a href="#s3"><b>3</b>기업 상세 분석</a></li>
-    <li><a href="#s4"><b>4</b>Investment Points</a></li>
-    <li><a href="#s5"><b>5</b>더 나은 대체 투자처 검토</a></li>
-    <li><a href="#s6"><b>6</b>리스크 &amp; Bull/Base/Bear</a></li>
-    <li><a href="#s7"><b>7</b>매출·비용 추정 — 하지 않는 이유</a></li>
-    <li><a href="#s8"><b>8</b>Valuation &amp; Target Price</a></li>
-    <li><a href="#s9"><b>9</b>Horizon &amp; Catalyst</a></li>
-    <li><a href="#s10"><b>10</b>Final Decision</a></li>
-    <li><a href="#s11"><b>11</b>Appendix — 심사표 전문</a></li>
-    <li><a href="#s12"><b>12</b>데이터 출처 · Output Schema</a></li>
+<!-- ═══ P2 Contents ═══ -->
+<div class="page">
+  <div class="rhead">
+    <div class="t">Equity Research / 전력기기·중전기 / 전망을 판 5개, 계약을 판 1개</div>
+    <div class="brand">DPIC<small>DREAMPLUS INVESTMENT CLUB</small></div>
+  </div>
+  <div class="ctitle">Contents</div>
+  <div class="cdiv"><i></i><i class="b"></i></div>
+  <ol class="clist">
+    <li><span class="nm">I. 산업분석 <i>· · · ·</i></span><span class="pg">3p</span></li>
+    <li class="sb"><span class="nm">1. 수요 구조 &mdash; 왜 전력기기인가 <i>· ·</i></span><span class="pg">3p</span></li>
+    <li class="sb"><span class="nm">2. 공급 구조 &mdash; Peer Group 지형 <i>· ·</i></span><span class="pg">4p</span></li>
+    <li><span class="nm">II. 기업분석 A &mdash; 산일전기 <i>· · · ·</i></span><span class="pg">5p</span></li>
+    <li><span class="nm">III. 기업분석 B &mdash; 일진전기 <i>· · · ·</i></span><span class="pg">7p</span></li>
+    <li><span class="nm">IV. 포트폴리오 종합 <i>· · · ·</i></span><span class="pg">9p</span></li>
   </ol>
-</nav>
+  <div class="pfoot"></div><div class="pnum">2</div>
+</div>
 
-<main>
+<!-- ═══ P3 산업분석 1 ═══ -->
+<div class="page">
+  <div class="rhead">
+    <div class="t">Equity Research / 전력기기·중전기 / 전망을 판 5개, 계약을 판 1개</div>
+    <div class="brand">DPIC<small>DREAMPLUS INVESTMENT CLUB</small></div>
+  </div>
+  <div class="chap">I. 산업분석</div>
+  <div class="chsub">1. 수요 구조 &mdash; 왜 전력기기인가</div>
 
-<section id="s2">
-  <div class="sh"><span class="n">2</span><h2>산업 선정 논리 — 전력기기·중전기</h2></div>
-
-  <div class="sn-row">
-    <div class="sn">얇은 커버리지가 곧 정보 우위다</div>
-    <div class="sn-body">
-      <p>사용자가 산업을 직접 지정한 <code>verify</code> 경로다. 지정 산업도 <code>discover</code>와 동일한 G1 게이트를 통과했다. G1 통과 3개 산업 중 <strong>평균 커버리지가 가장 얇은</strong> 곳을 택했다 — 모두가 보고 있는 산업에는 컨센서스와의 델타가 남아 있지 않다.</p>
+  <div class="sec">
+    <div class="sn">AI는 전기를 먹는다</div>
+    <div class="bd">
+      <div class="hk">데이터센터가 전력망을 병목으로 밀어넣었다</div>
+      <p>전력기기 수요의 성격이 바뀌고 있다. 과거 변압기·차단기 수요는 <b>노후 설비 교체</b>라는
+      완만한 대체 수요였다. 여기에 <b>신규 부하</b>가 얹혔다. 생성형 AI 확산으로 데이터센터의
+      전력 밀도가 급상승하면서 기존 배전망으로는 감당할 수 없는 규모의 전력 공급이 요구되고 있고,
+      이는 초고압 변압기와 배전 기기의 <b>신규 발주</b>로 이어진다.</p>
+      <p>주목할 점은 이 수요가 <b>발전이 아니라 송·배전 단에서 발생</b>한다는 것이다. 발전원이
+      원자력이든 가스든 재생에너지든, 그 전기를 데이터센터까지 실어나르려면 변압기와 개폐장치를
+      거쳐야 한다. <b>발전원 논쟁의 승패와 무관하게 통과해야 하는 구간</b>이라는 점이 이 산업의
+      구조적 위치다.</p>
     </div>
   </div>
 
-  <div class="tw">
-    <table>
-      <caption>6개 산업 59종목 스캔 — G1 게이트 (커버리지 3곳 이상 종목이 5개 이상)</caption>
-      <thead><tr><th>산업</th><th class="num">적격</th><th class="num">평균 커버리지</th><th>판정</th><th>비고</th></tr></thead>
+  <div class="sec">
+    <div class="sn">공급이 수요를 못 따라간다</div>
+    <div class="bd">
+      <div class="hk">판가가 오르는 산업 &mdash; 공급부족이 공시에 적혀 있다</div>
+      <p>수요 증가만으로는 투자 논리가 되지 않는다. 경쟁이 격화되면 물량이 늘어도 마진이 깎이기
+      때문이다. 그런데 이 산업은 <b>공급 측이 먼저 막혀 있다.</b> 복수 기업의 사업보고서가
+      <b>&ldquo;공급 부족(Shortage) 현상에 따른 판가 상승과 수주 잔고 확대가 동반되고 있다&rdquo;</b>고
+      직접 서술한다.</p>
+      <p>공급이 늘지 못하는 이유는 세 가지다. 첫째, <b>대형 변압기 제조 설비의 증설에 수년이
+      소요</b>된다. 둘째, 전력기기는 <b>국가별 전력계통 규격에 종속</b>되어 있어 설비를 지어도
+      해당 시장 규격에 맞추는 데 추가 시간이 든다. 셋째, <b>발주처가 트랙레코드를 요구</b>한다 &mdash;
+      신규 사업자가 설비와 인증을 갖춰도 실적이 없으면 채택되지 않는다.</p>
+      <p>이 세 가지가 겹치면서 산업 전체가 <b>공급자 우위 국면</b>에 들어가 있다. 우리 데스크가
+      이 산업을 선택한 1차 근거다.</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sn">아직 덜 알려진 자리를 골랐다</div>
+    <div class="bd">
+      <div class="hk">커버리지가 얇아야 컨센서스와 다를 여지가 남는다</div>
+      <p>6개 산업 59종목을 스캔해 컨센서스 커버리지 기준으로 걸렀다. 우리 수익은 컨센서스와의
+      차이에서 나오므로, 증권사 15~16곳이 이미 커버 중인 산업에서는 먼저 알 구조적 이유가 없다.
+      전력기기·중전기는 통과 산업 셋 중 <b>평균 커버리지가 가장 얇았다.</b></p>
+    </div>
+  </div>
+
+  <div class="fig2">
+    <div class="fcap">표 1-1. 산업 스크리닝 &mdash; 컨센서스 커버리지 기준</div>
+    <div class="fbody"><div class="tw"><table>
+      <thead><tr><th>산업</th><th>적격 종목</th><th>평균 커버리지</th><th>판정</th></tr></thead>
       <tbody>
-        <tr class="hi"><td>전력기기·중전기</td><td class="num">7</td><td class="num">8.7</td><td class="up">PASS</td><td>3개 PASS 중 커버리지 최저 — 정보 우위 여지</td></tr>
-        <tr><td>조선·조선기자재</td><td class="num">6</td><td class="num">15.3</td><td class="mu">PASS</td><td>already_covered</td></tr>
-        <tr><td>방산·항공</td><td class="num">5</td><td class="num">15.8</td><td class="mu">PASS</td><td>already_covered</td></tr>
-        <tr><td>원자력·발전정비</td><td class="num">4</td><td class="num">10.2</td><td class="dn">REJECT</td><td>coverage_below_5</td></tr>
-        <tr><td>시멘트·건자재</td><td class="num">3</td><td class="num">4.0</td><td class="dn">REJECT</td><td>coverage_below_5</td></tr>
-        <tr><td>환경·폐기물·수처리</td><td class="num">0</td><td class="num">0</td><td class="dn">REJECT</td><td>최근 3개월 내 의견 제시 증권사 전무</td></tr>
+        <tr class="hl"><td>전력기기·중전기</td><td class="num">7</td><td class="num">8.7</td><td class="ctr">선택</td></tr>
+        <tr><td>조선·조선기자재</td><td class="num">6</td><td class="num">15.3</td><td class="ctr mu">과다 커버</td></tr>
+        <tr><td>방산·항공</td><td class="num">5</td><td class="num">15.8</td><td class="ctr mu">과다 커버</td></tr>
+        <tr><td>원자력·발전정비</td><td class="num">4</td><td class="num">10.2</td><td class="ctr dn">적격 부족</td></tr>
+        <tr><td>시멘트·건자재</td><td class="num">3</td><td class="num">4.0</td><td class="ctr dn">적격 부족</td></tr>
+        <tr><td>환경·폐기물·수처리</td><td class="num">0</td><td class="num">0</td><td class="ctr dn">커버리지 전무</td></tr>
       </tbody>
-    </table>
+    </table></div></div>
+    <div class="src">자료 : FnGuide 컨센서스, DART OpenAPI, DPIC 데스크</div>
   </div>
 
-  <div class="sn-row">
-    <div class="sn">금리 상승 국면이라 상방을 15% 깎았다</div>
-    <div class="sn-body">
-      <p>FRED 실호출 <span class="tg f">FACT</span> — 미 10년물 <strong>4.72%</strong> (2026-08-10), 원/달러 <strong>1,409.94</strong> (2026-08-07). 3개월 상승 국면으로 <strong>매크로 게이트 G = 0.85(황색)</strong>. 멀티플 재평가 논리는 할인율에 직결되므로 <strong>상방 조정률만</strong> 감쇠시킨다.</p>
-    </div>
-  </div>
-</section>
-
-<section id="s3">
-  <div class="sh"><span class="n">3</span><h2>기업 상세 분석</h2></div>
-  <p class="lede">모든 판정 근거는 DART 공시 원문이다. 뉴스·IR·애널리스트 리포트는 인용에서 배제했다.</p>
-
-  <div class="sn-row">
-    <div class="sn">이익의 97%가 단일 제조 세그먼트에서 나온다</div>
-    <div class="sn-body">
-      <div class="tw">
-        <table>
-          <caption>Business Model &amp; Revenue Driver</caption>
-          <thead><tr><th>항목</th><th>내용</th><th class="num">비중</th><th>태그</th></tr></thead>
-          <tbody>
-            <tr class="hi"><td>영업이익 1위 세그먼트</td><td>전기사업 — 변압기, 리액터 등</td><td class="num">97.4%</td><td><span class="tg f">FACT</span></td></tr>
-            <tr><td>영업부문 구조</td><td>단일 영업부문 (기업회계기준서 1108호)</td><td class="num">100%</td><td><span class="tg f">FACT</span></td></tr>
-            <tr><td>인지노동성 매출</td><td>A/S 등 기타용역 8,935백만원</td><td class="num">1.8%</td><td><span class="tg f">FACT</span></td></tr>
-            <tr><td>종업원급여+복리후생+외주용역</td><td>매출 501,946백만원 대비</td><td class="num">7.0%</td><td><span class="tg f">FACT</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p><strong>AI 잠식 판정 L4 (제조).</strong> 영업이익의 97.4%가 변압기·리액터 <em>제조</em>에서 나오고 인건비 비중이 7.0%다. 즉사선(L1~L2)에서 멀다.</p>
+  <div class="sec">
+    <div class="sn">금리는 이 판단의 역풍이다</div>
+    <div class="bd">
+      <div class="hk">매크로는 상방에만 브레이크를 건다</div>
+      <p>미 10년물 국채금리는 <b>4.72%</b>, 원/달러 환율은 <b>1,409.94원</b>이다(2026년 8월 기준).
+      금리가 3개월째 오르는 국면이라 멀티플 재평가를 전제로 한 상방 주장은 할인율 상승분만큼
+      감쇠시켜야 한다. 우리는 <b>상방 조정률에만 0.85 계수</b>를 적용했고, 하방 판단에는 적용하지
+      않았다 &mdash; 금리가 올랐다고 하락 논리가 약해질 이유는 없기 때문이다.</p>
     </div>
   </div>
 
-  <h3>Competitive Position — Q1~Q5 판정</h3>
-  <div class="tw">
-    <table>
-      <thead><tr><th class="num">Q</th><th>질문</th><th>판정</th><th>근거</th></tr></thead>
+  <div class="pfoot"></div><div class="pnum">3</div>
+</div>
+
+<!-- ═══ P4 산업분석 2 — Peer Group ═══ -->
+<div class="page">
+  <div class="rhead">
+    <div class="t">Equity Research / 전력기기·중전기 / 전망을 판 5개, 계약을 판 1개</div>
+    <div class="brand">DPIC<small>DREAMPLUS INVESTMENT CLUB</small></div>
+  </div>
+  <div class="chap">I. 산업분석</div>
+  <div class="chsub">2. 공급 구조 &mdash; Peer Group 지형</div>
+
+  <div class="sec">
+    <div class="sn">같은 수요를 보는 7개 회사</div>
+    <div class="bd">
+      <div class="hk">전원이 같은 문장을 사업보고서에 쓰고 있다</div>
+      <p>컨센서스가 존재하는 산업 내 7개사를 전수 조사한 결과, <b>6개사가 사업보고서에 거의 동일한
+      문장</b>을 담고 있었다 &mdash; &ldquo;AI 확산으로 데이터센터 전력수요가 증가하고 있으며 이에 따라
+      전력기기 수요가 늘고 있다&rdquo;는 취지다. 산업 전망에 대한 인식은 <b>이미 완전히 공유되어
+      있다.</b></p>
+      <p>따라서 종목 선택의 기준은 <b>&ldquo;이 산업이 좋은가&rdquo;가 아니다.</b> 그건 이미 7개사와
+      증권사 60여 곳이 동의하는 사실이다. 우리가 물어야 할 것은 <b>&ldquo;늘어난 수요가 이 회사로
+      오는가, 그리고 그 이익이 주주에게 남는가&rdquo;</b>다.</p>
+    </div>
+  </div>
+
+  <div class="fig2">
+    <div class="fcap">표 1-2. Peer Group 지형 &mdash; 규모·집중도·해자 성격</div>
+    <div class="fbody"><div class="tw"><table>
+      <thead><tr><th>기업</th><th>커버리지</th><th>주력 세그먼트</th><th>이익 집중도</th><th>진입장벽 성격</th></tr></thead>
       <tbody>
-        <tr><td class="num">Q1</td><td>영업이익 50% 이상이 AI 대체 가능 인지노동인가</td><td class="up">NO</td><td>제조 97.4%, 용역 1.8%</td></tr>
-        <tr class="hi"><td class="num">Q2</td><td>3년 내 신규 진입 불가한가</td><td class="up">YES <span class="tg f">structural</span></td><td>거래 지속성 · 검증 요구</td></tr>
-        <tr class="hi"><td class="num">Q3</td><td>AI 확산이 매출을 직접 늘리는 경로가 공시에 있는가</td><td class="up">YES</td><td><strong>체결된 공급계약</strong></td></tr>
-        <tr><td class="num">Q4</td><td>AI로 낮출 인건비·설계비가 매출 10% 이상인가</td><td class="mu">NO</td><td>7.0% — 제조업이라 절감 여지가 적음</td></tr>
-        <tr><td class="num">Q5</td><td>컨센 갱신일 이후 중요 공시가 있었는가</td><td class="mu">NO</td><td>최근 공시 2026-08-07, 기준일 이전</td></tr>
+        <tr class="hl"><td>산일전기</td><td class="num">9</td><td>변압기·리액터</td><td class="num">97.4%</td><td class="ctr">구조적</td></tr>
+        <tr class="hl"><td>일진전기</td><td class="num">3</td><td>중전기(변압기·GIS)</td><td class="num">76.7%</td><td class="ctr">구조적</td></tr>
+        <tr><td>비츠로셀</td><td class="num">3</td><td>리튬전지</td><td class="num">100%</td><td class="ctr">구조적</td></tr>
+        <tr><td>대한전선</td><td class="num">7</td><td>초고압 케이블</td><td class="num">100%</td><td class="ctr mu">일시적</td></tr>
+        <tr><td>LS</td><td class="num">12</td><td>전력(지주 구조)</td><td class="num dn">28.6%</td><td class="ctr">구조적</td></tr>
+        <tr><td>효성중공업</td><td class="num">13</td><td>중공업(변압기·차단기)</td><td class="num">98.8%</td><td class="ctr mu">일시적</td></tr>
+        <tr><td>HD현대일렉트릭</td><td class="num">14</td><td>전기전자</td><td class="num">100%</td><td class="ctr mu">일시적</td></tr>
       </tbody>
-    </table>
+    </table></div></div>
+    <div class="src">자료 : DART 사업보고서 부문별 영업이익, FnGuide 컨센서스</div>
   </div>
 
-  <blockquote>
-    <p>한번 특정 제조사와 거래를 시작하면 특별한 문제가 발생하지 않는 한 매우 장기적으로 거래 관계를 이어가는 경우가 많습니다. 그렇기 때문에 시장에서의 검증이 부족한 신생 회사가 진입하기 매우 어려운 시장이며</p>
-    <cite>2025 사업보고서 (20260403003697) II.사업의 내용 7.기타 참고사항 마.시장여건 (1)시장의 특성</cite>
-  </blockquote>
+  <div class="sec">
+    <div class="sn">진입장벽에도 등급이 있다</div>
+    <div class="bd">
+      <div class="hk">구조적 장벽과 일시적 장벽을 나눈 이유</div>
+      <p>7개사 모두 사업보고서에 진입장벽을 서술한다. 그런데 <b>같은 문단을 끝까지 읽으면 성격이
+      갈린다.</b> 효성중공업은 &ldquo;초기 진입장벽이 높아 글로벌 선진업체 위주의 시장&rdquo;이라고
+      쓰면서, 바로 뒤에 <b>&ldquo;중국과 인도 등 후발업체가 가격 경쟁력을 토대로 참여함에 따라 가격
+      경쟁이 심화되고 있다&rdquo;</b>고 병기한다. 장벽이 있다는 진술과 그 장벽이 무너지는 중이라는
+      진술이 한 문단 안에 있다.</p>
+      <p>HD현대일렉트릭의 &ldquo;Track-record가 중요하게 작용하며 발주처가 보수적으로 접근한다&rdquo;도
+      마찬가지다. 이는 업계 <b>관행에 대한 서술</b>이지 제도적 장벽이 아니며, 동일 논리가 당사의
+      신규 시장 진입도 막는다. 대한전선의 &ldquo;진입장벽이 <b>비교적</b> 높은&rdquo;은 그 자체로
+      유보 표현이고, 설비투자는 자본으로 넘을 수 있어 전환비용과 다르다.</p>
+      <p>반면 <b>산일전기·일진전기·비츠로셀</b>의 장벽은 성격이 다르다. 각각 <b>거래 지속성과
+      검증 요구</b>, <b>국가별 전력계통 규격 종속</b>, <b>5년 이상 사용 실적과 6~8개월 인증평가</b>
+      &mdash; 모두 <b>고객 측 전환비용</b>이다. 경쟁자가 자본을 투입해도 단축되지 않는다.</p>
+    </div>
+  </div>
 
-  <div class="sn-row">
+  <div class="pfoot"></div><div class="pnum">4</div>
+</div>
+
+<!-- ═══ P5 기업 A ═══ -->
+<div class="page">
+  <div class="cobar"><span>II. 기업분석 A</span>산일전기 <span>062040 · KOSPI · BUY</span></div>
+  <div class="rt">
+    <div><dt>목표주가</dt><dd class="up">337,973원</dd></div>
+    <div><dt>현재주가</dt><dd>189,100원</dd></div>
+    <div><dt>상승여력</dt><dd class="up">+78.7%</dd></div>
+    <div><dt>시가총액</dt><dd>5조 7,946억</dd></div>
+  </div>
+
+  <div class="sec">
+    <div class="sn">산업 내 위치</div>
+    <div class="bd">
+      <div class="hk">규격 종속 시장의 중견 공급자</div>
+      <p>Peer 7개사 중 커버리지 9곳으로 중간 위치다. 시가총액 5조 7,946억원, 상장주식수
+      30,642,850주, 외국인지분율 17.56%. 52주 최고 341,000원 대비 현재가는 <b>−45% 구간</b>에
+      있다. 대형 3사(HD현대일렉트릭·효성중공업·LS)와 소형 사이의 <b>중형 전문업체</b>로,
+      대형사가 다루지 않는 규격이나 납기의 물량을 받는 위치다.</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sn">이익의 97%가 한 곳에서 나온다</div>
+    <div class="bd">
+      <div class="hk">사업 구조 &mdash; 단일 영업부문</div>
+      <p>영업이익 1위 세그먼트는 <b>전기사업(변압기·리액터 등)으로 전체의 97.4%</b>다. 기업회계기준서
+      제1108호상 <b>단일 영업부문</b>으로 보고되며, 인지노동성 매출은 A/S 등 기타용역
+      <b>1.8%</b>에 불과하다. 종업원급여·복리후생·외주용역 합계는 매출 대비 <b>7.0%</b>다.</p>
+      <p>이 구조가 중요한 이유는 두 가지다. 첫째, <b>판단의 전달률</b>이 높다 &mdash; 변압기 수요가
+      늘면 회사 전체 이익이 그만큼 움직인다. 둘째, <b>AI 대체 노출이 낮다.</b> 인건비 비중 7%인
+      제조업에서 AI가 깎을 수 있는 원가 자체가 작고, 반대로 AI가 뺏을 수 있는 부가가치도 작다.</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sn">거래를 트는 데 걸리는 시간이 해자다</div>
+    <div class="bd">
+      <div class="hk">진입장벽 &mdash; 고객 측 전환비용</div>
+      <div class="quo">한번 특정 제조사와 거래를 시작하면 특별한 문제가 발생하지 않는 한 매우
+      장기적으로 거래 관계를 이어가는 경우가 많습니다. 그렇기 때문에 시장에서의 검증이 부족한
+      신생 회사가 진입하기 매우 어려운 시장이며
+      <cite>2025 사업보고서 (20260403003697) II.사업의 내용 7.기타 참고사항 마.(1)</cite></div>
+      <p>이 진술의 무게는 <b>주어가 발주처</b>라는 데 있다. 당사가 &ldquo;우리는 기술력이
+      뛰어나다&rdquo;고 주장하는 것이 아니라, <b>고객이 공급자를 바꾸지 않는 성질</b>을 서술하고 있다.
+      전환비용은 경쟁자가 자본으로 상쇄할 수 없는 유형의 장벽이다. Peer 중 <b>일시적 장벽</b>으로
+      분류된 3사와 갈리는 지점이다(I장 2절 참조).</p>
+    </div>
+  </div>
+
+  <div class="pfoot"></div><div class="pnum">5</div>
+</div>
+
+<!-- ═══ P6 기업 A 계속 ═══ -->
+<div class="page">
+  <div class="rhead">
+    <div class="t">Equity Research / 산일전기 (062040, KS)</div>
+    <div class="brand">DPIC<small>DREAMPLUS INVESTMENT CLUB</small></div>
+  </div>
+  <div class="chap">II. 기업분석 A &mdash; 산일전기</div>
+  <div class="chsub">투자포인트 · Valuation · 리스크</div>
+
+  <div class="sec">
+    <div class="sn">전망이 아니라 계약이다</div>
+    <div class="bd">
+      <div class="hk">투자포인트 &mdash; 화살표가 이미 실현된 주장</div>
+      <p>Peer 6개사가 &ldquo;데이터센터 전력수요가 증가한다&rdquo;는 <b>산업 서술</b>을 근거로 제시한
+      반면, 동사는 <b>체결된 공급계약</b>을 제시했다.</p>
+      <div class="quo">본 계약은 미국 Data Center용 변압기를 공급하는 공사입니다.
+      계약금액 50,277,275,000원 &mdash; 최근매출액 대비 <b>10.02%</b>, 계약상대 Bloom Energy
+      <cite>2026-04-30 단일판매·공급계약체결 (20260430800407)</cite></div>
+      <p>산업 전망에서 당사 매출로 넘어가는 연결고리 &mdash; <b>&ldquo;그 수요가 왜 이 회사로
+      오는가&rdquo;</b> &mdash; 가 다른 6개사에서는 비어 있었다. 동사는 그 자리에 서명된 계약을 놓았다.
+      매출 대비 10%가 넘는 단일 계약이므로 규모도 실질적이다.</p>
+      <p><b>선례가 하나 더 있다.</b> 2025년 12월 24일 <b>미국 Data Center용 Pad Mount 변압기
+      43,782백만원(매출 대비 13.11%, EPC Power Corporation)</b> 계약이다. 두 건 모두 미국
+      데이터센터향이며 매출 대비 10% 이상이다. 다만 <b>2건으로 추세를 단정하지 않는다</b> &mdash;
+      반복성 확인이 상향 조건이다.</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sn">델타가 우리 몫이다</div>
+    <div class="bd">
+      <div class="hk">Valuation &mdash; 컨센서스에 무엇을 얹었는가</div>
+      <p>우리는 매출 P&times;Q 추정과 DCF를 수행하지 않는다. <b>9개 증권사가 이미 만든 추정치를
+      앵커로 쓰고, 그들이 반영하지 않은 것만 조정률로 얹는다.</b> 애널리스트보다 재무모델을 잘
+      만들 수 없기 때문이며, 이 델타가 곧 우리 판단이다.</p>
+      <div class="fx">컨센서스 목표주가                 278,889원  <i>9개사, 2026-08-11 기준</i>
+조정률   진입장벽 <b>+10%p</b> · 수요연동 <b>+15%p</b>  =  <b>+25.0%</b>
+매크로   <b>&times; 0.85</b>  <i>금리 상승 국면 — 상방에만 적용</i>
+
+<b>목표주가  278,889 &times; (1 + 0.212)  =  337,973원</b>
+상승여력  337,973 / 189,100 &minus; 1  =  <b>+78.7%</b>
+기대수익  +78.7% &times; 승률 0.45  =  <b>+35.5%</b></div>
+      <p>컨센서스 자체가 현재가 대비 <b>+47.5%</b> 위에 있다. 우리 판단은 그 위에 <b>+21.2%p</b>를
+      더 얹은 것이다. 수요연동 근거(공급계약)가 빠지면 조정률이 +10%로 내려가 델타가 8.5%p가 되고
+      투자 판단 기준선에 미달한다 &mdash; <b>이 판단은 계약 공시에 걸려 있다.</b></p>
+    </div>
+  </div>
+
+  <div class="sec">
     <div class="sn">이익이 주주에게 남는지는 절반만 답했다</div>
-    <div class="sn-body">
-      <div class="tw">
-        <table>
-          <caption>M3 이익귀속 — 동종 8분기 시계열 미확보로 정성 4방향 강등</caption>
-          <thead><tr><th>방향</th><th>질문</th><th>판정</th><th>근거</th></tr></thead>
-          <tbody>
-            <tr><td>경쟁자</td><td>동일 수혜인가</td><td class="dn">실패</td><td>peer 3사가 <strong>같은 Q3 근거</strong>를 사업보고서에 쓴다</td></tr>
-            <tr><td>고객</td><td>단가 인하를 강요당하는가</td><td class="up">방어</td><td>공급부족 국면 — 판가 상승이 산업 서술에 존재</td></tr>
-            <tr><td>공급자</td><td>원가로 흡수되는가</td><td class="dn">실패</td><td>구리·전기강판 전가 근거 없음 <span class="tg x">Data unavailable</span></td></tr>
-            <tr><td>규제</td><td>환수 대상인가</td><td class="up">방어</td><td>요금 규제 대상 아님</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="note w">
-        <span class="nl">이 종목의 최대 약점</span>
-        <p><strong>M3 = 1/2.</strong> 계약을 딴 것은 당사지만, 데이터센터 변압기 수요 자체는 경쟁사에도 간다. 이것이 §10 비중 30% 상한의 직접 근거다.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="s4">
-  <div class="sh"><span class="n">4</span><h2>Investment Points</h2></div>
-
-  <div class="pts">
-    <div class="pt"><span class="pn">POINT 1</span><h4>전망이 아니라 계약이다</h4><p>6개 경쟁 종목이 "AI로 전력수요가 는다"는 <em>산업 서술</em>을 근거로 냈다. 산일전기만 <strong>체결된 공급계약</strong>을 냈다.</p></div>
-    <div class="pt"><span class="pn">POINT 2</span><h4>전환비용이 구조적이다</h4><p>검증 요구가 신규 진입을 막는다. 경쟁 3사의 진입장벽 근거는 <code>temporary</code>였다.</p></div>
-    <div class="pt"><span class="pn">POINT 3</span><h4>사업이 흩어져 있지 않다</h4><p>영업이익 97.4%가 단일 세그먼트. LS는 1위 세그먼트가 <strong>28.6%</strong>뿐이라 부문 개선이 회사를 대표하지 못했다.</p></div>
-  </div>
-
-  <h3>인과 사슬 — 5단 전개</h3>
-  <div class="ch"><div class="k">P₁</div><div class="v"><b>[사실]</b> 신생 회사가 진입하기 매우 어려운 시장 <span class="tg f">FACT</span><br><span class="mu" style="font-size:.79rem">2025 사업보고서 II.7.마(1)</span></div></div>
-  <div class="arw">│</div>
-  <div class="ch"><div class="k">P₂</div><div class="v"><b>[사실]</b> 미국 Data Center용 변압기 공급계약 체결. <strong>502.8억원, 최근매출액 대비 10.02%</strong>, 계약상대 Bloom Energy <span class="tg f">FACT</span><br><span class="mu" style="font-size:.79rem">2026-04-30 단일판매·공급계약체결 (20260430800407)</span></div></div>
-  <div class="arw">↓ 연결 ①</div>
-  <div class="ch"><div class="k">M</div><div class="v"><b>[연결]</b> 진입장벽이 유지되는 시장에서 당사가 데이터센터 물량을 실제로 확보했다 → 매출 인식 예정<br><span class="up" style="font-size:.79rem">비약 공격 불성립 — 화살표가 이미 실현됨</span></div></div>
-  <div class="arw">↓ 연결 ②</div>
-  <div class="ch"><div class="k">R</div><div class="v"><b>[전망]</b> 영업이익 97.4%를 차지하는 세그먼트의 매출 증가가 이익으로 전환된다<br><span class="dn" style="font-size:.79rem">귀속 공격 부분 성립 — 경쟁자·공급자 방향 미방어 (M3 1/2)</span></div></div>
-
-  <div class="tw" style="margin-top:18px">
-    <table>
-      <caption>검증 5종 공격 — 끊긴 고리 0개</caption>
-      <thead><tr><th>공격</th><th>결과</th><th>사유</th></tr></thead>
-      <tbody>
-        <tr><td>① 비약</td><td class="up">불성립</td><td>계약 공시로 화살표가 실현됨. 나머지 6종목은 여기서 끊김</td></tr>
-        <tr><td>② 필요≠충분</td><td class="up">불성립</td><td>진입장벽 + 실제 수주가 함께 제시됨</td></tr>
-        <tr><td>③ 역방향</td><td class="up">불성립</td><td>같은 인용으로 반대 결론이 나오지 않음</td></tr>
-        <tr><td>④ 제3원인</td><td class="up">불성립</td><td>계약금액·상대방이 특정되어 다른 설명 불가</td></tr>
-        <tr><td>⑤ 귀속 누락</td><td class="dn">부분 성립</td><td>경쟁자·공급자 방향 미방어 → M3 1점으로 반영</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section id="s5">
-  <div class="sh"><span class="n">5</span><h2>더 나은 대체 투자처 검토</h2></div>
-  <p class="lede">단일 종목이라도 진공 비교는 금지된다. 같은 산업에서 생존했던 종목과 직접 비교한다.</p>
-
-  <div class="tw">
-    <table>
-      <thead><tr><th>비교 항목</th><th class="num">산일전기</th><th class="num">일진전기</th><th>판정</th></tr></thead>
-      <tbody>
-        <tr><td>업사이드</td><td class="num">+78.7%</td><td class="num up">+88.4%</td><td class="mu">일진 우위</td></tr>
-        <tr><td>커버리지</td><td class="num">9곳</td><td class="num up">3곳</td><td class="mu">일진 우위 (스위트스팟)</td></tr>
-        <tr><td>세그먼트 집중도</td><td class="num up">97.4%</td><td class="num">76.7%</td><td class="mu">산일 우위</td></tr>
-        <tr><td>인과 끊김</td><td class="num up">0</td><td class="num">1 (비약)</td><td><strong>산일 우위</strong></td></tr>
-        <tr><td>M4 상투어 감점</td><td class="num up">1</td><td class="num">2</td><td class="mu">산일 우위</td></tr>
-        <tr><td>승률</td><td class="num up">0.45</td><td class="num">0.25</td><td class="mu">산일 우위</td></tr>
-        <tr class="hi"><td><strong>기대수익</strong></td><td class="num up">+35.5%</td><td class="num">+22.1%</td><td><strong>산일 채택</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="sn-row">
-    <div class="sn">업사이드는 확률이 반영되기 전 숫자다</div>
-    <div class="sn-body">
-      <p><strong>일진전기가 업사이드와 커버리지에서 앞선다.</strong> 그럼에도 산일전기를 택한 이유는 <strong>인과 끊김</strong>이다. 일진전기의 Q3 근거는 <em>"데이터센터 전력 밀도가 급상승하면서 초고압 변압기 신규 발주가 이어지고 있다"</em>로, 산업 현상 서술이지 당사 수주 근거가 아니다. 승률을 곱하면 순서가 뒤집힌다.</p>
-      <div class="note">
-        <span class="nl">그리고 일진전기는 담을 수 없다</span>
-        <p>전력기기 7종목이 <strong>전부 L4(제조)</strong>다. 분산 규칙상 같은 L단계를 중복 편입하면 <em>물리 자동화가 진전될 때 동시에 무너지므로</em> 배제된다. 3종목 포트폴리오를 만들려면 <strong>L3 또는 L5 산업</strong>이 따로 필요하다 — 종목이 부족해서가 아니라 <strong>단일 산업만 심사한 구조적 결과</strong>다.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="s6">
-  <div class="sh"><span class="n">6</span><h2>리스크 &amp; Bull / Base / Bear</h2></div>
-  <div class="tw">
-    <table>
-      <thead><tr><th>시나리오</th><th>가정</th><th class="num">TP</th><th class="num">현재가 대비</th><th class="num">확률</th></tr></thead>
-      <tbody>
-        <tr><td class="up"><strong>Bull</strong></td><td>Bloom Energy 계약이 반복 수주로 전환</td><td class="num">337,973 <span class="tg e">EST</span></td><td class="num up">+78.7%</td><td class="num">0.30</td></tr>
-        <tr><td><strong>Base</strong></td><td>계약 이행 완료, 추가 수주는 산업 평균</td><td class="num">278,889 <span class="tg f">FACT</span></td><td class="num up">+47.5%</td><td class="num">0.45</td></tr>
-        <tr><td class="dn"><strong>Bear</strong></td><td>단발 계약 종료, 후속 물량 경쟁사 이탈</td><td class="num">189,100 <span class="tg a">ASSUME</span></td><td class="num mu">0%</td><td class="num">0.25</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="sn-row">
-    <div class="sn">최악에서도 손실이 아니라 정체다</div>
-    <div class="sn-body">
-      <p>Bear에서 목표주가가 현재가로 회귀할 뿐 아래로 내려가지 않는다. <strong>현재가가 컨센서스 대비 이미 47.5% 아래</strong>이기 때문이다 <span class="tg f">FACT</span>. 하방은 컨센서스 자체가 무너질 때 열린다.</p>
+    <div class="bd">
+      <div class="hk">리스크 &mdash; 경쟁자와 공급자 방향이 열려 있다</div>
+      <p>늘어난 이익이 주주 몫으로 남는지를 <b>경쟁자·고객·공급자·규제</b> 네 방향으로 검사했다.
+      <b>고객</b>(공급부족 국면의 판가 상승)과 <b>규제</b>(요금 규제 대상 아님)는 방어된다.
+      그러나 <b>경쟁자</b> 방향은 Peer 3사가 같은 수요를 보고 있어 방어에 실패했고, <b>공급자</b>
+      방향은 구리·전기강판 원가 전가 근거가 공시에서 확인되지 않았다.</p>
+      <p>계약을 딴 것은 당사지만 데이터센터 변압기 수요 자체는 경쟁사에도 간다. 이것이
+      <b>비중 상한</b>의 직접 근거다.</p>
+      <ul>
+        <li><b>계약 취소·축소 공시</b> &mdash; 투자 논리의 근거가 소멸한다</li>
+        <li><b>Peer 3사의 동일 데이터센터 계약 공시</b> &mdash; 경쟁자 방향이 완전히 무너진다</li>
+        <li><b>세그먼트 집중도 90% 미만 하락</b> &mdash; 판단 전달률 전제가 깨진다</li>
+        <li><b>컨센서스 목표주가 하향</b> &mdash; 우리 목표주가가 연동 산출되므로 직접 영향</li>
+      </ul>
     </div>
   </div>
 
-  <h3>Thesis-breaking Risk — 이게 관측되면 논리가 죽는다</h3>
-  <ul>
-    <li><strong>계약 취소·축소 공시</strong> — P₂가 무효화되면 사슬 전체가 무너진다</li>
-    <li><strong>세그먼트 영업이익 비중 90% 미만 하락</strong> — M1(L4) 판정 근거 소멸</li>
-    <li><strong>컨센서스 TP 하향</strong> — 우리 TP가 컨센에 연동되므로 독립적 하방 방어선이 없다</li>
-    <li><strong>경쟁 3사의 동일 계약 공시</strong> — M3 경쟁자 방향이 완전히 무너진다</li>
-  </ul>
+  <div class="fin">
+    <div class="h">산일전기 &mdash; BUY / TP 337,973원 / 24M / +78.7%</div>
+    <p>Peer 7개사 중 산업 전망이 아니라 <b>체결된 계약</b>을 근거로 제시한 유일한 종목이다.
+    이익 집중도 97.4%로 판단 전달률이 높고 진입장벽이 고객 측 전환비용에 기반한다. 다만 이익 귀속이
+    절반만 방어되어 <b>비중 상한 30%</b>를 전제한다. 추가 데이터센터 계약으로 반복성이 확인되면
+    상한을 해제한다.</p>
+  </div>
 
-  <h3>미해결 항목</h3>
-  <ul>
-    <li>M3 공급자 방향 — 구리·전기강판 원가 전가 근거 <span class="tg x">Data unavailable</span></li>
-    <li>반복성 — 계약 2건은 추세가 아니다 (2025-12-24 EPC Power 437.8억 포함)</li>
-    <li>커버리지 9곳 — 스위트스팟(3~5곳) 밖. 정보 우위가 두텁지 않다</li>
-  </ul>
-</section>
+  <div class="pfoot"></div><div class="pnum">6</div>
+</div>
 
-<section id="s7">
-  <div class="sh"><span class="n">7</span><h2>매출·비용 추정 — 하지 않는다</h2></div>
+<!-- ═══ P7 기업 B ═══ -->
+<div class="page">
+  <div class="cobar"><span>III. 기업분석 B</span>일진전기 <span>103590 · KOSPI · BUY</span></div>
+  <div class="rt">
+    <div><dt>목표주가</dt><dd class="up">136,552원</dd></div>
+    <div><dt>현재주가</dt><dd>72,500원</dd></div>
+    <div><dt>상승여력</dt><dd class="up">+88.3%</dd></div>
+    <div><dt>커버리지</dt><dd>3개사</dd></div>
+  </div>
 
-  <div class="sn-row">
-    <div class="sn">9개 증권사가 만든 추정을 다시 만들지 않는다</div>
-    <div class="sn-body">
-      <div class="fx"><span class="m">일반 리서치</span>   매출 P&times;Q 추정 &rarr; FCFF &rarr; WACC &rarr; DCF &rarr; 목표주가
-<span class="o">우리 데스크</span>   컨센 TP (FnGuide 9개사) &times; (1 + <span class="o">조정률</span>)</div>
-      <p><strong>우리는 애널리스트보다 재무모델을 잘 만들 수 없다.</strong> 9개 증권사가 이미 만든 추정치가 있는데 그것을 무시하고 우리 P×Q를 세우는 것은 자원 낭비이며, 우리가 잘하는 일도 아니다.</p>
-      <p>우리가 잘할 수 있는 것은 <strong>그들이 안 본 것을 반영해 그 숫자를 밀거나 당기는 것</strong>이다. 델타가 곧 우리 판단이다.</p>
-      <div class="note w">
-        <span class="nl">비워두지 않고 명시하는 이유</span>
-        <p>밝히지 않으면 <strong>"추정을 안 했다"</strong>로 읽히고, 밝히면 <strong>"설계 선택"</strong>이 된다. 추정의 품질은 컨센서스를 구성하는 9개사가 담보한다.</p>
-      </div>
+  <div class="sec">
+    <div class="sn">산업분석은 I장 참조</div>
+    <div class="bd">
+      <div class="hk">산업 내 위치 &mdash; 가장 덜 알려진 자리</div>
+      <p>산업 전반의 수요·공급 구조는 <b>I장에서 서술했으므로 반복하지 않는다.</b> 여기서는
+      Peer Group 내 동사의 위치만 다룬다.</p>
+      <p>동사의 특이점은 <b>컨센서스 커버리지가 3개사</b>라는 것이다. Peer 7개사 중 최저이며,
+      HD현대일렉트릭(14개사)·효성중공업(13개사)·LS(12개사)와 <b>정보 밀도가 근본적으로 다르다.</b>
+      우리 데스크가 정의한 스위트스팟(3~5개사)에 정확히 들어간다 &mdash; 컨센서스와 대조는 가능하되
+      아직 완전히 반영되지 않은 구간이다.</p>
+      <p>사업 구조는 <b>전선과 중전기 두 축</b>이며, 영업이익 기준으로는 <b>중전기가 76.7%</b>다.
+      산일전기(97.4%)보다 집중도가 낮아 판단 전달률은 그만큼 희석된다. 다만 전선 부문 역시 초고압
+      케이블로 <b>동일한 전력망 수요</b>를 받는 구조라 방향이 어긋나지는 않는다.</p>
     </div>
   </div>
-</section>
 
-<section id="s8">
-  <div class="sh"><span class="n">8</span><h2>Valuation &amp; Target Price</h2></div>
-
-  <div class="fx">조정률   = Q2 진입장벽 <span class="o">+10%p</span> + Q3 수요연동 <span class="o">+15%p</span>  =  <span class="o">+25.0%</span>
-G        = 0.85            <span class="m">FRED DGS10 4.72% 상승국면 — 황색. 상방에만 적용</span>
-
-<span class="o">우리 TP</span>  = 278,889 &times; (1 + 0.25 &times; 0.85)  =  <span class="o">337,973원</span>
-델타     = 0.25 &times; 0.85 = <span class="o">+21.2%</span>          <span class="m">게이트 20%p 통과</span>
-업사이드  = 337,973 / 189,100 &minus; 1 = <span class="o">+78.7%</span>
-승률     = 0.55 &minus; 0.10 &times; (인과 0 + M4 감점 1) = <span class="o">0.45</span>
-기대수익  = 0.787 &times; 0.45 = <span class="o">+35.5%</span></div>
-
-  <h3>3점 비교</h3>
-  <div class="px">
-    <div class="pxr"><div class="pxl">현재가</div><div class="pxt"><div class="pxf a" style="width:55.9%"></div></div><div class="pxv">189,100</div></div>
-    <div class="pxr"><div class="pxl">컨센 TP</div><div class="pxt"><div class="pxf b" style="width:82.5%"></div></div><div class="pxv dn">278,889</div></div>
-    <div class="pxr"><div class="pxl">우리 TP</div><div class="pxt"><div class="pxf c" style="width:100%"></div></div><div class="pxv up">337,973</div></div>
-  </div>
-  <p>컨센서스 자체가 현재가 대비 <strong>+47.5%</strong> 위에 있다 <span class="tg f">FACT</span>. 우리 판단은 그 위에 <strong>+21.2%</strong>를 더 얹은 것이며, <strong>델타가 우리 몫이다.</strong></p>
-
-  <h3>민감도 — 조정률 × G</h3>
-  <div class="tw">
-    <table>
-      <thead><tr><th class="num">조정률 \ G</th><th class="num">1.00 녹색</th><th class="num">0.85 황색</th><th class="num">0.50 적색</th></tr></thead>
-      <tbody>
-        <tr><td class="num">+15%</td><td class="num">320,722</td><td class="num">314,439</td><td class="num">299,806</td></tr>
-        <tr class="hi"><td class="num">+25%</td><td class="num">348,611</td><td class="num"><strong>337,973</strong></td><td class="num">313,750</td></tr>
-        <tr><td class="num">+35%</td><td class="num">376,500</td><td class="num">361,507</td><td class="num">327,694</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>Q3(수요연동) 하나가 빠지면 조정률이 +10%가 되어 <strong>델타 8.5%p로 게이트 미달</strong>이 된다. <strong>이 판단은 공급계약 공시 1건에 걸려 있다.</strong></p>
-</section>
-
-<section id="s9">
-  <div class="sh"><span class="n">9</span><h2>Investment Horizon &amp; Catalyst Timeline</h2></div>
-  <p class="lede">보유 기간 24개월. 데스크 호흡은 10~20년이나 이 판단의 근거인 계약은 이행 주기가 짧다.</p>
-  <div class="tw">
-    <table>
-      <thead><tr><th>시점</th><th>관측 대상</th><th>의미</th></tr></thead>
-      <tbody>
-        <tr><td>분기 실적</td><td>계약 매출 인식 진행률</td><td>502.8억이 실제로 들어오는가</td></tr>
-        <tr class="hi"><td>수시공시</td><td><strong>추가 데이터센터 공급계약</strong></td><td><strong>Bull 전환 조건이자 비중 상한 해제 조건</strong></td></tr>
-        <tr><td>컨센 갱신</td><td>9개사 목표주가 변동</td><td>우리 TP가 컨센에 연동되므로 직접 영향</td></tr>
-        <tr><td>사업보고서</td><td>세그먼트 영업이익 97.4% 유지</td><td>M1(L4) 판정 근거 유지</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p><strong>선례가 하나 더 있다</strong> <span class="tg f">FACT</span> — 2025-12-24 미국 Data Center용 Pad Mount 변압기 437.8억원(매출 대비 13.11%, EPC Power Corporation). <strong>2건째라는 점이 반복성의 초기 근거</strong>이나 2건으로 추세를 단정하지 않는다.</p>
-</section>
-
-<section id="s10">
-  <div class="sh"><span class="n">10</span><h2>Final Decision</h2></div>
-
-  <div class="final">
-    <p>Final Decision: <span class="up">BUY</span> — Target Price ₩337,973 / 24M Horizon / +78.7% Upside</p>
-    <p>전력기기 7종목 중 인과 사슬이 끊기지 않은 유일한 종목이며, 근거가 시장 전망이 아니라 <strong>체결된 공급계약</strong>이다. 다만 그 계약이 논리의 전부이고 M3가 절반만 방어되었으므로 <strong>비중 30% 상한</strong>을 둔다.</p>
-  </div>
-
-  <h3>배분 (1억 기준)</h3>
-  <div class="fx">산일전기        30%    3,000만원      <span class="m">상한. M3 절반 방어가 근거</span>
-현금·기존 유지   70%    7,000만원      <span class="m">L4 중복으로 2·3순위 편입 불가</span>
-
-<span class="o">기대수익</span>  3,000만 &times; +78.7% &times; 0.45  =  <span class="o">+1,062만원</span></div>
-
-  <h3>청산 규칙</h3>
-  <div class="tw">
-    <table>
-      <thead><tr><th>조건</th><th>행동</th></tr></thead>
-      <tbody>
-        <tr><td>재심사에서 인과 끊김 2개 이상</td><td class="dn">전량 매도</td></tr>
-        <tr><td>계약 취소·축소 공시</td><td class="dn">전량 매도</td></tr>
-        <tr><td>컨센 TP 하향</td><td>즉시 재평가</td></tr>
-        <tr><td>우리 TP 90% 도달 (304,176원)</td><td class="up">절반 익절</td></tr>
-        <tr><td>&minus;20% (151,280원)</td><td class="dn">손절</td></tr>
-        <tr><td>세그먼트 영업이익 비중 90% 미만</td><td>M1 재판정</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h3>고객 유형</h3>
-  <ul>
-    <li><strong>공격형</strong> — 위 배분 그대로 (30%)</li>
-    <li><strong>안정형</strong> — 15%로 축소. 승률 0.45는 설명 가능하나 계약 1~2건 의존 구조는 변동성이 크다</li>
-  </ul>
-</section>
-
-<section id="s11">
-  <div class="sh"><span class="n">11</span><h2>Appendix — 심사표 전문</h2></div>
-  <p class="lede"><strong>탈락 종목을 숨기지 않는다.</strong> "7개 중 1개를 골랐다"는 증거가 안 되지만 "6개를 이 사유로 죽였다"는 증거가 된다.</p>
-
-  <div class="tw">
-    <table>
-      <caption>pro_tackler 심사 전수 — 전력기기·중전기 7종목</caption>
-      <thead><tr><th>종목</th><th class="num">M1</th><th class="num">세그</th><th class="num">인과</th><th class="num">M3</th><th class="num">M4</th><th class="num">델타</th><th class="num">업사이드</th><th class="num">승률</th><th class="num">기대수익</th><th>판정 · 사유</th></tr></thead>
-      <tbody>
-        <tr class="hi"><td><strong>산일전기</strong></td><td class="num">L4</td><td class="num">97%</td><td class="num">0끊</td><td class="num">1</td><td class="num">1</td><td class="num">21.2%</td><td class="num">78.8%</td><td class="num">0.45</td><td class="num up">35.5%</td><td><strong>편입 1위</strong></td></tr>
-        <tr><td>일진전기</td><td class="num">L4</td><td class="num">77%</td><td class="num">1끊</td><td class="num">1</td><td class="num">2</td><td class="num">21.2%</td><td class="num">88.4%</td><td class="num">0.25</td><td class="num">22.1%</td><td>반려 — 분산 규칙 L4 중복</td></tr>
-        <tr><td>LS</td><td class="num">L4</td><td class="num dn">29%</td><td class="num dn">2끊</td><td class="num mu">-</td><td class="num mu">-</td><td class="num">21.2%</td><td class="num">110.7%</td><td class="num mu">-</td><td class="num mu">-</td><td>반려 — 세그먼트 대표성 + 근거 세그먼트 불일치</td></tr>
-        <tr><td>효성중공업</td><td class="num">L4</td><td class="num">99%</td><td class="num dn">2끊</td><td class="num mu">-</td><td class="num mu">-</td><td class="num">21.2%</td><td class="num">77.6%</td><td class="num mu">-</td><td class="num mu">-</td><td>반려 — 역방향(Q2 자기모순)</td></tr>
-        <tr><td>HD현대일렉트릭</td><td class="num">L4</td><td class="num">100%</td><td class="num dn">2끊</td><td class="num mu">-</td><td class="num mu">-</td><td class="num">21.2%</td><td class="num">85.1%</td><td class="num mu">-</td><td class="num mu">-</td><td>반려 — 역방향(관행 서술)</td></tr>
-        <tr><td>대한전선</td><td class="num">L4</td><td class="num">100%</td><td class="num dn">2끊</td><td class="num mu">-</td><td class="num mu">-</td><td class="num">21.2%</td><td class="num">75.6%</td><td class="num mu">-</td><td class="num mu">-</td><td>반려 — 역방향(hedge 표현)</td></tr>
-        <tr><td>비츠로셀</td><td class="num">L4</td><td class="num">100%</td><td class="num">0끊</td><td class="num mu">-</td><td class="num mu">-</td><td class="num dn">17.0%</td><td class="num">72.4%</td><td class="num mu">-</td><td class="num mu">-</td><td>반려 — 델타 17.0%p &lt; 20%p</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="sn-row">
-    <div class="sn">가중치가 해자의 구조성을 반영하지 않는다</div>
-    <div class="sn-body">
-      <p><strong>비츠로셀은 인과가 무결한데 탈락했다.</strong> Q2가 <code>structural</code>(5년 이상 실적, 6~8개월 인증평가)로 가장 강했으나 Q3가 없어 조정률이 20%에 그쳤고, G 적용 후 17.0%p로 게이트에 미달했다. <strong>좋은 회사를 찾는 게 아니라 시장이 틀린 곳을 찾는 것</strong>이므로 이것은 정상 작동이다.</p>
-      <div class="note w">
-        <span class="nl">설계 이슈 — A·C에 제안</span>
-        <p>Q2 가중치가 <code>structural</code>과 <code>temporary</code>에 동일하게 +10%p다. 그 결과 <strong>구조적 해자를 가진 비츠로셀이 탈락하고, 중국·인도 가격경쟁에 노출된 효성중공업·HD현대일렉트릭이 게이트를 통과</strong>했다(인과에서 탈락하기 전까지). 10~20년 호흡 데스크에서는 반대여야 한다. <code>structural +15 / temporary +5</code> 분기를 제안한다.</p>
-      </div>
+  <div class="sec">
+    <div class="sn">규격이 곧 자물쇠다</div>
+    <div class="bd">
+      <div class="hk">진입장벽 &mdash; 국가별 전력계통 종속</div>
+      <div class="quo">안정성 및 신뢰성에 대한 장기간의 검증과 국제적 인증이 필수적입니다. 또한
+      각 국가별 전력계통 및 규격과 연계되어 <b>모델 변경이 어렵고</b>, 공사 현장별 지리적, 기후적
+      특성 등에 따라 고객의 요구 사양이 매우 다양하여 고도의 전문성이 요구됩니다.
+      <cite>2025 사업보고서 (20260311004216) II.사업의 내용 7.기타 참고사항 다.(2)</cite></div>
+      <p>&ldquo;모델 변경이 어렵다&rdquo;는 표현이 핵심이다. 이는 <b>제품이 계통에 묶여 있다</b>는
+      뜻으로, 발주처가 공급자를 바꾸려면 규격 검증을 처음부터 다시 해야 한다. 산일전기의 &ldquo;거래
+      지속성&rdquo;이 <b>관계</b>에 기반한 전환비용이라면, 일진전기의 것은 <b>기술 규격</b>에 기반한
+      전환비용이다. 성격은 다르나 둘 다 <b>구조적</b>으로 분류된다.</p>
     </div>
   </div>
-</section>
 
-<section id="s12">
-  <div class="sh"><span class="n">12</span><h2>데이터 출처 · Output Schema</h2></div>
-  <div class="tw">
-    <table>
-      <thead><tr><th>항목</th><th>출처</th><th>검증</th></tr></thead>
-      <tbody>
-        <tr><td>컨센 TP · 커버리지 · 기준일</td><td>FnGuide (navercomp.wisereport 서빙)</td><td class="up">실호출 <span class="tg f">FACT</span></td></tr>
-        <tr><td>현재가</td><td>네이버 금융 실시간</td><td class="up">실호출 <span class="tg f">FACT</span></td></tr>
-        <tr><td>Q1~Q5 근거 · segment_top</td><td>DART 사업보고서 · 수시공시</td><td class="up">moat-scorer 실호출 <span class="tg f">FACT</span></td></tr>
-        <tr><td>상장사 corp_code</td><td>DART OpenAPI corpCode.xml — 3,925개</td><td class="up">실호출 <span class="tg f">FACT</span></td></tr>
-        <tr><td>매크로 게이트 G</td><td>FRED DGS10 · DEXKOUS</td><td class="up">실호출 <span class="tg f">FACT</span></td></tr>
-        <tr><td>산업 게이트</td><td>6개 산업 59종목 스캔, G1 적격 7개</td><td class="up"><span class="tg f">FACT</span></td></tr>
-        <tr><td>동종 8분기 마진 시계열</td><td class="mu">&mdash;</td><td class="dn">미확보 <span class="tg x">Data unavailable</span></td></tr>
-      </tbody>
-    </table>
+  <div class="pfoot"></div><div class="pnum">7</div>
+</div>
+
+<!-- ═══ P8 기업 B 계속 ═══ -->
+<div class="page">
+  <div class="rhead">
+    <div class="t">Equity Research / 일진전기 (103590, KS)</div>
+    <div class="brand">DPIC<small>DREAMPLUS INVESTMENT CLUB</small></div>
+  </div>
+  <div class="chap">III. 기업분석 B &mdash; 일진전기</div>
+  <div class="chsub">투자포인트 · Valuation · 리스크</div>
+
+  <div class="sec">
+    <div class="sn">근거가 계약이 아니라 시장 서술이다</div>
+    <div class="bd">
+      <div class="hk">투자포인트 &mdash; 그리고 그 약점</div>
+      <p>동사의 수요 근거는 사업보고서 시장여건 항목이다.</p>
+      <div class="quo">생성형 AI의 확산으로 데이터센터의 전력 밀도가 급상승하면서, 기존 배전망으로는
+      감당하기 어려운 대규모 전력 공급이 요구되고 있습니다. 이에 따라 초고압 변압기 및 배전
+      기기(Switchgear)의 신규 발주가 이어지고 있으며, <b>공급 부족 현상에 따른 판가 상승과 수주
+      잔고 확대가 동반</b>되고 있습니다.
+      <cite>2025 사업보고서 (20260311004216) II.7.다(2)④ 시장여건 &mdash; 해외 시장</cite></div>
+      <p>이 진술은 <b>산업 현상으로는 정확하나 당사 수주의 근거는 아니다.</b> 산일전기의 계약
+      공시와 비교하면 차이가 분명하다 &mdash; 한쪽은 <b>&ldquo;시장에서 발주가 이어지고 있다&rdquo;</b>이고
+      다른 쪽은 <b>&ldquo;우리가 502억을 수주했다&rdquo;</b>이다. 우리는 이 차이를 <b>승률에 반영</b>했다.</p>
+      <p>다만 이 약점이 투자 부적격을 뜻하지는 않는다. 진입장벽은 구조적으로 확인되었고,
+      <b>커버리지 3개사라는 정보 우위</b>가 이를 상쇄한다. 시장이 아직 충분히 보지 않은 자리이며,
+      <b>업사이드가 Peer 중 가장 크다.</b></p>
+    </div>
   </div>
 
-  <div class="fx">runs/2026-08-13_전력기기/
-  01-industry.json     <span class="m">verify · G1 PASS · peers 3사 · FRED</span>
-  02-companies.json    <span class="m">7종목 Q1~Q5 + DART 인용 + segment_top</span>
-  03-valuation.json    <span class="m">조정률 · 우리 TP · 델타 · 업사이드</span>
-  04-tackle.json       <span class="m">심사표 전수 · picks · 분산 노트</span>
-  <span class="o">report.html</span>          <span class="m">이 문서 — 제출물</span></div>
-</section>
+  <div class="sec">
+    <div class="sn">업사이드는 크고 승률은 낮다</div>
+    <div class="bd">
+      <div class="hk">Valuation</div>
+      <div class="fx">컨센서스 목표주가                 112,667원  <i>3개사, 2026-08-11 기준</i>
+조정률   진입장벽 <b>+10%p</b> · 수요연동 <b>+15%p</b>  =  <b>+25.0%</b>
+매크로   <b>&times; 0.85</b>
 
-</main>
+<b>목표주가  112,667 &times; (1 + 0.212)  =  136,552원</b>
+상승여력  136,552 / 72,500 &minus; 1  =  <b>+88.3%</b>
+기대수익  +88.3% &times; 승률 0.25  =  <b>+22.1%</b></div>
+      <p>업사이드는 <b>+88.3%로 산일전기(+78.7%)를 앞선다.</b> 그럼에도 편입 순위가 뒤인 것은
+      승률 때문이다. 수요 근거가 계약이 아니라 시장 서술이고, 그 논리 자체가 이미 업계 공통 인식이라
+      승률이 <b>0.25</b>로 산정됐다. <b>업사이드는 확률이 반영되기 전 숫자다</b> &mdash; 곱하고 나면
+      기대수익 +22.1%로 순서가 뒤집힌다.</p>
+    </div>
+  </div>
 
-<footer>
-  <span>PLUS FUTURE AI ANTI PLATFORM</span>
-  <span>한화투자증권 PB팀</span>
-  <span>CASE C · Single-Stock Report</span>
-  <span>2026-08-13</span>
-</footer>
+  <div class="sec">
+    <div class="sn">이 논리가 죽는 조건</div>
+    <div class="bd">
+      <div class="hk">리스크</div>
+      <ul>
+        <li><b>커버리지 확대</b> &mdash; 3개사에서 늘어나면 정보 우위가 소멸한다. 역설적으로
+        <b>주목받는 것이 리스크</b>인 종목이다</li>
+        <li><b>중전기 세그먼트 비중 하락</b> &mdash; 76.7%로 이미 산일전기보다 낮다.
+        더 내려가면 판단 전달률이 무너진다</li>
+        <li><b>수주 공시 부재 장기화</b> &mdash; 시장 서술만으로 버티는 구조이므로,
+        Peer가 계약을 따고 동사가 못 따는 상황이 이어지면 논리가 무너진다</li>
+        <li><b>컨센서스 목표주가 하향</b> &mdash; 3개사 중 1곳만 바꿔도 컨센 평균이 크게 움직인다.
+        커버리지가 얇다는 것의 이면이다</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="fin">
+    <div class="h">일진전기 &mdash; BUY / TP 136,552원 / 24M / +88.3%</div>
+    <p>국가별 전력계통 규격 종속이라는 <b>구조적 전환비용</b>을 보유하고, 컨센서스 커버리지
+    3개사로 <b>Peer 중 정보 우위가 가장 크다.</b> 다만 수요 근거가 계약이 아닌 시장 서술이라
+    승률이 낮게 산정되었다. <b>비중 상한 20%</b>를 전제하며, 데이터센터향 수주 공시가 나오면
+    산일전기와 동급으로 재평가한다.</p>
+  </div>
+
+  <div class="pfoot"></div><div class="pnum">8</div>
+</div>
+
+<!-- ═══ P9 종합 ═══ -->
+<div class="page">
+  <div class="rhead">
+    <div class="t">Equity Research / 전력기기·중전기 / 포트폴리오 종합</div>
+    <div class="brand">DPIC<small>DREAMPLUS INVESTMENT CLUB</small></div>
+  </div>
+  <div class="chap">IV. 포트폴리오 종합</div>
+  <div class="chsub">배분 · 상대비교 · 운용 규칙</div>
+
+  <div class="sec">
+    <div class="sn">둘은 같은 산업의 다른 약점을 가졌다</div>
+    <div class="bd">
+      <div class="hk">상대비교 &mdash; 왜 둘 다 담는가</div>
+      <p>두 종목은 <b>서로의 약점을 보완하지 않는다.</b> 같은 산업, 같은 수요, 같은 AI 잠식
+      단계(L4·제조)다. 원칙적으로는 분산이 아니다. 그럼에도 둘을 담는 이유는 <b>확실성과 배당의
+      성격이 다르기 때문</b>이다.</p>
+      <p>산일전기는 <b>근거가 단단하지만 이미 9개사가 본다.</b> 일진전기는 <b>근거가 얇지만 3개사만
+      본다.</b> 전자는 논리 리스크가 낮고 후자는 정보 우위가 크다. 한쪽이 틀리는 방식이 다르므로
+      완전한 동조는 아니다.</p>
+      <p><b>다만 이것을 분산이라고 부르지는 않는다.</b> 산업 전체가 꺾이면 둘 다 꺾인다. L3·L5
+      산업이 추가되어야 진짜 분산이 성립한다.</p>
+    </div>
+  </div>
+
+  <div class="fig2">
+    <div class="fcap">표 4-1. 편입 2종목 상대비교</div>
+    <div class="fbody"><div class="tw"><table>
+      <thead><tr><th>항목</th><th>산일전기</th><th>일진전기</th><th>해석</th></tr></thead>
+      <tbody>
+        <tr><td>상승여력</td><td class="num">+78.7%</td><td class="num up">+88.3%</td><td>일진 우위</td></tr>
+        <tr><td>컨센서스 커버리지</td><td class="num">9개사</td><td class="num up">3개사</td><td>일진 우위 &mdash; 정보 여지</td></tr>
+        <tr><td>이익 집중도</td><td class="num up">97.4%</td><td class="num">76.7%</td><td>산일 우위 &mdash; 전달률</td></tr>
+        <tr><td>수요 근거</td><td class="ctr up">공급계약</td><td class="ctr">시장 서술</td><td>산일 우위 &mdash; 확실성</td></tr>
+        <tr><td>승률</td><td class="num up">0.45</td><td class="num">0.25</td><td>산일 우위</td></tr>
+        <tr class="hl"><td>기대수익</td><td class="num up">+35.5%</td><td class="num">+22.1%</td><td>산일 1순위</td></tr>
+      </tbody>
+    </table></div></div>
+    <div class="src">자료 : DPIC 데스크</div>
+  </div>
+
+  <div class="sec">
+    <div class="sn">확실한 쪽에 더 싣는다</div>
+    <div class="bd">
+      <div class="hk">배분 &mdash; 1억 기준</div>
+      <div class="fx">산일전기        <b>30%</b>   3,000만원    <i>이익 귀속 절반 방어 → 상한</i>
+일진전기        <b>20%</b>   2,000만원    <i>수요 근거가 시장 서술 → 추가 제한</i>
+현금·기존 유지   50%   5,000만원    <i>L4 편중 — 타 산업 편입 전까지 유보</i>
+
+기대수익  3,000만 &times; +78.7% &times; 0.45  =  <b>+1,062만원</b>
+         2,000만 &times; +88.3% &times; 0.25  =  <b>+  442만원</b>
+                                          합계 <b>+1,504만원</b>  (배분자산 대비 +30.1%)</div>
+      <p>현금 비중 50%는 소극적 선택이 아니라 <b>L단계 편중에 대한 방어</b>다. 두 종목 모두
+      물리 제조업이므로 자동화 진전 국면에서 동시에 노출된다. L3(프로젝트 관리·복잡한 조달) 또는
+      L5(인허가 서명·안전 책임) 산업에서 종목이 확보되면 현금을 소진한다.</p>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sn">언제 파는지 미리 정한다</div>
+    <div class="bd">
+      <div class="hk">운용 규칙</div>
+      <ul>
+        <li><b>공통</b> &mdash; 컨센서스 목표주가가 하향되면 즉시 재평가. 우리 목표주가가
+        컨센서스에 연동 산출되므로 독립적 하방 방어선이 없다</li>
+        <li><b>공통</b> &mdash; 목표주가의 90% 도달 시 절반 익절, &minus;20% 손절</li>
+        <li><b>산일전기</b> &mdash; 계약 취소·축소 공시 시 전량 매도. 추가 데이터센터 계약
+        확인 시 비중 상한 해제</li>
+        <li><b>일진전기</b> &mdash; 커버리지가 6개사를 넘으면 정보 우위 소멸로 간주해 비중 축소.
+        데이터센터향 수주 공시 시 산일전기와 동급 재평가</li>
+      </ul>
+      <p><b>고객 유형별로는</b> 공격형에 위 배분을 그대로 적용하고, 안정형에는 산일전기 15% 단독
+      편입을 권한다. 일진전기의 승률 0.25는 안정형 고객에게 설명하기 어려운 수준이다.</p>
+    </div>
+  </div>
+
+  <div class="pfoot"></div><div class="pnum">9</div>
+</div>
 
 </div>
