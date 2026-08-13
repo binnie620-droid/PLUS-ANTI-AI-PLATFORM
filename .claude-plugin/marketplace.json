@@ -1,0 +1,28 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dpic",
+  "description": "DreamPlus Investment Club — AI 시대 상장주 투자판단 데스크 스킬셋",
+  "owner": {
+    "name": "PLUS FUTURE AI ANTI PLATFORM",
+    "url": "https://github.com/binnie620-droid/PLUS-ANTI-AI-PLATFORM"
+  },
+  "plugins": [
+    {
+      "name": "dpic-desk",
+      "source": "./",
+      "version": "1.0.0",
+      "description": "산업 스크린 → 기업 전수 판정 → 태클 심사 → 최종 투자보고서. 근거는 DART 공시 인용만 인정하고, 컨센서스와 같은 결론이면 편입하지 않는다.",
+      "author": {
+        "name": "PLUS FUTURE AI ANTI PLATFORM"
+      },
+      "category": "research",
+      "keywords": [
+        "investment",
+        "equity-research",
+        "korea-stocks",
+        "dart",
+        "consensus"
+      ]
+    }
+  ]
+}

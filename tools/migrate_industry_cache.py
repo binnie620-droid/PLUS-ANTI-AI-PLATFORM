@@ -1,4 +1,7 @@
 """
+[이관 완료 · 실행 불필요] 소스인 data/industry_universe.csv 는 2026-08-13 PR #5 에서
+삭제됐다. 지금 실행하면 FileNotFoundError 가 난다. 이관 이력 보존용으로만 남긴다.
+
 1회성 이관: data/industry_universe.csv(고정 6산업/59종목) -> data/industry_cache.json
 
 기존 industry_universe.csv를 없애기 전에 한 번 실행해서 자동 성장 캐시의 시드로 옮긴다.

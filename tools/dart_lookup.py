@@ -18,12 +18,13 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 import env_keys
+import paths
 
 CORP_CODE_URL = "https://opendart.fss.or.kr/api/corpCode.xml"
 COMPANY_URL = "https://opendart.fss.or.kr/api/company.json"
 
-_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CORP_CODE_CACHE_PATH = os.path.join(_REPO_ROOT, "data", "dart_corp_codes.csv")
+# 생성물이라 저장소에 커밋하지 않는다(gitignore). 없으면 DART에서 다시 받는다.
+CORP_CODE_CACHE_PATH = paths.target("dart_corp_codes.csv")
 
 
 def _http_get(url, timeout=25):

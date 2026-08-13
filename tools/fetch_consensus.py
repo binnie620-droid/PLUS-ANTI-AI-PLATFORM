@@ -29,8 +29,12 @@ UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
 DELAY_SEC = 1.2          # 서버 예의. 줄이지 말 것
 TIMEOUT = 25
 
-OUT_MAIN = os.path.join("data", "consensus.csv")
-OUT_EXTRA = os.path.join("data", "consensus_extra.csv")
+# 경로 해석은 paths.py 가 한다 — clone 실행과 플러그인 설치를 모두 지원한다.
+# 상대경로로 두면 다른 디렉터리에서 실행했을 때 엉뚱한 위치에 data/ 를 만든다.
+import paths
+
+OUT_MAIN = paths.target("consensus.csv")
+OUT_EXTRA = paths.target("consensus_extra.csv")
 
 
 def fetch(ticker):
@@ -141,26 +145,52 @@ def main(tickers):
         if i < len(tickers):
             time.sleep(DELAY_SEC)
 
-    os.makedirs("data", exist_ok=True)
-    with io.open(OUT_MAIN, "w", encoding="utf-8", newline="") as f:
-        w = csv.writer(f)
-        w.writerow(["ticker", "name", "consensus_tp", "coverage_count", "last_updated"])
-        for r in rows:
-            if r["coverage_count"] is None:
-                continue          # 컨센 없는 종목은 애초에 대상이 아니다 (G1)
-            w.writerow([r["ticker"], r["name"], r["consensus_tp"],
-                        r["coverage_count"], r["last_updated"]])
-
-    with io.open(OUT_EXTRA, "w", encoding="utf-8", newline="") as f:
-        w = csv.writer(f)
-        w.writerow(["ticker", "investment_opinion", "eps", "per", "note"])
-        for r in rows:
-            w.writerow([r["ticker"], r["investment_opinion"], r["eps"],
-                        r["per"], r["note"]])
-
     kept = sum(1 for r in rows if r["coverage_count"] is not None)
-    print("\n수집 {}개 중 컨센 보유 {}개 -> {}".format(len(rows), kept, OUT_MAIN))
+    added = _merge_csv(
+        paths.seed("consensus.csv"),
+        ["ticker", "name", "consensus_tp", "coverage_count", "last_updated"],
+        [r for r in rows if r["coverage_count"] is not None])
+    _merge_csv(
+        paths.seed("consensus_extra.csv"),
+        ["ticker", "investment_opinion", "eps", "per", "note"],
+        rows)
+
+    print("\n수집 {}개 중 컨센 보유 {}개 (신규 {}개) -> {}".format(
+        len(rows), kept, added, OUT_MAIN))
     print("진단 필드 -> {}".format(OUT_EXTRA))
+
+
+def _merge_csv(path, header, rows):
+    """기존 파일에 병합한다. 같은 ticker 는 새 값으로 갱신하고 나머지는 보존한다.
+
+    덮어쓰기로 두면 한 산업을 수집할 때마다 다른 산업의 행이 통째로 사라진다.
+    실제로 전력기기 12종목을 수집하다 57행짜리 파일을 12행으로 날린 적이 있다.
+    """
+    existing = {}
+    order = []
+    if os.path.exists(path):
+        with io.open(path, encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                t = row.get("ticker")
+                if t:
+                    existing[t] = row
+                    order.append(t)
+    added = 0
+    for r in rows:
+        t = r["ticker"]
+        if t not in existing:
+            order.append(t)
+            added += 1
+        existing[t] = {k: r.get(k) for k in header}
+
+    paths.ensure_dir(path)
+    with io.open(path, "w", encoding="utf-8", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(header)
+        for t in order:
+            row = existing[t]
+            w.writerow([row.get(k) if row.get(k) is not None else "" for k in header])
+    return added
 
 
 if __name__ == "__main__":

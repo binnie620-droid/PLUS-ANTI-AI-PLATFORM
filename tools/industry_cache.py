@@ -15,15 +15,20 @@ import json
 import os
 import sys
 
-_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CACHE_PATH = os.path.join(_REPO_ROOT, "data", "industry_cache.json")
+import paths
+
+CACHE_NAME = "industry_cache.json"
+# 쓰기 기준 경로. 플러그인으로 설치되면 사용자 프로젝트 쪽을 가리킨다.
+CACHE_PATH = paths.target(CACHE_NAME)
 
 
 def empty_cache():
     return {"companies": {}, "industries": {}}
 
 
-def load_cache(path=CACHE_PATH):
+def load_cache(path=None):
+    # 기본 읽기는 작업본 우선, 없으면 저장소에 커밋된 씨앗 캐시를 본다.
+    path = path or paths.source(CACHE_NAME)
     if not os.path.exists(path):
         return empty_cache()
     with open(path, encoding="utf-8") as f:
@@ -33,8 +38,8 @@ def load_cache(path=CACHE_PATH):
     return data
 
 
-def save_cache(cache, path=CACHE_PATH):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
+def save_cache(cache, path=None):
+    path = paths.ensure_dir(path or paths.target(CACHE_NAME))
     with open(path, "w", encoding="utf-8") as f:
         json.dump(cache, f, ensure_ascii=False, indent=2, sort_keys=True)
 

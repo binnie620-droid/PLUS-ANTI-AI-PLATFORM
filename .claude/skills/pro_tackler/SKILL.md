@@ -691,7 +691,13 @@ L단계가 이미 담은 종목과 같으면 건너뛴다
 | 세그먼트별 영업이익 | DART 사업보고서 | 매출 구성으로 대체 (M1) |
 | 동종 3사 영업이익률 | DART OpenAPI 다중회사 주요계정 | M3를 4방향 정성 판정으로 강등 |
 | 현재가 | `data/price.csv` | 보고서 기재값 |
-| 산업 유니버스 | B의 `data/industry_universe.csv` | 보고서에 언급된 경쟁사 |
+| M3 비교 3사 | **`01-industry.json` 의 `peers`** | 아래 폴백 |
+| 산업 유니버스 | B의 `data/industry_cache.json` (`industries[<산업명>].tickers`) | 보고서에 언급된 경쟁사 |
+
+> **`data/industry_universe.csv` 는 삭제됐다** (2026-08-13, PR #5).
+> B의 산업 유니버스는 자동 성장 캐시 `data/industry_cache.json` 으로 이동했다.
+> M3 비교군은 원래 `01-industry.json` 의 `peers` 를 먼저 쓰고, 거기에 심사 대상 자신이
+> 들어 있으면 캐시의 `tickers` 에서 다음 순위를 채운다.
 
 **데이터가 없다는 이유로 종목을 죽이지 않는다.** 그건 태클이 아니라 사고다.
 

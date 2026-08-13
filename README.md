@@ -21,6 +21,60 @@
 
 ---
 
+## 빠른 시작 — 직접 돌려보기
+
+**Claude Code 플러그인으로 설치한다.** 저장소를 clone할 필요도 없다.
+
+```
+/plugin marketplace add binnie620-droid/PLUS-ANTI-AI-PLATFORM
+/plugin install dpic-desk@dpic
+/dpic-desk:desk-setup
+```
+
+`desk-setup` 이 API 키 발급 안내부터 데이터 수집까지 끝내준다. 그다음:
+
+```
+/dpic-desk:industry-screen     산업 판정
+/dpic-desk:company-screen      종목 전수 판정
+/dpic-desk:pro_tackler         태클 심사
+/dpic-desk:desk-head           최종 투자보고서
+/dpic-desk:desk-run            위 순서를 한 번에
+```
+
+### 알아둘 것
+
+- **Python 3.9 이상만 있으면 된다. `pip install` 불필요** — `tools/` 전부 표준 라이브러리만 쓴다
+- **필요한 키는 DART와 FRED 둘뿐이다.** 둘 다 무료이고 즉시 발급된다
+  ([DART](https://opendart.fss.or.kr) · [FRED](https://fred.stlouisfed.org/docs/api/api_key.html))
+- **3단계(조정률 산출)에서 멈추는 것은 정상이다.** 그 계산을 하는 `core/` 는 미구현이라
+  `desk-run` 이 수동 입력을 안내하고 정지한다. 버그가 아니다
+- 산출물(`data/` · `runs/`)은 **현재 프로젝트 폴더**에 쌓인다. 플러그인 설치 위치는 건드리지 않는다
+
+### 키 없이 결과만 보려면
+
+이미 돌린 기록이 저장소에 그대로 들어 있다.
+
+```
+runs/2026-08-13_전력기기·중전기/    01~04 + report.html   전력기기 7개사 전수 심사
+runs/2026-08-13_discover/           산업 discover 결과
+```
+
+`report.html` 을 브라우저로 열면 된다. 7개사 중 1개만 통과했고, 그마저
+팀장 단계에서 **투자보류로 뒤집힌** 기록이다.
+
+### clone해서 쓰려면
+
+```bash
+git clone https://github.com/binnie620-droid/PLUS-ANTI-AI-PLATFORM.git
+cd PLUS-ANTI-AI-PLATFORM
+cp .env.example .env          # DART_API_KEY · FRED_API_KEY 채우기
+```
+
+그 폴더에서 Claude Code를 열면 스킬이 프로젝트 스킬로 잡힌다. 이때는
+`dpic-desk:` 접두어 없이 `/desk-setup`, `/industry-screen` 으로 부른다.
+
+---
+
 ## 1. 한눈에
 
 ```
@@ -217,28 +271,44 @@ ticker,price,turnover_20d,rel_return_12m
 ```
 PLUS-ANTI-AI-PLATFORM/
 ├─ README.md                              이 파일 (= 판단규칙서 · 제출물 ①)
+├─ .claude-plugin/
+│  ├─ marketplace.json                    마켓플레이스 등록
+│  └─ plugin.json                         플러그인 매니페스트
 ├─ .claude/
 │  ├─ skills/
+│  │  ├─ desk-setup/SKILL.md              처음 한 번 세팅
+│  │  ├─ desk-run/SKILL.md                오케스트레이터 (1~5단계 진행)
 │  │  ├─ industry-screen/SKILL.md         Skill 1 + 1.5      [B]
 │  │  ├─ company-screen/SKILL.md          Skill 2            [C]
-│  │  └─ pro_tackler/SKILL.md             Skill 3+4          [D-검증·팀장]
+│  │  ├─ pro_tackler/SKILL.md             Skill 3            [D-검증]
+│  │  └─ desk-head/SKILL.md               Skill 4 · 최종 보고서 [팀장]
+│  │     └─ references/                   판형·문체·Valuation·Quality Gate 11종
 │  └─ agents/
-│     └─ moat-scorer.md                   종목 1개 판정      [C]
-├─ core/
-│  ├─ adjust.py                           조정률·TP·델타     [A]
-│  ├─ select.py                           하드컷·정렬·분산   [A]
-│  ├─ macro.py                            FRED 게이트        [A]
-│  ├─ report.py                           리포트 렌더        [A]
-│  └─ run.py                              오케스트레이터     [A]
-├─ adapters/consensus.py                  FnGuide 정규화     [A]
-├─ data/
-│  ├─ consensus.csv
+│     └─ moat-scorer.md                   종목 1개 Q1~Q5 판정 [C]
+├─ contracts/
+│  ├─ pipeline.md                         ★ 파일 계약 정본. 스킬 간 주고받는 JSON 스키마
+│  └─ 보고서-최소요건.md
+├─ tools/                                 전부 표준 라이브러리. pip install 불필요
+│  ├─ paths.py                            데이터 경로 해석 (clone / 플러그인 양쪽 지원)
+│  ├─ env_keys.py                         DART·FRED 키 온보딩
+│  ├─ dart_lookup.py                      DART 업종코드·상장사 캐시
+│  ├─ industry_cache.py                   산업↔종목 캐시 읽기/쓰기
+│  ├─ fetch_consensus.py                  FnGuide 컨센서스 수집 (병합)
+│  └─ fetch_roic.py                       DART 재무제표 → ROE·ROIC
+├─ data/                                  씨앗 데이터. 실행하면 프로젝트 쪽에 쌓인다
+│  ├─ consensus.csv                       ticker,name,consensus_tp,coverage_count,last_updated
 │  ├─ price.csv
 │  ├─ industry_cache.json                 산업-종목 캐시, 자동 성장 [B]
-│  └─ dart_corp_codes.csv                 DART 상장사 캐시 (gitignore) [B]
-└─ reports/
-   └─ 2026-08-13_<티커>.md                실제 판단 · 제출물 ③
+│  └─ dart_corp_codes.csv                 DART 상장사 캐시 (gitignore, 자동 생성)
+├─ runs/<run_id>/                          실행 기록 · 제출물 ③
+│  ├─ 01-industry.json  02-companies.json
+│  ├─ 03-valuation.json 04-tackle.json
+│  └─ report.html
+└─ tests/                                 python -m unittest discover -s tests -t .
 ```
+
+> **`core/` 는 아직 없다.** 3단계(조정률·목표주가 산출)를 담당할 A의 Python 패키지이며,
+> 그때까지 `desk-run` 이 그 단계에서 수동 입력을 안내하고 정지한다. 설계상 정상이다.
 
 ---
 
@@ -514,16 +584,46 @@ PB는 종목이 아니라 **배분**을 판다.
 
 ## 10. 실행
 
-```bash
-# 산업 추천 경로
-python -m core.run --discover
+**진입점은 Python CLI가 아니라 Claude Code 스킬이다.** 설치는 위 [빠른 시작](#빠른-시작--직접-돌려보기) 참조.
 
-# 산업 지정 경로
-python -m core.run --industry "농업"
-
-# 재현성 테스트
-python -m core.run --ticker 000000 --repeat 3
 ```
+/desk-setup                      처음 한 번 — 키·데이터 준비
+/desk-run                        1~5단계를 순서대로 (권장)
+```
+
+단계별로 따로 돌릴 수도 있다. 각 스킬은 앞 단계의 파일을 읽고 다음 파일을 쓴다.
+
+```
+/industry-screen "조선·조선기자재"    → runs/<run_id>/01-industry.json
+/company-screen                       → runs/<run_id>/02-companies.json
+                                        (3단계 core/ 미구현 — 여기서 정지가 정상)
+/pro_tackler                          → runs/<run_id>/04-tackle.json
+/desk-head                            → runs/<run_id>/report.html
+```
+
+산업명을 안 주면 `industry-screen` 이 되묻는다 — **데스크가 산업을 대신 고르지 않는다.**
+
+### 도구 단독 실행
+
+스킬 없이 데이터만 뽑을 수도 있다.
+
+```bash
+python tools/env_keys.py check                       # 키 확인
+python tools/industry_cache.py list-industries       # 등재된 산업
+python tools/fetch_consensus.py 062040 103590        # 컨센서스 수집 (병합)
+python tools/fetch_roic.py 062040 --json             # ROE·ROIC
+python -m unittest discover -s tests -t .            # 테스트
+```
+
+### 재현성 테스트
+
+같은 입력으로 3회 돌려 판정이 흔들리는지 본다.
+
+```
+/pro_tackler runs/<run_id>/ 를 3회 실행하고 심사표를 비교
+```
+
+흔들리면 해당 관문의 문구가 모호한 것이므로 SKILL.md를 고친다.
 
 ---
 

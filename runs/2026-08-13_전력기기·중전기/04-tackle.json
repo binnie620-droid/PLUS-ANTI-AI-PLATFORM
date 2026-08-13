@@ -1,0 +1,280 @@
+{
+  "run_id": "2026-08-13_전력기기·중전기",
+  "industry": "전력기기·중전기",
+  "judged_count": 7,
+  "selected": [
+    {
+      "ticker": "062040",
+      "name": "산일전기",
+      "m1": {
+        "level": "L4",
+        "segment": "전기사업 97.4% — 변압기 제조"
+      },
+      "causal": {
+        "breaks": 0,
+        "note": "끊김 0"
+      },
+      "m2": {
+        "grade": "↑",
+        "source": "01-industry.json expected_direction=UP"
+      },
+      "m3": {
+        "score": 2,
+        "note": "OPM 21.7→35.6%(+13.9%p). 동종 3사 전부에 대해 격차 확대"
+      },
+      "m4": {
+        "penalty": 1,
+        "note": "940억 수주는 공시로 공개됐고 9개사가 커버 — 부분적으로 알려짐. 다만 컨센 EPS 반영 여부는 확인되지 않음"
+      },
+      "consensus": {
+        "coverage_count": 9,
+        "consensus_tp": 278889,
+        "our_tp": 338153,
+        "price": 189100,
+        "delta": 0.2125,
+        "upside": 0.7882
+      },
+      "win_rate": 0.45,
+      "expected_return": 0.3547,
+      "q2_durability": "structural",
+      "rank": 1
+    }
+  ],
+  "excluded_by_diversification": [
+    {
+      "ticker": "267260",
+      "name": "HD현대일렉트릭",
+      "m1": {
+        "level": "L4",
+        "segment": "전기전자부문 100%"
+      },
+      "causal": {
+        "breaks": 1,
+        "note": "끊김 1 (고리①: 비약 — 산업 수요 증가와 자사 매출 사이에 회사 고유 노출도가 없다)"
+      },
+      "m2": {
+        "grade": "↑",
+        "source": "01-industry.json expected_direction=UP"
+      },
+      "m3": {
+        "score": 2,
+        "note": "OPM 11.7→24.4%(+12.7%p). 효성·LS 대비 격차 확대, 산일 대비는 열위 확대"
+      },
+      "m4": {
+        "penalty": 2,
+        "note": "상투어. 사업보고서가 \"AI 보편화에 따른 IDC 증설\"을 그대로 서술 — 회사가 공시에 쓸 정도면 업계 상용구"
+      },
+      "consensus": {
+        "coverage_count": 14,
+        "consensus_tp": 1193929,
+        "our_tp": 1447639,
+        "price": 782000,
+        "delta": 0.2125,
+        "upside": 0.8512
+      },
+      "win_rate": 0.25,
+      "expected_return": 0.2128,
+      "q2_durability": "temporary",
+      "excluded_by": "분산 규칙 — L4가 이미 편입됨(산일전기). 물리 자동화가 진전되면 동시에 무너진다"
+    }
+  ],
+  "rejected": [
+    {
+      "ticker": "103590",
+      "name": "일진전기",
+      "m1": {
+        "level": "L4",
+        "segment": "중전기 76.7%"
+      },
+      "causal": {
+        "breaks": 1,
+        "note": "끊김 1 (고리①: 비약)"
+      },
+      "m2": {
+        "grade": "↑",
+        "source": "01-industry.json expected_direction=UP"
+      },
+      "m3": {
+        "score": 0,
+        "note": "OPM +2.5%p. 업황 개선 국면에서 동종 대비 개선폭 최하위권 — 이익이 이 회사에 귀속된다는 증거 없음"
+      },
+      "m4": {
+        "penalty": 2,
+        "note": "상투어"
+      },
+      "consensus": {
+        "coverage_count": 3,
+        "consensus_tp": 112667,
+        "our_tp": 136609,
+        "price": 72500,
+        "delta": 0.2125,
+        "upside": 0.8843
+      },
+      "win_rate": 0.25,
+      "expected_return": 0.2211,
+      "q2_durability": "temporary",
+      "rejected_for": [
+        "M3 귀속 방어 실패"
+      ]
+    },
+    {
+      "ticker": "298040",
+      "name": "효성중공업",
+      "m1": {
+        "level": "L4",
+        "segment": "중공업부문 98.8%"
+      },
+      "causal": {
+        "breaks": 1,
+        "note": "끊김 1 (고리①: 비약)"
+      },
+      "m2": {
+        "grade": "↑",
+        "source": "01-industry.json expected_direction=UP"
+      },
+      "m3": {
+        "score": 0,
+        "note": "OPM +6.5%p. 동종 3사 중 LS 1사 대비만 우위, HD·산일 대비 열위 확대"
+      },
+      "m4": {
+        "penalty": 2,
+        "note": "상투어"
+      },
+      "consensus": {
+        "coverage_count": 13,
+        "consensus_tp": 4235385,
+        "our_tp": 5135404,
+        "price": 2892000,
+        "delta": 0.2125,
+        "upside": 0.7757
+      },
+      "win_rate": 0.25,
+      "expected_return": 0.1939,
+      "q2_durability": "temporary",
+      "rejected_for": [
+        "M3 귀속 방어 실패"
+      ]
+    },
+    {
+      "ticker": "001440",
+      "name": "대한전선",
+      "m1": {
+        "level": "L4",
+        "segment": "전선부문 100%"
+      },
+      "causal": {
+        "breaks": 1,
+        "note": "끊김 1 (고리①: 비약)"
+      },
+      "m2": {
+        "grade": "↑",
+        "source": "01-industry.json expected_direction=UP"
+      },
+      "m3": {
+        "score": 0,
+        "note": "OPM +0.7%p. 사실상 정체"
+      },
+      "m4": {
+        "penalty": 2,
+        "note": "상투어"
+      },
+      "consensus": {
+        "coverage_count": 7,
+        "consensus_tp": 42643,
+        "our_tp": 51705,
+        "price": 29450,
+        "delta": 0.2125,
+        "upside": 0.7557
+      },
+      "win_rate": 0.25,
+      "expected_return": 0.1889,
+      "q2_durability": "temporary",
+      "rejected_for": [
+        "M3 귀속 방어 실패"
+      ]
+    },
+    {
+      "ticker": "082920",
+      "name": "비츠로셀",
+      "m1": {
+        "level": "L4",
+        "segment": "전지사업 100%"
+      },
+      "causal": {
+        "breaks": 1,
+        "note": "끊김 1 (고리①: 비약)"
+      },
+      "m2": {
+        "grade": "↑",
+        "source": "01-industry.json expected_direction=UP"
+      },
+      "m3": {
+        "score": 0,
+        "note": "OPM +7.1%p이나 HD현대일렉 대비 격차는 +9.7→+4.1로 축소 — 발산 아님"
+      },
+      "m4": {
+        "penalty": 2,
+        "note": "Q3 자체가 false — AI 수요와 연결되는 매출 경로가 공시에 없다"
+      },
+      "consensus": {
+        "coverage_count": 3,
+        "consensus_tp": 50333,
+        "our_tp": 58890,
+        "price": 34150,
+        "delta": 0.17,
+        "upside": 0.7244
+      },
+      "win_rate": 0.25,
+      "expected_return": 0.1811,
+      "q2_durability": "structural",
+      "rejected_for": [
+        "M3 귀속 방어 실패",
+        "|델타| 17.0%p < 20%p"
+      ]
+    },
+    {
+      "ticker": "006260",
+      "name": "LS",
+      "m1": {
+        "level": "L4",
+        "segment": "전력부문 28.6% — 지주회사, 1위 세그먼트가 영업이익의 28.6%뿐"
+      },
+      "causal": {
+        "breaks": 2,
+        "note": "끊김 2 (고리①: 비약 / 고리②: 귀속 누락 — 전력부문이 영업이익의 28.6%뿐이라 수혜가 주주 몫으로 희석)"
+      },
+      "m2": {
+        "grade": "↑",
+        "source": "01-industry.json expected_direction=UP"
+      },
+      "m3": {
+        "score": 0,
+        "note": "OPM 3.7→3.3%. 7사 중 유일하게 악화"
+      },
+      "m4": {
+        "penalty": 2,
+        "note": "상투어"
+      },
+      "consensus": {
+        "coverage_count": 12,
+        "consensus_tp": 585667,
+        "our_tp": 710121,
+        "price": 337000,
+        "delta": 0.2125,
+        "upside": 1.1072
+      },
+      "win_rate": 0.15,
+      "expected_return": 0.1661,
+      "q2_durability": "structural",
+      "rejected_for": [
+        "인과 끊김 2개 이상",
+        "M3 귀속 방어 실패"
+      ]
+    }
+  ],
+  "rejection_directive": null,
+  "_m3_basis": "DART fnlttMultiAcnt 연결 영업이익률 2023/2024/2025 3개년. 8분기 시계열 대신 3개년 연간 — 방향 판정에는 충분하나 분기 변동은 보이지 않는다.",
+  "_diversification_note": "7종목 전원 M1=L4(설비 기반 제조). 분산 규칙상 L4는 1개만 담을 수 있어 즉사 게이트를 통과한 HD현대일렉트릭이 제외됐다. 단일 산업만 심사하면 구조적으로 발생하는 결과다 — 2종목 포트폴리오가 필요하면 팀장이 근거를 명시하고 뒤집을 것.",
+  "_durability_conflict": "이번 company-screen 재판정에서 일진전기 Q2 durability 가 structural -> temporary 로 뒤집혔다. A의 03-valuation.json 은 이전 판정(structural)으로 만들어졌다. A가 _rev_* 가중치(structural +15 / temporary +5)를 계약에 반영하면 일진전기 델타는 25.5% -> 17.0% 로 내려가 컨센 게이트(20%p)에서도 탈락한다. 이번 심사는 M3 에서 이미 탈락시켰으므로 결론은 바뀌지 않는다.",
+  "_impact_source": "임팩트%는 A의 03-valuation.json delta (= adjust_rate x G, G=0.85). D가 별도 산출하지 않았다."
+}

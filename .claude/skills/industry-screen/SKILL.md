@@ -125,12 +125,34 @@ Run these four steps **in this order** — the DART sanity pass happens *before*
 finalized, because it can shrink the qualifying ticker count:
 
 **Step 1 — build the candidate set.** From the industry's ticker list (cache or
-freshly DART-confirmed, see above), get each ticker's consensus coverage **directly
-from FnSpace** — call `mcp__plugin_fnspace_fnspace__get_target_price` (또는
-`get_estimates`) per ticker. `coverage_count`는 그 응답에서 컨센서스를 낸 기관 수로
-판단한다 (FnSpace 응답 필드명은 실제 호출 결과를 보고 확인 — 항목 코드가 궁금하면
-`list_items(apigb="A000003")`으로 카탈로그를 먼저 훑는다). Candidates = tickers with
-`coverage_count >= 3`.
+freshly DART-confirmed, see above), get each ticker's consensus coverage.
+Candidates = tickers with `coverage_count >= 3`.
+
+### 커버리지 조회 경로는 두 가지다 — **먼저 어느 쪽이 가능한지 확인한다**
+
+```
+FnSpace MCP 도구가 이 세션에 로드돼 있는가?
+
+  있다  →  mcp__plugin_fnspace_fnspace__get_target_price (또는 get_estimates) 를
+           종목마다 호출한다. coverage_count 는 응답에서 컨센서스를 낸 기관 수다
+           (필드명은 실제 호출 결과로 확인 — 항목 코드는 list_items(apigb="A000003"))
+
+  없다  →  python tools/fetch_consensus.py <ticker> <ticker> ...
+           수집 후 data/consensus.csv 의 coverage_count 를 쓴다
+```
+
+**미연결이 예외가 아니라 기본값이다.** 이 저장소를 clone하거나 플러그인으로 설치한
+사람에게 FnSpace MCP는 없다. 구독 만료(2026-08-15 예정) 때도 같은 경로를 탄다.
+**둘 중 어느 쪽도 안 되면 정지**하고 `tools/fetch_consensus.py` 실행을 안내한다 —
+커버리지를 추정하거나 지어내지 않는다.
+
+두 소스는 **모두 FnGuide가 공급하는 데이터**다. `fetch_consensus.py` 는 FnGuide
+컨센서스를 네이버 금융 종목분석 페이지 경유로 읽는다. 우회가 아니라 **같은 출처의
+다른 경로**이며, "FnGuide 컨센서스 필수 활용" 요건을 그대로 충족한다.
+
+어느 경로를 썼는지 **출력의 `_coverage_source` 에 반드시 기록한다.** 두 소스는
+갱신 시점이 달라 목표주가가 미세하게 어긋날 수 있고, 그때 원인을 추적하려면
+어느 쪽을 읽었는지가 남아 있어야 한다.
 
 진행상황을 짧게 출력한다: 종목을 조회할 때마다 "○○○ 컨센서스 확인 중..." 한 줄.
 
@@ -316,11 +338,13 @@ Write to `runs/<run_id>/01-industry.json` where `run_id` = `YYYY-MM-DD_<산업�
   ],
   "_dart_check": { "sampled_tickers": ["000010","000011","000012"], "active_filers": 3, "median_disclosures_90d": 3 },
   "_macro_context": { "sector_series": ["PWHEAMTUSDM","PMAIZMTUSDM"], "universal_series": ["DEXKOUS","DGS10"], "as_of": "2026-07" },
-  "_universe_source": "data/industry_cache.json (auto-discovered via DART + FnSpace, not a fixed list)"
+  "_universe_source": "data/industry_cache.json (auto-discovered via DART + FnSpace, not a fixed list)",
+  "_coverage_source": "FnSpace MCP" 또는 "FnGuide via tools/fetch_consensus.py (FnSpace MCP 미연결)"
 }
 ```
 
-`_dart_check`, `_macro_context`, `_universe_source`는 **파이프라인 계약이 아니다** —
+`_dart_check`, `_macro_context`, `_universe_source`, `_coverage_source`는
+**파이프라인 계약이 아니다** —
 언더스코어 접두 진단 필드이며, 다운스트림 파서는 모르는 키를 무시해야 한다. 이 필드들의
 존재/내용이 `gate`를 바꾸지 않는다.
 

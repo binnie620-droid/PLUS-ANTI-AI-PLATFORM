@@ -14,8 +14,19 @@ description: 산업 하나를 받아 그 산업의 컨센서스 보유 종목 �
 - `industry`: skill 1/1.5가 PASS로 넘긴 산업명
 - 산업 내 종목 목록 — 아래 우선순위로 확보한다:
   1. 호출자(팀장/오케스트레이터)가 ticker 리스트를 직접 준 경우 그대로 쓴다
-  2. `data/industry_universe.csv`에 종목 단위 열(`industry,ticker,name`)이 있으면 그 산업으로 필터한다
+  2. **`data/industry_cache.json`** 에서 그 산업의 `tickers` 를 읽는다 (B가 소유하는 자동 성장 캐시)
+     ```python
+     from tools.industry_cache import load_cache, get_industry
+     tickers = get_industry(load_cache(), industry)["tickers"]
+     ```
+     종목명은 같은 파일의 `companies[ticker]["name"]` 에 있다.
+     `01-industry.json` 의 `peers` 는 **M3 비교군 3개일 뿐 전체 유니버스가 아니다** —
+     그걸 판정 대상으로 쓰면 전수 판정이 아니라 3종목 판정이 된다.
   3. 둘 다 없으면 판정을 시작하지 않는다. "산업→종목 매핑이 없다"고 보고한다 — 이건 B와 맞출 데이터 계약이지, C가 임의로 채우거나 지어낼 데이터가 아니다.
+
+> **`data/industry_universe.csv` 는 2026-08-13 자로 삭제됐다** (PR #5).
+> 고정 6산업 CSV가 자동 성장 캐시 `data/industry_cache.json` 으로 이관됐고,
+> 이관 스크립트는 `tools/migrate_industry_cache.py` 다. 그 CSV를 읽는 코드는 전부 깨진다.
 - `data/consensus.csv`에서 각 ticker의 `last_updated`를 가져와 Q5 입력으로 넘긴다. `consensus.csv`에 없는 ticker는 판정 대상에서 제외하고 사유를 남긴다 (G1 게이트 — 컨센서스 없는 종목은 애초에 대상이 아니다).
 
 ## 절차
@@ -118,7 +129,10 @@ long_term + ai_impact  보유 판단 — 10~15년 뒤 이익이 더 큰가      
 
 ## 블록 1(스키마 고정)에서 B·A와 확인해야 할 것
 
-- `data/industry_universe.csv`가 종목 단위(`industry,ticker,name`)까지 담는지, 아니면 산업별 개수만 담는지 B와 맞춘다. 개수만 담는 스키마라면 이 스킬은 종목 리스트를 받을 방법이 없다 — 팀장/skill1 쪽에서 ticker 리스트를 직접 넘기는 경로를 대신 열어야 한다.
+- ~~`data/industry_universe.csv`가 종목 단위까지 담는지 B와 맞춘다~~ → **해결됨 (2026-08-13, PR #5).**
+  `data/industry_cache.json` 이 `industries[<산업명>].tickers` 와 `companies[<ticker>].name` 을
+  모두 담는다. 다만 이 캐시는 **B가 실행한 산업만 자라는 구조**다 — 캐시에 없는 산업이
+  들어오면 B의 industry-screen 을 먼저 돌려야 하며, C가 DART를 직접 뒤져 채우지 않는다.
 - `data/consensus.csv`의 `last_updated` 날짜 포맷(예: `2026-06-30`)을 A와 통일한다 — Q5 판정에서 날짜 비교에 그대로 쓴다.
 
 ## A·D에게 제안 — 10~15년 홀딩 관점을 담는 방법

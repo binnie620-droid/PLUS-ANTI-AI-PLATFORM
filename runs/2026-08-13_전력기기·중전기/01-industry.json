@@ -1,0 +1,40 @@
+{
+  "run_id": "2026-08-13_전력기기·중전기",
+  "mode": "verify",
+  "selected_industry": "전력기기·중전기",
+  "industries": [
+    {
+      "name": "전력기기·중전기",
+      "consensus_universe_count": 7,
+      "gate": "PASS",
+      "reason": "캐시 12종목 전수 컨센서스 재조회(2026-08-13 라이브) 결과 coverage_count>=3 종목 7개 — HD현대일렉트릭14, 효성중공업13, LS12, 산일전기9, 대한전선7, 일진전기3, 비츠로셀3. 제룡전기·가온전선·비츠로테크·광명전기·서전기전 5종목은 최근 3개월 내 제시된 의견이 없어 커버리지 0으로 후보에서 제외. 후보 평균 커버리지 8.71로 already_covered 기준(10) 미만 — 정보 우위가 아직 남아 있는 구간이다. 사양별 주문제작·설비 기반 제조업이라 Q1(이익 대체성)이 구조적으로 NO이며, 데이터센터向 변압기 수요가 단일판매·공급계약 공시로 확인되는 채널이 있어 Q3도 답변 가능하다. Q4는 인건비 비중이 매출 대비 5~7%로 10% 기준에 미달해 답변 불가. DART 표본 5종목(267260, 298040, 006260, 062040, 103590) 전원 활성 공시 확인(최근 90일 9~28건, 중앙값 15). 거시: 원/달러 1409.94(08-07, 6월말 1542.07 대비 원화 강세), 미10년물 4.70%(08-11, 7월초 4.48%에서 상승 — Multiple 확장에 비우호적), WTI 84.77(08-11).",
+      "expected_direction": "UP",
+      "answerable_questions": ["Q1", "Q2", "Q3", "Q5"]
+    }
+  ],
+  "peers": [
+    { "ticker": "267260", "name": "HD현대일렉트릭", "market_cap_bn": 281889 },
+    { "ticker": "298040", "name": "효성중공업", "market_cap_bn": 269666 },
+    { "ticker": "006260", "name": "LS", "market_cap_bn": 106829 }
+  ],
+  "_dart_check": {
+    "sampled_tickers": ["267260", "298040", "006260", "062040", "103590"],
+    "active_filers": 5,
+    "median_disclosures_90d": 15,
+    "window": "2026-05-15 ~ 2026-08-13"
+  },
+  "_macro_context": {
+    "sector_series": ["DCOILWTICO"],
+    "universal_series": ["DEXKOUS", "DGS10"],
+    "as_of": "2026-08-11",
+    "values": {
+      "DEXKOUS_원달러": "1409.94 (2026-08-07), 2026-06-29 1542.07",
+      "DGS10_미10년물": "4.70% (2026-08-11), 2026-07-01 4.48%",
+      "DCOILWTICO_WTI": "84.77 (2026-08-11), 2026-07-01 69.74"
+    },
+    "note": "A의 core/macro.py가 소유하는 목표주가 조정 게이트 G와는 별개. 여기서는 reason에 인용되는 참고 맥락으로만 사용."
+  },
+  "_universe_source": "data/industry_cache.json (12종목). 이번 실행에서 신규 추가한 종목 없음 — 캐시 히트.",
+  "_coverage_source": "FnGuide 컨센서스 (navercomp.wisereport.co.kr 경유, tools/fetch_consensus.py). SKILL.md Step 1이 지정한 FnSpace MCP(mcp__plugin_fnspace_fnspace__*)가 이 세션에 연결돼 있지 않아 대체했다. 두 소스 모두 FnGuide 공급 데이터이나 갱신 시점이 다를 수 있다 — B의 2026-08-13 discover 실행(FnSpace)과 대조하면 일진전기 목표주가만 112,667 -> 115,667로 변동했고 7개 종목의 커버리지 수는 전부 일치했다.",
+  "_market_cap_method": "DART stockTotqySttus.json(2025 사업보고서) 발행주식총수 x data/price.csv 현재가, 단위 억원. 필드명 istc_totqy 실호출로 확인됨."
+}

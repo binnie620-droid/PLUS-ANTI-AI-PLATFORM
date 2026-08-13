@@ -1,0 +1,22 @@
+{
+  "name": "dpic-desk",
+  "displayName": "DPIC Investment Desk",
+  "version": "1.0.0",
+  "description": "AI 고도화 시대의 상장주 투자판단 데스크. 산업 스크린 → 기업 전수 판정 → 태클 심사 → 최종 투자보고서까지 4단계를 파일 계약으로 잇는다. 근거는 DART 공시 원문 인용만 인정하고, 컨센서스와 결론이 같으면 편입하지 않는다. KOSPI/KOSDAQ 종목 분석, 산업 리서치, 투자 논리 검증, 애널리스트 보고서 작성에 사용.",
+  "author": {
+    "name": "PLUS FUTURE AI ANTI PLATFORM",
+    "url": "https://github.com/binnie620-droid/PLUS-ANTI-AI-PLATFORM"
+  },
+  "homepage": "https://github.com/binnie620-droid/PLUS-ANTI-AI-PLATFORM",
+  "repository": "https://github.com/binnie620-droid/PLUS-ANTI-AI-PLATFORM",
+  "keywords": [
+    "investment",
+    "equity-research",
+    "korea-stocks",
+    "dart",
+    "fundamental-analysis",
+    "consensus"
+  ],
+  "skills": "./.claude/skills/",
+  "agents": "./.claude/agents/"
+}

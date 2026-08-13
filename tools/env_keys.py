@@ -22,6 +22,11 @@ ONBOARDING_TEMPLATE = (
 
 
 def read_env_file(path):
+    """.env를 읽는다. 값을 감싼 따옴표는 벗긴다.
+
+    벗기지 않으면 FRED가 400을 낸다 — api_key를 32자 소문자 영숫자로만 받는데
+    따옴표까지 34자로 전달되기 때문이다. 실제로 겪은 버그다.
+    """
     values = {}
     if not os.path.exists(path):
         return values
@@ -31,7 +36,7 @@ def read_env_file(path):
             if not line or line.startswith("#") or "=" not in line:
                 continue
             k, v = line.split("=", 1)
-            values[k.strip()] = v.strip()
+            values[k.strip()] = v.strip().strip("\"'")
     return values
 
 

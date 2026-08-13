@@ -36,23 +36,39 @@ PRETAX = [r"법인세비용차감전순이익"]
 
 
 def api_key():
+    """tools/env_keys.py 와 같은 규칙으로 읽는다 — .env 값이 따옴표로 감싸여 있을 수 있다.
+    직접 파싱하면 FRED 키에서 실제로 겪었듯 길이가 32자를 넘어 API가 400을 낸다."""
     key = os.environ.get("DART_API_KEY")
     if key:
-        return key
+        return key.strip().strip("\"'")
     env = os.path.join(BASE, ".env")
     if os.path.exists(env):
         for line in io.open(env, encoding="utf-8"):
-            if line.startswith("DART_API_KEY"):
-                return line.split("=", 1)[1].strip()
-    sys.exit("DART_API_KEY 없음 — .env 또는 환경변수에 설정하라")
+            if line.strip().startswith("DART_API_KEY"):
+                return line.split("=", 1)[1].strip().strip("\"'")
+    sys.exit("DART_API_KEY 없음 — python tools/env_keys.py check 로 확인하라")
 
 
 def corp_code(ticker):
-    path = os.path.join(BASE, "data", "dart_corp_codes.csv")
+    """ticker -> (회사명, corp_code).
+
+    캐시 파일은 gitignore 대상이라 clone 직후에는 없다. 없으면 DART에서 자동으로
+    받아온다. 헤더는 두 가지가 돌아다닌다 — dart_lookup.py 가 만드는
+    `ticker,corp_code,corp_name,modify_date` 와 초기 수기 파일의
+    `ticker,name,corp_code` 다. 소비자 쪽에서 둘 다 받는다.
+    """
+    sys.path.insert(0, os.path.join(BASE, "tools"))
+    import dart_lookup
+    path = dart_lookup.CORP_CODE_CACHE_PATH
+    if not os.path.exists(path):
+        print("종목코드 캐시가 없어 DART에서 받아온다 (최초 1회)...")
+        dart_lookup.build_corp_code_cache(api_key(), path=path)
     for row in csv.DictReader(io.open(path, encoding="utf-8")):
-        if row["ticker"] == ticker:
-            return row["name"], row["corp_code"]
-    sys.exit("data/dart_corp_codes.csv 에 %s 없음" % ticker)
+        if row.get("ticker") != ticker:
+            continue
+        name = row.get("name") or row.get("corp_name") or ticker
+        return name, row["corp_code"]
+    sys.exit("data/dart_corp_codes.csv 에 %s 없음 — 상장 종목 코드인지 확인하라" % ticker)
 
 
 def fetch(key, code, year):
