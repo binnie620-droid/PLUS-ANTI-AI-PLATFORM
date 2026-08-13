@@ -18,5 +18,5 @@
     "consensus"
   ],
   "skills": "./.claude/skills/",
-  "agents": "./.claude/agents/"
+  "agents": ["./.claude/agents/moat-scorer.md"]
 }
