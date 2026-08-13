@@ -1,0 +1,65 @@
+{
+  "run_id": "2026-08-13_discover",
+  "mode": "discover",
+  "selected_industry": null,
+  "industries": [
+    {
+      "name": "전력기기·중전기",
+      "consensus_universe_count": 7,
+      "gate": "PASS",
+      "reason": "라이브 FnSpace 확인(2026-08-13): coverage_count>=3 종목 7개 — 효성중공업13, HD현대일렉트릭14, 일진전기3, 대한전선7, 산일전기9, LS12, 비츠로셀3(제룡전기·가온전선·비츠로테크·광명전기·서전기전은 컨센서스 0으로 제외). 평균 커버리지 8.71로 already_covered 기준(10) 미만 — 3개 PASS 산업 중 유일하게 정보 우위가 남아 있어 1순위. AI 데이터센터向 변압기·HVDC·ESS 수요는 실제 수주 공시로 확인되는 채널이라 Q3가 산업 구조상 답변 가능. DART 표본(산일전기·LS·일진전기) 최근 90일 공시 9~15건으로 전원 활성 공시기업 확인.",
+      "expected_direction": "UP",
+      "answerable_questions": ["Q1", "Q2", "Q3", "Q5"]
+    },
+    {
+      "name": "증권(브로커리지)",
+      "consensus_universe_count": 5,
+      "gate": "PASS",
+      "reason": "라이브 FnSpace 확인(2026-08-13): coverage_count>=3 종목 5개 — 미래에셋증권17, NH투자증권17, 삼성증권17, 키움증권17, 대신증권3(유안타·신영·유진투자증권은 컨센서스 0으로 제외). 평균 14.2로 already_covered이나, 이 산업은 리서치·트레이딩 집행 등 핵심 업무가 AI로 직접 대체 가능한 인지노동이라 Q1이 구조적으로 YES인 함정(☠) 후보 — 데스크가 하향 픽 최소 1개를 확보해야 하므로 2순위로 포함. 진입장벽(Q2)은 금융투자업 인가로 명확히 답변 가능하나 신규진입 자체보다 기존업무 대체가 핵심 리스크. DART 표본(미래에셋·삼성·대신증권) 최근 90일 공시 100건(상한 도달) — 매우 활발한 공시기업.",
+      "expected_direction": "DOWN",
+      "answerable_questions": ["Q1", "Q2", "Q4", "Q5"]
+    },
+    {
+      "name": "조선·조선기자재",
+      "consensus_universe_count": 6,
+      "gate": "PASS",
+      "reason": "라이브 FnSpace 확인(2026-08-13): coverage_count>=3 종목 6개 — HD한국조선해양15, 한화오션20, 삼성중공업20, HD현대중공업19, HD현대마린솔루션11, 한화엔진6(STX엔진은 2개로 미달, 현대힘스·세진중공업 등은 컨센서스 0). 평균 15.33으로 already_covered — 정보 우위가 낮아 3순위. 도크·설비·트랙레코드 기반 진입장벽(Q2)은 명확하나 AI 확산과의 직접 매출 연동 채널은 약함. 방산·항공(count=5, 평균15.4, 유사 already_covered)과 근소한 차이로 경쟁했으나 후보 종목 수가 더 많고 WTI 원가 프록시로 매크로 맥락을 붙이기 쉬워 우선 선택. DART 표본(HD한국조선해양·한화오션·한화엔진) 최근 90일 공시 15~41건으로 전원 활성 공시기업 확인.",
+      "expected_direction": "UP",
+      "answerable_questions": ["Q1", "Q2", "Q5"]
+    }
+  ],
+  "peers": [],
+  "_dart_check": {
+    "sampled_tickers": ["062040", "006260", "103590", "006800", "016360", "003540", "009540", "042660", "082740"],
+    "active_filers": 9,
+    "median_disclosures_90d": 15,
+    "note": "DART_API_KEY 확인 완료 후 상위 3개 산업 대표 종목 각 3개씩 표본 검증(전체 종목 전수 아님, Step 2 sanity 목적). 전원 최근 90일 내 공시 확인 — 폐지/거래정지 의심 종목 없음."
+  },
+  "_macro_context": {
+    "sector_series": ["DCOILWTICO"],
+    "universal_series": ["DEXKOUS", "DGS10"],
+    "as_of": "2026-08-11",
+    "values": {
+      "DEXKOUS_원달러": "1409.94 (2026-08-07)",
+      "DGS10_미10년물": "4.70% (2026-08-11)",
+      "DCOILWTICO_WTI": "84.77 (2026-08-11, 8/7 79.77에서 급등 — 조선·해운 연료비/신조선가 원가 맥락)"
+    },
+    "note": "A의 core/macro.py가 소유하는 목표주가 조정 게이트 G와는 별개 — 여기서는 산업 reason에 인용되는 참고 맥락으로만 사용."
+  },
+  "_universe_source": "data/industry_cache.json (auto-discovered via DART + FnSpace live calls, not a fixed list). 이번 실행에서 증권/광고대행/여행사/교육(사교육)/인력파견·BPO/신용정보·채권추심/IT서비스·SI 확장분을 신규로 DART 확인 후 캐시에 추가함.",
+  "_rejected": [
+    { "name": "IT서비스·SI", "consensus_universe_count": 3, "gate": "REJECT", "reason": "coverage_below_5 — 삼성에스디에스13, 현대오토에버15, 롯데이노베이트3만 기준 충족(포스코DX·신세계I&C·아시아나IDT·대신정보통신은 컨센서스 0), 3종목뿐" },
+    { "name": "광고대행", "consensus_universe_count": 2, "gate": "REJECT", "reason": "coverage_below_5 — 제일기획11, 이노션9만 기준 충족(KT나스미디어는 2개로 미달, HS애드는 0), 2종목뿐" },
+    { "name": "여행사", "consensus_universe_count": 1, "gate": "REJECT", "reason": "coverage_below_5 — 하나투어5만 기준 충족(모두투어는 1개로 미달, 노랑풍선은 0), 1종목뿐" },
+    { "name": "교육(사교육)", "consensus_universe_count": 0, "gate": "REJECT", "reason": "coverage_below_5 — 메가스터디교육 최대 2, 대교 최대 1, 웅진씽크빅·비상교육 0으로 coverage_count>=3 종목이 하나도 없음" },
+    { "name": "인력파견·BPO", "consensus_universe_count": 0, "gate": "REJECT", "reason": "coverage_below_5 — KTis·브리지텍 모두 컨센서스 0. 캐시 후보 자체도 2종목뿐이라 커버리지와 무관하게 REJECT" },
+    { "name": "신용정보·채권추심", "consensus_universe_count": 0, "gate": "REJECT", "reason": "coverage_below_5 — NICE평가정보·나이스디앤비 각 1, 고려신용정보 0으로 coverage_count>=3 종목 없음" },
+    { "name": "택배·물류", "consensus_universe_count": 3, "gate": "REJECT", "reason": "coverage_below_5 — 캐시된 후보가 씨제이대한통운/한진/세방 3종목뿐이라 커버리지 조회 없이도 최대 3 < 5로 확정 REJECT" },
+    { "name": "환경·폐기물·수처리", "consensus_universe_count": 0, "gate": "REJECT", "reason": "coverage_below_5 — 코엔텍·와이엔텍·인선이엔티·자연과환경·제이엔케이글로벌 전원 컨센서스 0" },
+    { "name": "시멘트·건자재", "consensus_universe_count": 3, "gate": "REJECT", "reason": "coverage_below_5 — 아세아시멘트3, 고려아연4~5, LX하우시스4~5만 기준 충족(한일시멘트2·현대엘리베이터1은 미달, 나머지 4종목은 0), 3종목뿐" },
+    { "name": "원자력·발전정비", "consensus_universe_count": 4, "gate": "REJECT", "reason": "coverage_below_5 — 두산에너빌리티16, 한전기술11, 한전KPS11, 비에이치아이3만 기준 충족(우진은 1로 미달, 나머지 3종목은 0), 4종목뿐" }
+  ],
+  "_additional_pass_not_selected": [
+    { "name": "방산·항공", "consensus_universe_count": 5, "gate": "PASS", "reason": "coverage_count>=3 종목 5개 — 한화에어로스페이스17, 현대로템17, 한국항공우주18, 풍산12, 한화시스템14(SNT다이내믹스는 1로 미달). 평균 15.4로 already_covered. 조선·조선기자재와 근소한 차이로 3순위 경쟁, 근소하게 밀려 top3에서 제외." }
+  ]
+}
