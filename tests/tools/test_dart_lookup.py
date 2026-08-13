@@ -88,6 +88,20 @@ class TestCorpCodeCache(unittest.TestCase):
         )
         self.assertIsNone(corp_code)
 
+    def test_get_corp_code_second_miss_on_existing_cache_does_not_refetch(self):
+        # Bootstrap the cache once with a fake fetcher (populates one known ticker).
+        dl.build_corp_code_cache("APIKEY", path=self.cache_path, fetcher=lambda url: self.zip_bytes)
+
+        def fail_if_called(url):
+            raise AssertionError("should not refetch when cache file already exists")
+
+        # A genuinely unknown ticker on an already-built cache is a final miss —
+        # it must not trigger a corpCode.xml refetch.
+        corp_code = dl.get_corp_code(
+            "999999", "APIKEY", cache_path=self.cache_path, fetcher=fail_if_called
+        )
+        self.assertIsNone(corp_code)
+
 
 class TestCompanyInfoAndIndutyCode(unittest.TestCase):
     def setUp(self):
@@ -180,6 +194,20 @@ class TestMainApiKeyEnvFileFallback(unittest.TestCase):
             os.environ.pop("DART_API_KEY", None)
             rc = dl.main(["induty-code", "009540"])
         self.assertEqual(rc, 2)
+
+
+class TestMainDartErrorHandling(unittest.TestCase):
+    """A real DART failure (bad key, rate limit, network) must not look like
+    NOT_FOUND (exit 1) — main() should surface it with a distinct exit code."""
+
+    def test_main_returns_3_on_runtime_error_from_get_induty_code(self):
+        def fake_get_induty_code(ticker, api_key, cache_path=dl.CORP_CODE_CACHE_PATH, fetcher=None):
+            raise RuntimeError("simulated DART error")
+
+        with mock.patch.dict(os.environ, {"DART_API_KEY": "APIKEY"}, clear=False), \
+                mock.patch.object(dl, "get_induty_code", fake_get_induty_code):
+            rc = dl.main(["induty-code", "009540"])
+        self.assertEqual(rc, 3)
 
 
 if __name__ == "__main__":

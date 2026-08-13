@@ -78,8 +78,9 @@ def get_corp_code(ticker, api_key, cache_path=CORP_CODE_CACHE_PATH, fetcher=None
     mapping = load_corp_code_cache(cache_path)
     if ticker in mapping:
         return mapping[ticker]
-    build_corp_code_cache(api_key, cache_path, fetcher=fetcher)
-    mapping = load_corp_code_cache(cache_path)
+    if not os.path.exists(cache_path):
+        build_corp_code_cache(api_key, cache_path, fetcher=fetcher)
+        mapping = load_corp_code_cache(cache_path)
     return mapping.get(ticker)
 
 
@@ -114,7 +115,11 @@ def main(argv):
     if not api_key:
         print("DART_API_KEY not set")
         return 2
-    result = get_induty_code(argv[1], api_key)
+    try:
+        result = get_induty_code(argv[1], api_key)
+    except (RuntimeError, OSError, zipfile.BadZipFile) as e:
+        print("DART_ERROR: {}".format(e))
+        return 3
     if result is None:
         print("NOT_FOUND")
         return 1

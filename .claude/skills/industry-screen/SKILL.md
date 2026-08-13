@@ -85,19 +85,31 @@ discover를 돌리면 그 판단이 숨겨진다.
 `verify`든 `discover`든, 후보 산업이 정해지면 그 산업의 종목 목록을 다음 순서로 얻는다:
 
 ```
-1. 캐시에 이미 있는가?
+1. 산업이 캐시에 이미 있는가?
      python tools/industry_cache.py get-industry "<산업명>"
      있다 → 그 tickers로 Step 1(candidate set)로 진행
      없다 → 2로
 
-2. 각 후보 종목마다 DART로 실존/업종코드를 확인한다 (처음 만난 티커만 — 캐시에
-   있으면 다시 안 부른다)
+2. 후보 티커 각각에 대해 먼저 종목 단위 캐시를 확인한다 (다른 산업 아래 이미
+   등록되어 있을 수 있다 — 회사는 여러 산업에 속할 수 있음):
+     python tools/industry_cache.py get-company <ticker>
+     있다 → 그 name/induty_code를 그대로 쓰고 4로 (DART 재호출 안 함)
+     없다 → 3으로
+
+3. 종목 캐시에도 없으면 DART로 실존/업종코드를 확인한다:
      python tools/dart_lookup.py induty-code <ticker>
-   반환된 induty_code로 캐시에 등록 (JSON의 `induty_code`가 `null`이면 `-`를 넣는다 —
-   `add-company`는 `-`를 "미상"으로 처리한다):
+   반환된 JSON의 corp_name을 그대로 <name>으로 쓴다 — Claude가 기억하는
+   이름으로 임의로 바꾸지 않는다. induty-code가 종료코드 3(DART_ERROR)을
+   반환하면 — 키 문제/rate-limit 등 실제 조회 실패이지 "종목 없음"이 아니다.
+   이 경우 그 산업 전체를 REJECT 처리하지 말고 사용자에게 "DART 조회 실패,
+   재시도 필요"라고 보고하며 중단한다. 종료코드 1(NOT_FOUND)일 때만 그
+   티커를 후보에서 뺀다.
+
+4. 확보한 name/induty_code로 캐시에 등록 (JSON의 `induty_code`가 `null`이면 `-`를
+   넣는다 — `add-company`는 `-`를 "미상"으로 처리한다):
      python tools/industry_cache.py add-company <ticker> <name> <induty_code-or-"-"> "<산업명>"
 
-3. 등록 후 Step 1(candidate set)로 진행
+5. 등록 후 Step 1(candidate set)로 진행
 ```
 
 **verify에서 종목을 모를 때** — 사용자가 "농업" 같은 산업명만 주고 구성 종목을 안
@@ -223,8 +235,9 @@ Requires `DART_API_KEY` (already confirmed in Step -1).
    python tools/dart_lookup.py induty-code <ticker>
    ```
    내부적으로 `corpCode.xml`(전체 상장사 목록)을 `data/dart_corp_codes.csv`에 한 번만
-   캐싱하고, 처음 만난 티커에 한해 `company.json`을 호출해 `induty_code`를 얻는다.
-   이미 캐시에 있는 티커는 재호출하지 않는다.
+   캐싱한다 — 이 캐시는 티커→corp_code 매핑까지다. `company.json`(induty_code 조회)은
+   호출될 때마다 실제로 요청이 나간다 — 반복 호출을 막는 건 이 스크립트가 아니라 한 단계
+   위의 `data/industry_cache.json`이다 (유니버스 구축 절차의 2번, 종목 캐시 확인).
 
 2. **disclosure recency, sampled (Step 2, sanity check only):**
    `GET https://opendart.fss.or.kr/api/list.json?crtfc_key={DART_API_KEY}&corp_code={corp_code}&bgn_de={YYYYMMDD}&end_de={YYYYMMDD}&page_count=100`
