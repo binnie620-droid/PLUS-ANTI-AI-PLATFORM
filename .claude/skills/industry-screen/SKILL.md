@@ -25,6 +25,12 @@ selected industry name from it; desk-head/pro_tackler (D) reads `peers` for the 
 동종 비교 test. Field names below are copied verbatim from that contract — do not
 rename them.
 
+**No fixed universe.** There is no hand-picked CSV of "allowed" industries anymore.
+`data/industry_cache.json` is an auto-growing record of what's been checked so far —
+`tools/industry_cache.py` reads/writes it, `tools/dart_lookup.py` confirms new tickers
+against DART before they're added. Any industry can be checked; the cache just remembers
+what's already been verified so repeat runs don't re-pay the DART/FnSpace cost.
+
 ## When to Use
 
 - **discover**: "AI 수혜/피해 산업 추천해줘", no specific industry named.
@@ -33,6 +39,25 @@ rename them.
 - Do **not** use to produce a target price or compute the FRED macro gate `G`
   (that's `core/macro.py`, owned by A — see FRED section below for why this skill
   only *reads* FRED, never *decides* with it).
+
+## Step -1 — API 키 확인 (항상 먼저)
+
+이 스킬은 `DART_API_KEY`와 `FRED_API_KEY`가 **둘 다** 필요하다. 다른 어떤 단계보다
+먼저 확인한다.
+
+```bash
+python tools/env_keys.py check
+```
+
+- exit 0 (`OK`) → Step 0으로 진행.
+- exit 1 (`MISSING:...`) → 출력된 온보딩 메시지를 **그대로 사용자에게 채팅으로 보여주고**,
+  키 값을 받는다. 받으면:
+  ```bash
+  python tools/env_keys.py save DART_API_KEY=<받은값> FRED_API_KEY=<받은값>
+  ```
+  (하나만 받았으면 받은 것만 저장 — 다음 `check`에서 나머지가 다시 물어짐)
+- 사용자가 "없다/나중에"라고 답하면 — **abort한다.** JSON을 만들지 않고, 어떤 키가 없어서
+  멈췄는지 명시한 뒤 대화를 종료한다. 저하된 모드로 부분 진행하지 않는다.
 
 ## Step 0 — 산업이 지정되지 않았으면 **반드시 먼저 물어본다**
 
@@ -44,44 +69,58 @@ rename them.
   ① 산업명을 직접 지정          → verify 모드 (예: "조선기자재", "폐기물처리")
   ② 데스크가 후보를 추천          → discover 모드
 
-②를 고르시면 data/industry_universe.csv 에 등재된 산업 중에서만 고릅니다.
-그 목록은 현재 [N]개 산업 / [M]개 종목이며, 목록에 없는 산업은 후보에 오르지
-않습니다. 특정 산업을 염두에 두고 계시면 ①이 정확합니다."
+②를 고르시면 AI 고도화 테마로 업종을 가리지 않고 폭넓게 후보를 찾습니다
+(제조업뿐 아니라 서비스·금융·컨설팅 등도 포함). 특정 산업을 염두에 두고
+계시면 ①이 정확합니다."
 ```
 
 **왜 물어야 하는가 — 안 물으면 데스크가 산업을 대신 고르게 된다.**
-discover는 `data/industry_universe.csv`에 있는 산업만 순위 매긴다. 그 파일을 채우는
-주체가 계약에 정의되어 있지 않으므로(계약 불일치 #4), **유니버스 작성자가 사실상 산업을
-결정한다.** 사용자에게 묻지 않고 discover를 돌리면 그 사실이 숨겨진다.
+discover가 무엇을 후보로 떠올릴지는 브레인스토밍 시점의 판단이다. 사용자에게 묻지 않고
+discover를 돌리면 그 판단이 숨겨진다.
 
 `verify`가 정식 진입점이다 — 다른 팀 사람은 항상 자기 관심 산업을 들고 온다.
 
-### 지정된 산업이 유니버스에 없을 때
+## 유니버스 구축 — 캐시 확인 → 없으면 DART로 확인 → 캐시에 추가
+
+`verify`든 `discover`든, 후보 산업이 정해지면 그 산업의 종목 목록을 다음 순서로 얻는다:
 
 ```
-1. data/industry_universe.csv 에 해당 산업 행이 있는가?
-     있다  →  그대로 Step 1 로 진행
-     없다  →  2로
+1. 캐시에 이미 있는가?
+     python tools/industry_cache.py get-industry "<산업명>"
+     있다 → 그 tickers로 Step 1(candidate set)로 진행
+     없다 → 2로
 
-2. DART 업종코드(induty_code)로 즉석 구성을 시도한다
-     data/dart_corp_codes.csv 의 ticker→corp_code 로
-     company.json 을 조회해 induty_code 를 얻고, 산업명과 대응시킨다
-     구성된 목록을 industry_universe.csv 에 append 하고 Step 1 로 진행
+2. 각 후보 종목마다 DART로 실존/업종코드를 확인한다 (처음 만난 티커만 — 캐시에
+   있으면 다시 안 부른다)
+     python tools/dart_lookup.py induty-code <ticker>
+   반환된 induty_code로 캐시에 등록 (JSON의 `induty_code`가 `null`이면 `-`를 넣는다 —
+   `add-company`는 `-`를 "미상"으로 처리한다):
+     python tools/industry_cache.py add-company <ticker> <name> <induty_code-or-"-"> "<산업명>"
 
-3. 2도 불가능하면 (DART_API_KEY 없음 등) 정지하고 사용자에게 보고한다
-     "'<산업명>' 의 종목 목록을 만들 수 없다. 필요한 것: DART_API_KEY 또는
-      industry_universe.csv 에 해당 산업 행."
-     **임의로 종목을 골라 채우지 않는다.**
+3. 등록 후 Step 1(candidate set)로 진행
 ```
+
+**verify에서 종목을 모를 때** — 사용자가 "농업" 같은 산업명만 주고 구성 종목을 안
+줬으면, 이 스킬(Claude)이 일반 지식으로 그 산업의 대표 상장사 후보를 몇 개 떠올려서
+위 2번으로 넘긴다. DART가 실존을 확인 못 하는 종목은 절대 임의로 지어내지 않는다 —
+확인 안 되면 후보에서 뺀다.
+
+**DART_API_KEY는 Step -1에서 이미 확인했으므로 여기서 없을 일은 없다.**
 
 ## Gate Logic — the only judgment this skill makes
 
 Run these four steps **in this order** — the DART sanity pass happens *before* G1 is
 finalized, because it can shrink the qualifying ticker count:
 
-**Step 1 — build the candidate set.** Join `data/industry_universe.csv` (`industry,ticker,name`)
-to `data/consensus.csv` (ticker→coverage_count). Candidates = tickers in this industry
-with `coverage_count >= 3`.
+**Step 1 — build the candidate set.** From the industry's ticker list (cache or
+freshly DART-confirmed, see above), get each ticker's consensus coverage **directly
+from FnSpace** — call `mcp__plugin_fnspace_fnspace__get_target_price` (또는
+`get_estimates`) per ticker. `coverage_count`는 그 응답에서 컨센서스를 낸 기관 수로
+판단한다 (FnSpace 응답 필드명은 실제 호출 결과를 보고 확인 — 항목 코드가 궁금하면
+`list_items(apigb="A000003")`으로 카탈로그를 먼저 훑는다). Candidates = tickers with
+`coverage_count >= 3`.
+
+진행상황을 짧게 출력한다: 종목을 조회할 때마다 "○○○ 컨센서스 확인 중..." 한 줄.
 
 **Step 2 — DART sanity filter.** Sample up to 5 candidates and check they're active
 filers (see DART section below). Drop any sampled ticker found dead (delisted/suspended)
@@ -132,11 +171,18 @@ still does the actual per-company YES/NO with DART citation.
 
 ## Mode: discover
 
-Run Steps 1–4 for every industry present in `data/industry_universe.csv`, then:
-1. Drop every industry that failed Step 3 (G1).
-2. Rank survivors per the sweet-spot heuristic and tie-break rule.
-3. Return the top 3 (fewer if fewer than 3 pass).
-4. `selected_industry: null`, `peers: []` — no single industry has been chosen yet, so
+1. **폭넓게 브레인스토밍한다** — AI 고도화 테마와 관련성이 있어 보이는 산업을 업종을
+   가리지 않고 20~40개 정도 떠올린다. **제조업/중공업에만 머물지 않는다** — 서비스업,
+   컨설팅, 금융, 유통, 헬스케어, 인력파견 등도 반드시 포함한다. 이래야 Q1-YES 함정
+   (☠) 후보가 나올 구조적 여지가 생긴다 (제조업·설비 기반 산업만 떠올리면 함정 후보가
+   원천적으로 나올 수 없다 — 이게 예전 설계의 결함이었다).
+2. 후보 산업마다 "유니버스 구축" 절차(위)로 종목을 확보하고, Steps 1–4를 실행한다.
+   확인 없이 바로 진행하되, 산업을 하나씩 처리할 때마다 진행상황을 짧게 출력한다:
+   "[3/25] 반도체장비 확인 중..." 같은 형식.
+3. Drop every industry that failed Step 3 (G1).
+4. Rank survivors per the sweet-spot heuristic and tie-break rule.
+5. Return the top 3 (fewer if fewer than 3 pass).
+6. `selected_industry: null`, `peers: []` — no single industry has been chosen yet, so
    there's nothing to build a peer group against. Once a teammate/orchestrator picks
    one of the 3, re-run in `verify` mode on that name to get the full record including
    `peers`.
@@ -168,34 +214,51 @@ The subject ticker that C/D later judge is **not** excluded here — B doesn't k
 single ticker will be selected yet. D excludes it at comparison time if it happens to
 be one of the 3 (per `contracts/pipeline.md`).
 
-## DART calls (공시 확인 — Step 2, supplementary)
+## DART calls
 
-Requires `DART_API_KEY` env var (register at opendart.fss.or.kr). Purpose: confirm
-candidate tickers are live filers (not delisted/suspended) before G1 is computed, and
-support the `answerable_questions`/`reason` text for Q5 — thin, slow-updating coverage
-usually shows up as low disclosure frequency too. **This is a sanity/context check, not
-a citation source** — DART citations for individual Q1–Q5 YES answers are Skill 2's
-job (`moat-scorer`), not this skill's.
+Requires `DART_API_KEY` (already confirmed in Step -1).
 
-1. **corp code lookup (once, cache it):**
-   `GET https://opendart.fss.or.kr/api/corpCode.xml?crtfc_key={DART_API_KEY}`
-   Returns a zip of `corp_code / corp_name / stock_code / modify_date` for every DART
-   filer. Cache the ticker→corp_code mapping locally (e.g.
-   `data/dart_corp_codes.csv`, gitignored) — do not refetch per run.
+1. **업종코드 조회 (유니버스 구축용, 이 스킬 전용 wrapper 사용):**
+   ```bash
+   python tools/dart_lookup.py induty-code <ticker>
+   ```
+   내부적으로 `corpCode.xml`(전체 상장사 목록)을 `data/dart_corp_codes.csv`에 한 번만
+   캐싱하고, 처음 만난 티커에 한해 `company.json`을 호출해 `induty_code`를 얻는다.
+   이미 캐시에 있는 티커는 재호출하지 않는다.
 
-2. **disclosure recency, sampled (not exhaustive):**
+2. **disclosure recency, sampled (Step 2, sanity check only):**
    `GET https://opendart.fss.or.kr/api/list.json?crtfc_key={DART_API_KEY}&corp_code={corp_code}&bgn_de={YYYYMMDD}&end_de={YYYYMMDD}&page_count=100`
    For up to 5 sampled tickers per industry, count disclosures in the trailing 90 days.
    Zero disclosures across a 2-year window on a sampled ticker means it's likely
    delisted/suspended — drop it from the candidate set (this can flip Step 3's G1 from
    PASS to REJECT if it drops the count below 5 — that's intended, not a bug).
+   **This is a sanity/context check, not a citation source** — DART citations for
+   individual Q1–Q5 YES answers are Skill 2's job (`moat-scorer`), not this skill's.
+
+## FnSpace calls (컨센서스 — Step 1, live)
+
+FnSpace(FnGuide) MCP 도구를 **직접** 호출한다 — `data/consensus.csv`(A 소유, 배치성)를
+거치지 않고 실시간 값을 쓴다. 처음 쓴다면 `mcp__plugin_fnspace_fnspace__quickstart`로
+키 상태를 먼저 확인해도 좋다.
+
+- `mcp__plugin_fnspace_fnspace__get_target_price` — 종목별 목표주가·투자의견 컨센서스.
+- `mcp__plugin_fnspace_fnspace__get_estimates` — 추정실적 컨센서스(연간), 커버리지
+  기관 수 판단의 보조 자료.
+
+**유료 구독 만료 주의**: 2026-08-15 이후 위 두 도구가 응답하지 않을 수 있다. 만료된
+것으로 보이면(에러 또는 빈 응답) 그 사실을 `_note`에 남기고, `data/consensus.csv`가
+있으면 그걸로 폴백한다 — 조용히 값을 비우지 않는다.
+
+**consensus.csv와 다를 수 있음**: 이 스킬이 쓰는 값은 실시간이라 A의 배치 파일
+(`data/consensus.csv`)과 다를 수 있다. 이는 알려진 리스크다 — 값이 크게 다르면
+`_note`에 남긴다.
 
 ## FRED calls (거시 맥락 — Step 4, read-only)
 
-Requires `FRED_API_KEY` env var. Purpose: attach macro context to `reason`, purely
-informational. **A's `core/macro.py` owns the actual FRED-derived gate `G`** used in
-target-price adjustment — this skill must not compute or output a competing `G` value,
-just cite context in prose.
+Requires `FRED_API_KEY` (already confirmed in Step -1). Purpose: attach macro context
+to `reason`, purely informational. **A's `core/macro.py` owns the actual FRED-derived
+gate `G`** used in target-price adjustment — this skill must not compute or output a
+competing `G` value, just cite context in prose.
 
 `GET https://api.stlouisfed.org/fred/series/observations?series_id={ID}&api_key={FRED_API_KEY}&file_type=json&sort_order=desc&limit=13`
 (trailing 13 months)
@@ -216,7 +279,7 @@ commentary entirely — it's optional color, not a required field).
 ## Output — `01-industry.json` (contracts/pipeline.md — do not rename fields)
 
 Write to `runs/<run_id>/01-industry.json` where `run_id` = `YYYY-MM-DD_<산업명>`
-(e.g. `2026-08-13_농업`), **and** return the same JSON to the caller.
+(verify) or `YYYY-MM-DD_discover` (discover), **and** return the same JSON to the caller.
 
 ```json
 {
@@ -239,23 +302,39 @@ Write to `runs/<run_id>/01-industry.json` where `run_id` = `YYYY-MM-DD_<산업�
     { "ticker": "000012", "name": "마바종묘", "market_cap_bn": 3600 }
   ],
   "_dart_check": { "sampled_tickers": ["000010","000011","000012"], "active_filers": 3, "median_disclosures_90d": 3 },
-  "_macro_context": { "sector_series": ["PWHEAMTUSDM","PMAIZMTUSDM"], "universal_series": ["DEXKOUS","DGS10"], "as_of": "2026-07" }
+  "_macro_context": { "sector_series": ["PWHEAMTUSDM","PMAIZMTUSDM"], "universal_series": ["DEXKOUS","DGS10"], "as_of": "2026-07" },
+  "_universe_source": "data/industry_cache.json (auto-discovered via DART + FnSpace, not a fixed list)"
 }
 ```
 
-`_dart_check` and `_macro_context` are **not** part of the pipeline contract — they're
-underscore-prefixed diagnostic fields for the desk to eyeball, and downstream parsers
-must ignore unknown keys. Never let their absence or content change `gate`.
+`_dart_check`, `_macro_context`, `_universe_source`는 **파이프라인 계약이 아니다** —
+언더스코어 접두 진단 필드이며, 다운스트림 파서는 모르는 키를 무시해야 한다. 이 필드들의
+존재/내용이 `gate`를 바꾸지 않는다.
 
 `discover` mode: same top-level shape, `mode: "discover"`, `selected_industry: null`,
 `industries` holds up to 3 items (each with the same per-item fields as above), `peers: []`.
+
+## 채팅 요약 — 용어 병기 + 다음 단계 유도
+
+`01-industry.json`을 저장한 뒤, 채팅에는 표 요약과 함께 내부 용어를 쉬운 말로 병기한다:
+- `G1` → "컨센서스 커버리지 최소 5종목 조건"
+- `coverage_count` → "그 종목을 커버하는 애널리스트/기관 수"
+- `expected_direction: DOWN` → "AI로 인한 하향 압력이 예상되는 함정 후보"
+
+**항상 다음 단계 유도로 마무리한다** — 산업→기업→검증→팀장 흐름이 끊기지 않도록:
+```
+"이 중 하나를 골라 Skill 2(기업 판정, company-screen)로 넘길까요?"
+```
+(company-screen 자체의 로직은 이 스킬 범위 밖 — 유도 질문만 담당한다.)
 
 ## Common Mistakes
 
 | Mistake | Fix |
 |---|---|
+| API 키 확인 없이 바로 진행 | **Step -1 위반.** 항상 `env_keys.py check`부터. 없으면 abort. |
 | 산업명이 없다고 바로 discover를 실행 | **Step 0 위반.** 먼저 물어본다 — 안 물으면 데스크가 산업을 대신 고르게 된다. |
-| 유니버스에 없는 산업을 "못 한다"며 즉시 반려 | Step 0의 DART induty_code 즉석 구성을 먼저 시도한다. |
+| discover에서 제조업/중공업만 브레인스토밍 | 서비스·금융·컨설팅 등도 반드시 포함 — 안 그러면 Q1-YES 함정 후보가 구조적으로 나올 수 없다. |
+| 캐시에 없는 산업을 "목록에 없다"며 즉시 반려 | 유니버스 구축 절차(DART 확인 → 캐시 추가)를 먼저 시도한다. |
 | Ranking industries by a point total | There is no industry score. PASS/REJECT + sweet-spot rank only. |
 | Recommending already-crowded industries (robotics, semis, data centers) | Clear G1 easily but avg coverage >= 10 — rank last, say so in `reason`. |
 | Dropping trap (Q1-YES) industries because they're "bad news" | Keep them, `expected_direction: "DOWN"`. A desk with only UP picks isn't credible. |
@@ -264,15 +343,17 @@ must ignore unknown keys. Never let their absence or content change `gate`.
 | Calling DART `list.json` for every ticker in a large industry | Sample up to 5. Sanity check, not a census. |
 | Renaming `industries`/`peers`/`consensus_universe_count` to match your own taste | C and D already parse these exact names. Renaming breaks the pipeline silently. |
 | Writing prose instead of JSON to `runs/<run_id>/01-industry.json` | Downstream reads the file programmatically — prose breaks the pipeline. |
+| 결과만 보여주고 끝내기 | 항상 Skill 2로 넘길지 물어보며 마무리한다. |
 
 ## Do Not
 
 - Score industries (no point total, no weighted average).
 - Recommend more than 3 industries in `discover`.
-- Include unlisted/non-DART-registered industries.
+- Include a ticker DART cannot confirm exists.
 - Mention a target price or valuation multiple anywhere in the output.
 - Judge an individual company (Skill 2's job — this stops at the industry).
 - Cite DART filings as Q1–Q5 evidence for a specific company (Skill 2's job).
+- Proceed without both `DART_API_KEY` and `FRED_API_KEY` confirmed.
 
 ## Completion Definition
 
@@ -280,4 +361,4 @@ Input: `"농업"` (verify mode). Output: `runs/2026-08-13_농업/01-industry.jso
 the schema above — `consensus_universe_count`, `gate` (+ `reason` if REJECT),
 `answerable_questions`, `expected_direction`, and (if PASS) 3 `peers` — cross-checked
 against DART for candidate survivorship, with FRED context cited in `reason` when
-relevant.
+relevant, and a chat summary ending in a Skill-2 handoff question.
